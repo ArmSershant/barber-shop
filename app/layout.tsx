@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.scss';
+import { Providers } from './providers';
+import { SiteHeader } from '@/components/SiteHeader';
 
 export const metadata: Metadata = {
   title: 'Barber-Shop — Book barbers in Yerevan',
@@ -12,7 +14,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       {/* suppressHydrationWarning: browser extensions (e.g. ColorZilla) inject
           attributes onto <body> before React hydrates; this ignores that noise. */}
-      <body suppressHydrationWarning>{children}</body>
+      <body suppressHydrationWarning>
+        <Providers>
+          <SiteHeader />
+          {children}
+        </Providers>
+      </body>
     </html>
   );
 }

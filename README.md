@@ -129,8 +129,15 @@ Smoke test (dev server must be running):
 bash scripts/smoke-auth.sh
 ```
 
+**Frontend:** the client data layer uses **RTK Query** (`lib/store/`) — the api
+slice (`lib/store/api.ts`) exposes hooks (`useMeQuery`, `useLoginMutation`,
+`useRegisterMutation`, `useLogoutMutation`) and auto-refreshes the session on a
+`401`. `/login` and `/register` pages use React Hook Form + the shared Zod
+schemas; the header reflects auth state via `useMeQuery`.
+
 > After pulling auth changes, run `pnpm install` (new deps: `jose`,
-> `@node-rs/argon2`) and `pnpm prisma migrate deploy && pnpm prisma generate`
+> `@node-rs/argon2`, `@reduxjs/toolkit`, `react-redux`, `react-hook-form`,
+> `@hookform/resolvers`) and `pnpm prisma migrate deploy && pnpm prisma generate`
 > (new `refresh_tokens` table).
 
 ## Deploying to Vercel

@@ -6,7 +6,7 @@ Decision: **Next.js full-stack** (UI + API in one project) with **pnpm**, hosted
 
 | Layer | MVP choice | Notes |
 |-------|-----------|-------|
-| App | **Next.js (App Router) + TypeScript + SCSS** | UI as Server/Client Components; backend as **Route Handlers** (`app/api/**/route.ts`) and Server Actions. TanStack Query for client data, React Hook Form + Zod for forms (Zod schemas shared with the API). SCSS via Next's built-in Sass support. |
+| App | **Next.js (App Router) + TypeScript + SCSS** | UI as Server/Client Components; backend as **Route Handlers** (`app/api/**/route.ts`) and Server Actions. **RTK Query** (Redux Toolkit) for client data fetching/caching, React Hook Form + Zod for forms (Zod schemas shared with the API). SCSS via Next's built-in Sass support. |
 | API | **Next.js Route Handlers** | Same project. Keep business logic in `packages/` services (framework-agnostic) so it's testable and portable if you split the API out later. |
 | ORM | **Prisma** | Best TS DX + easy migrations. Lives in `packages/db`. Note: the no-overlap exclusion constraint is added via a **raw SQL migration** (Prisma doesn't model GiST exclusion natively). |
 | DB | **PostgreSQL 15+** | Needs `pgcrypto`, `btree_gist`, optionally `pg_trgm`, `citext`. Use Neon (Vercel's native Postgres) or Supabase. |
