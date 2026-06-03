@@ -104,6 +104,28 @@
       "sun": "Sunday"
     }
   },
+  "shopDefaults": {
+    "heading": "Shop defaults",
+    "hoursLabel": "Default working hours",
+    "breaksLabel": "Default breaks",
+    "closed": "Closed",
+    "save": "Save defaults",
+    "saved": "Defaults saved.",
+    "applyAll": "Apply to all barbers",
+    "applied": "Applied to all barbers.",
+    "applyConfirm": "Copy these defaults onto every barber? This replaces their current hours and breaks."
+  },
+  "roster": {
+    "heading": "Barbers",
+    "empty": "No barbers yet.",
+    "addName": "Barber name",
+    "addExperience": "Years of experience",
+    "addButton": "Add barber",
+    "added": "Barber added.",
+    "manage": "Manage",
+    "back": "Back to dashboard",
+    "profileHeading": "Profile"
+  },
   "availability": {
     "timeOffHeading": "Time off",
     "timeOffEmpty": "No time off scheduled.",

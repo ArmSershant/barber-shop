@@ -49,6 +49,40 @@ export async function POST(req: NextRequest, { params }: Params) {
       },
     });
 
+    // Seed the new barber with the shop's default hours + breaks (copy-on-apply).
+    const wh = (shop.defaultWorkingHours as unknown as {
+      weekday: number;
+      startMinute: number;
+      endMinute: number;
+    }[]) ?? [];
+    const br = (shop.defaultBreaks as unknown as {
+      weekday: number | null;
+      startMinute: number;
+      endMinute: number;
+    }[]) ?? [];
+    if (wh.length) {
+      await prisma.workingHours.createMany({
+        data: wh.map((i) => ({
+          barberId: barber.id,
+          weekday: i.weekday,
+          startMinute: i.startMinute,
+          endMinute: i.endMinute,
+        })),
+      });
+    }
+    if (br.length) {
+      await prisma.break.createMany({
+        data: br.map((i) => ({
+          barberId: barber.id,
+          weekday: i.weekday ?? null,
+          startMinute: i.startMinute,
+          endMinute: i.endMinute,
+          status: 'approved' as const,
+          requestedBy: 'owner' as const,
+        })),
+      });
+    }
+
     return ok({ barber }, { status: 201 });
   } catch (err) {
     return errorResponse(err);

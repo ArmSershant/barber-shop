@@ -184,6 +184,9 @@ model Shop {
   phone       String?
   instagram   String?
   status      ProviderStatus @default(pending)
+  // Copy-on-apply templates: arrays of {weekday,startMinute,endMinute}.
+  defaultWorkingHours Json   @default("[]") @map("default_working_hours")
+  defaultBreaks       Json   @default("[]") @map("default_breaks")
   createdAt   DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt   DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
   deletedAt   DateTime?      @map("deleted_at") @db.Timestamptz(6)

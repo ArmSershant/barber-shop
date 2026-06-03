@@ -10,6 +10,8 @@ import { ServicesSection } from '@/components/dashboard/ServicesSection';
 import { WorkingHoursSection } from '@/components/dashboard/WorkingHoursSection';
 import { TimeOffSection } from '@/components/dashboard/TimeOffSection';
 import { BreaksSection } from '@/components/dashboard/BreaksSection';
+import { ShopRosterSection } from '@/components/dashboard/ShopRosterSection';
+import { ShopDefaultsSection } from '@/components/dashboard/ShopDefaultsSection';
 
 export default function DashboardPage() {
   const t = useTranslations('dashboard');
@@ -52,6 +54,8 @@ export default function DashboardPage() {
             {isShopOwner && <ShopForm shop={provider?.shop ?? null} />}
             {isBarber && <BarberForm barber={provider?.barber ?? null} />}
             {((isShopOwner && provider?.shop) || (isBarber && provider?.barber)) && <ServicesSection />}
+            {isShopOwner && provider?.shop && <ShopDefaultsSection shopSlug={provider.shop.slug} />}
+            {isShopOwner && provider?.shop && <ShopRosterSection shopSlug={provider.shop.slug} />}
             {isBarber && provider?.barber && (
               <>
                 <WorkingHoursSection barberSlug={provider.barber.slug} />

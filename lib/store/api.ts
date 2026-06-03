@@ -73,6 +73,21 @@ export interface ProviderMeResponse {
   barber: Barber | null;
 }
 
+export interface ShopBarberListItem {
+  id: string;
+  slug: string;
+  displayName: string;
+  photoUrl: string | null;
+}
+
+export interface BarberProfileData {
+  slug: string;
+  displayName: string;
+  bio: string | null;
+  experienceYears: number | null;
+  photoUrl: string | null;
+}
+
 export interface Service {
   id: string;
   name: string;
@@ -115,6 +130,11 @@ export interface BreakRequest {
   endMinute: number;
 }
 
+export interface ShopDefaults {
+  workingHours: WorkingHourInterval[];
+  breaks: BreakRequest[];
+}
+
 // All requests are same-origin to /api; `credentials: 'include'` sends the
 // httpOnly auth cookies.
 const rawBaseQuery = fetchBaseQuery({ baseUrl: '/api', credentials: 'include' });
@@ -154,7 +174,17 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['Me', 'ProviderMe', 'Services', 'WorkingHours', 'TimeOff', 'Breaks'],
+  tagTypes: [
+    'Me',
+    'ProviderMe',
+    'Services',
+    'WorkingHours',
+    'TimeOff',
+    'Breaks',
+    'Barber',
+    'ShopBarbers',
+    'ShopDefaults',
+  ],
   endpoints: (builder) => ({
     me: builder.query<MeResponse, void>({
       query: () => '/me',
@@ -191,7 +221,19 @@ export const api = createApi({
     }),
     updateBarber: builder.mutation<{ barber: Barber }, { slug: string; data: UpdateBarberInput }>({
       query: ({ slug, data }) => ({ url: `/barbers/${slug}`, method: 'PATCH', body: data }),
-      invalidatesTags: ['ProviderMe'],
+      invalidatesTags: (_r, _e, arg) => ['ProviderMe', 'ShopBarbers', { type: 'Barber', id: arg.slug }],
+    }),
+    getBarber: builder.query<{ barber: BarberProfileData }, string>({
+      query: (slug) => `/barbers/${slug}`,
+      providesTags: (_r, _e, slug) => [{ type: 'Barber', id: slug }],
+    }),
+    getShopBarbers: builder.query<{ barbers: ShopBarberListItem[] }, string>({
+      query: (shopSlug) => `/shops/${shopSlug}/barbers`,
+      providesTags: ['ShopBarbers'],
+    }),
+    addShopBarber: builder.mutation<{ barber: Barber }, { slug: string; data: CreateBarberInput }>({
+      query: ({ slug, data }) => ({ url: `/shops/${slug}/barbers`, method: 'POST', body: data }),
+      invalidatesTags: ['ShopBarbers'],
     }),
 
     providerServices: builder.query<{ services: Service[] }, void>({
@@ -249,6 +291,23 @@ export const api = createApi({
       query: ({ slug, id }) => ({ url: `/barbers/${slug}/breaks/${id}`, method: 'DELETE' }),
       invalidatesTags: ['Breaks'],
     }),
+
+    getShopDefaults: builder.query<ShopDefaults, string>({
+      query: (shopSlug) => `/shops/${shopSlug}/defaults`,
+      providesTags: ['ShopDefaults'],
+    }),
+    setShopDefaults: builder.mutation<{ ok: boolean }, { slug: string } & ShopDefaults>({
+      query: ({ slug, workingHours, breaks }) => ({
+        url: `/shops/${slug}/defaults`,
+        method: 'PUT',
+        body: { workingHours, breaks },
+      }),
+      invalidatesTags: ['ShopDefaults'],
+    }),
+    applyShopDefaults: builder.mutation<{ ok: boolean; barbers: number }, string>({
+      query: (shopSlug) => ({ url: `/shops/${shopSlug}/apply-defaults`, method: 'POST' }),
+      invalidatesTags: ['WorkingHours', 'Breaks'],
+    }),
   }),
 });
 
@@ -262,6 +321,9 @@ export const {
   useUpdateShopMutation,
   useCreateBarberMutation,
   useUpdateBarberMutation,
+  useGetBarberQuery,
+  useGetShopBarbersQuery,
+  useAddShopBarberMutation,
   useProviderServicesQuery,
   useCreateServiceMutation,
   useUpdateServiceMutation,
@@ -274,4 +336,7 @@ export const {
   useGetBreaksQuery,
   useCreateBreakMutation,
   useDeleteBreakMutation,
+  useGetShopDefaultsQuery,
+  useSetShopDefaultsMutation,
+  useApplyShopDefaultsMutation,
 } = api;

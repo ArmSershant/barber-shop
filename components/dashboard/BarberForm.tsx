@@ -6,10 +6,19 @@ import { useTranslations } from 'next-intl';
 import { Button, NumberInput, Paper, Stack, Text, Textarea, TextInput, Title } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { createBarberSchema, type CreateBarberInput } from '@/lib/validation/provider';
-import { useCreateBarberMutation, useUpdateBarberMutation, type Barber } from '@/lib/store/api';
+import { useCreateBarberMutation, useUpdateBarberMutation } from '@/lib/store/api';
 import { apiErrorMessage } from '@/lib/api-error';
 
-export function BarberForm({ barber }: { barber: Barber | null }) {
+// Minimal shape the form needs — satisfied by both the RTK `Barber` type and
+// the public barber profile, so it works for self-edit and shop-roster edit.
+export interface EditableBarber {
+  slug: string;
+  displayName: string;
+  bio?: string | null;
+  experienceYears?: number | null;
+}
+
+export function BarberForm({ barber }: { barber: EditableBarber | null }) {
   const t = useTranslations('dashboard.barber');
   const [createBarber, { isLoading: creating }] = useCreateBarberMutation();
   const [updateBarber, { isLoading: updating }] = useUpdateBarberMutation();
