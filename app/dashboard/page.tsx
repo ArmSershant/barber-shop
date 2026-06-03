@@ -8,6 +8,8 @@ import { ShopForm } from '@/components/dashboard/ShopForm';
 import { BarberForm } from '@/components/dashboard/BarberForm';
 import { ServicesSection } from '@/components/dashboard/ServicesSection';
 import { WorkingHoursSection } from '@/components/dashboard/WorkingHoursSection';
+import { TimeOffSection } from '@/components/dashboard/TimeOffSection';
+import { BreaksSection } from '@/components/dashboard/BreaksSection';
 
 export default function DashboardPage() {
   const t = useTranslations('dashboard');
@@ -51,7 +53,11 @@ export default function DashboardPage() {
             {isBarber && <BarberForm barber={provider?.barber ?? null} />}
             {((isShopOwner && provider?.shop) || (isBarber && provider?.barber)) && <ServicesSection />}
             {isBarber && provider?.barber && (
-              <WorkingHoursSection barberSlug={provider.barber.slug} />
+              <>
+                <WorkingHoursSection barberSlug={provider.barber.slug} />
+                <BreaksSection barberSlug={provider.barber.slug} />
+                <TimeOffSection barberSlug={provider.barber.slug} />
+              </>
             )}
             {!isShopOwner && !isBarber && <Text c="dimmed">{t('customerOnly')}</Text>}
           </>

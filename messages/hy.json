@@ -104,6 +104,29 @@
       "sun": "Կիրակի"
     }
   },
+  "availability": {
+    "timeOffHeading": "Բացակայություն",
+    "timeOffEmpty": "Բացակայություններ չկան։",
+    "startDate": "Սկիզբ",
+    "endDate": "Ավարտ",
+    "reason": "Պատճառ (ոչ պարտադիր)",
+    "addTimeOff": "Ավելացնել բացակայություն",
+    "timeOffAdded": "Բացակայությունն ավելացվեց։",
+    "breaksHeading": "Ամենօրյա ընդմիջումներ",
+    "breaksEmpty": "Ընդմիջումներ չկան։",
+    "everyDay": "Ամեն օր",
+    "day": "Օր",
+    "from": "Սկսած",
+    "to": "Մինչև",
+    "addBreak": "Ավելացնել ընդմիջում",
+    "breakAdded": "Ընդմիջումն ավելացվեց։",
+    "deleted": "Հեռացվեց։",
+    "deleteConfirm": "Հեռացնե՞լ սա։",
+    "delete": "Հեռացնել",
+    "cancel": "Չեղարկել",
+    "pending": "Սպասում է հաստատման",
+    "approved": "Հաստատված"
+  },
   "discover": {
     "barbersTitle": "Վարսավիրներ",
     "browseBarbers": "Դիտել վարսավիրներին",

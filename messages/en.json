@@ -104,6 +104,29 @@
       "sun": "Sunday"
     }
   },
+  "availability": {
+    "timeOffHeading": "Time off",
+    "timeOffEmpty": "No time off scheduled.",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "reason": "Reason (optional)",
+    "addTimeOff": "Add time off",
+    "timeOffAdded": "Time off added.",
+    "breaksHeading": "Daily breaks",
+    "breaksEmpty": "No breaks set.",
+    "everyDay": "Every day",
+    "day": "Day",
+    "from": "From",
+    "to": "To",
+    "addBreak": "Add break",
+    "breakAdded": "Break added.",
+    "deleted": "Removed.",
+    "deleteConfirm": "Remove this?",
+    "delete": "Remove",
+    "cancel": "Cancel",
+    "pending": "Pending approval",
+    "approved": "Approved"
+  },
   "discover": {
     "barbersTitle": "Barbers",
     "browseBarbers": "Browse barbers",

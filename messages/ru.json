@@ -104,6 +104,29 @@
       "sun": "Воскресенье"
     }
   },
+  "availability": {
+    "timeOffHeading": "Отгулы",
+    "timeOffEmpty": "Нет запланированных отгулов.",
+    "startDate": "Начало",
+    "endDate": "Конец",
+    "reason": "Причина (необязательно)",
+    "addTimeOff": "Добавить отгул",
+    "timeOffAdded": "Отгул добавлен.",
+    "breaksHeading": "Ежедневные перерывы",
+    "breaksEmpty": "Нет перерывов.",
+    "everyDay": "Каждый день",
+    "day": "День",
+    "from": "С",
+    "to": "До",
+    "addBreak": "Добавить перерыв",
+    "breakAdded": "Перерыв добавлен.",
+    "deleted": "Удалено.",
+    "deleteConfirm": "Удалить это?",
+    "delete": "Удалить",
+    "cancel": "Отмена",
+    "pending": "Ожидает подтверждения",
+    "approved": "Подтверждено"
+  },
   "discover": {
     "barbersTitle": "Барберы",
     "browseBarbers": "Смотреть барберов",

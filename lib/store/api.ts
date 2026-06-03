@@ -88,6 +88,33 @@ export interface WorkingHourInterval {
   endMinute: number;
 }
 
+export interface TimeOff {
+  id: string;
+  startsAt: string;
+  endsAt: string;
+  reason?: string | null;
+  status: string;
+  requestedBy: string;
+}
+export interface Break {
+  id: string;
+  weekday: number | null;
+  startMinute: number;
+  endMinute: number;
+  status: string;
+  requestedBy: string;
+}
+export interface TimeOffRequest {
+  startsAt: string;
+  endsAt: string;
+  reason?: string;
+}
+export interface BreakRequest {
+  weekday: number | null;
+  startMinute: number;
+  endMinute: number;
+}
+
 // All requests are same-origin to /api; `credentials: 'include'` sends the
 // httpOnly auth cookies.
 const rawBaseQuery = fetchBaseQuery({ baseUrl: '/api', credentials: 'include' });
@@ -127,7 +154,7 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['Me', 'ProviderMe', 'Services', 'WorkingHours'],
+  tagTypes: ['Me', 'ProviderMe', 'Services', 'WorkingHours', 'TimeOff', 'Breaks'],
   endpoints: (builder) => ({
     me: builder.query<MeResponse, void>({
       query: () => '/me',
@@ -196,6 +223,32 @@ export const api = createApi({
       }),
       invalidatesTags: ['WorkingHours'],
     }),
+
+    getTimeOff: builder.query<{ timeOff: TimeOff[] }, string>({
+      query: (slug) => `/barbers/${slug}/time-off`,
+      providesTags: ['TimeOff'],
+    }),
+    createTimeOff: builder.mutation<{ timeOff: TimeOff }, { slug: string; data: TimeOffRequest }>({
+      query: ({ slug, data }) => ({ url: `/barbers/${slug}/time-off`, method: 'POST', body: data }),
+      invalidatesTags: ['TimeOff'],
+    }),
+    deleteTimeOff: builder.mutation<{ ok: boolean }, { slug: string; id: string }>({
+      query: ({ slug, id }) => ({ url: `/barbers/${slug}/time-off/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['TimeOff'],
+    }),
+
+    getBreaks: builder.query<{ breaks: Break[] }, string>({
+      query: (slug) => `/barbers/${slug}/breaks`,
+      providesTags: ['Breaks'],
+    }),
+    createBreak: builder.mutation<{ break: Break }, { slug: string; data: BreakRequest }>({
+      query: ({ slug, data }) => ({ url: `/barbers/${slug}/breaks`, method: 'POST', body: data }),
+      invalidatesTags: ['Breaks'],
+    }),
+    deleteBreak: builder.mutation<{ ok: boolean }, { slug: string; id: string }>({
+      query: ({ slug, id }) => ({ url: `/barbers/${slug}/breaks/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['Breaks'],
+    }),
   }),
 });
 
@@ -215,4 +268,10 @@ export const {
   useDeleteServiceMutation,
   useGetWorkingHoursQuery,
   useSetWorkingHoursMutation,
+  useGetTimeOffQuery,
+  useCreateTimeOffMutation,
+  useDeleteTimeOffMutation,
+  useGetBreaksQuery,
+  useCreateBreakMutation,
+  useDeleteBreakMutation,
 } = api;
