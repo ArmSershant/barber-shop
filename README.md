@@ -103,6 +103,36 @@ docker-compose.yml   # local Postgres + Redis
     --to-schema-datamodel prisma/schema.prisma --exit-code
   ```
 
+## Auth
+
+Email + password auth with our own JWT. Access + refresh tokens are stored in
+**httpOnly cookies**; refresh tokens rotate on every use and revoke the whole
+chain if a used token is replayed (reuse detection). Roles (`customer`,
+`barber`, `shop_owner`, `admin`) live in `user_roles` and are embedded in the
+access token; guard routes with `requireAuth` / `requireRole` from
+`lib/auth/rbac.ts`.
+
+Endpoints:
+
+| Method | Path | Purpose |
+|--------|------|---------|
+| POST | `/api/auth/register` | Create account (`role`: customer/barber/shop_owner), logs in |
+| POST | `/api/auth/login` | Email + password |
+| POST | `/api/auth/refresh` | Rotate tokens (uses the refresh cookie) |
+| POST | `/api/auth/logout` | Revoke refresh token, clear cookies |
+| GET | `/api/me` | Current user (requires auth) |
+| GET | `/api/provider/ping` | Demo role-guarded route (barber/shop_owner only) |
+
+Smoke test (dev server must be running):
+
+```bash
+bash scripts/smoke-auth.sh
+```
+
+> After pulling auth changes, run `pnpm install` (new deps: `jose`,
+> `@node-rs/argon2`) and `pnpm prisma migrate deploy && pnpm prisma generate`
+> (new `refresh_tokens` table).
+
 ## Deploying to Vercel
 
 1. Import the GitHub repo in Vercel (it auto-detects Next.js + pnpm).
