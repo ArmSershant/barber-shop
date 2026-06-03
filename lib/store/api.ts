@@ -5,6 +5,12 @@ import {
   type FetchArgs,
   type FetchBaseQueryError,
 } from '@reduxjs/toolkit/query/react';
+import type {
+  CreateShopInput,
+  UpdateShopInput,
+  CreateBarberInput,
+  UpdateBarberInput,
+} from '@/lib/validation/provider';
 
 // ---- Types (mirror the API responses) ----
 export type Role = 'customer' | 'barber' | 'shop_owner' | 'admin';
@@ -34,6 +40,36 @@ export interface RegisterRequest {
 export interface LoginRequest {
   email: string;
   password: string;
+}
+
+export interface Shop {
+  id: string;
+  slug: string;
+  name: string;
+  description?: string | null;
+  address?: string | null;
+  phone?: string | null;
+  instagram?: string | null;
+  logoUrl?: string | null;
+  districtId?: number | null;
+  status: string;
+}
+
+export interface Barber {
+  id: string;
+  slug: string;
+  displayName: string;
+  bio?: string | null;
+  experienceYears?: number | null;
+  photoUrl?: string | null;
+  districtId?: number | null;
+  shopId?: string | null;
+  status: string;
+}
+
+export interface ProviderMeResponse {
+  shop: Shop | null;
+  barber: Barber | null;
 }
 
 // All requests are same-origin to /api; `credentials: 'include'` sends the
@@ -75,7 +111,7 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['Me'],
+  tagTypes: ['Me', 'ProviderMe'],
   endpoints: (builder) => ({
     me: builder.query<MeResponse, void>({
       query: () => '/me',
@@ -93,7 +129,38 @@ export const api = createApi({
       query: () => ({ url: '/auth/logout', method: 'POST' }),
       invalidatesTags: ['Me'],
     }),
+
+    providerMe: builder.query<ProviderMeResponse, void>({
+      query: () => '/provider/me',
+      providesTags: ['ProviderMe'],
+    }),
+    createShop: builder.mutation<{ shop: Shop }, CreateShopInput>({
+      query: (body) => ({ url: '/shops', method: 'POST', body }),
+      invalidatesTags: ['ProviderMe'],
+    }),
+    updateShop: builder.mutation<{ shop: Shop }, { slug: string; data: UpdateShopInput }>({
+      query: ({ slug, data }) => ({ url: `/shops/${slug}`, method: 'PATCH', body: data }),
+      invalidatesTags: ['ProviderMe'],
+    }),
+    createBarber: builder.mutation<{ barber: Barber }, CreateBarberInput>({
+      query: (body) => ({ url: '/barbers', method: 'POST', body }),
+      invalidatesTags: ['ProviderMe'],
+    }),
+    updateBarber: builder.mutation<{ barber: Barber }, { slug: string; data: UpdateBarberInput }>({
+      query: ({ slug, data }) => ({ url: `/barbers/${slug}`, method: 'PATCH', body: data }),
+      invalidatesTags: ['ProviderMe'],
+    }),
   }),
 });
 
-export const { useMeQuery, useRegisterMutation, useLoginMutation, useLogoutMutation } = api;
+export const {
+  useMeQuery,
+  useRegisterMutation,
+  useLoginMutation,
+  useLogoutMutation,
+  useProviderMeQuery,
+  useCreateShopMutation,
+  useUpdateShopMutation,
+  useCreateBarberMutation,
+  useUpdateBarberMutation,
+} = api;

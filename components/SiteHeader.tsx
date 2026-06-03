@@ -24,6 +24,11 @@ export function SiteHeader() {
           <LanguageSwitcher />
           {isLoading ? null : user ? (
             <>
+              {(user.roles.includes('shop_owner') || user.roles.includes('barber')) && (
+                <Anchor component={Link} href="/dashboard" c="inherit" fz="sm">
+                  {t('dashboard')}
+                </Anchor>
+              )}
               <Text c="dimmed" fz="sm">
                 {t('greeting', { name: user.fullName })}
               </Text>

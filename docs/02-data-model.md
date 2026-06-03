@@ -169,7 +169,11 @@ At the center sits **`bookings`**, each pointing to one **customer** (`users`) a
 | column | type | notes |
 |--------|------|-------|
 | id | uuid PK | |
-| customer_user_id | uuid FK→users | |
+| customer_user_id | uuid FK→users | **nullable** — null for guest (no-account) bookings |
+| guest_name | text | nullable; required when customer_user_id is null |
+| guest_phone | text | nullable; required when customer_user_id is null |
+| guest_email | text | nullable |
+| manage_token | text | nullable; random token (hashed) letting a guest view/cancel without an account |
 | barber_id | uuid FK→barbers | |
 | shop_id | uuid FK→shops | nullable; denormalized for shop dashboards |
 | starts_at | timestamptz | |
@@ -181,6 +185,8 @@ At the center sits **`bookings`**, each pointing to one **customer** (`users`) a
 | cancel_reason | text | nullable |
 | cancelled_by | text | nullable: `customer` \| `provider` \| `system` |
 | created_at / updated_at | timestamptz | |
+
+> **Guest bookings (no forced registration):** clients can browse and book without an account. A booking is tied to either a registered `customer_user_id` **or** guest contact (`guest_name` + `guest_phone` required). A `CHECK` enforces one-or-the-other. Guests get a `manage_token` (link) to cancel; after booking we suggest creating an account (pre-filled from the guest fields). Phone OTP verification is deferred to the SMS/payments phase. This column set is added in the migration that ships with the booking feature.
 
 > **Double-booking prevention (the critical constraint):**
 > ```sql

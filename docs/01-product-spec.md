@@ -112,14 +112,15 @@ A realistic solo/2-person build of this MVP is on the order of **8–12 weeks**.
 
 ## 7. User flows
 
-### 7.1 Customer booking (single path for shop barbers and independents)
-1. Browse/search → filter by district / service / rating.
+### 7.1 Customer booking (no forced registration; single path for shop barbers and independents)
+1. Browse/search → filter by district / service / rating. **No login required to browse.**
 2. Open a **barber** profile (reached directly or via a shop profile).
 3. Pick one or more **services** → system sums duration + price.
 4. System shows **available slots** for the next N days (computed: working hours − existing bookings − blocked time − buffers, snapped to a slot granularity that fits the chosen duration).
-5. Pick date + time → confirm (logged-in required; prompt to sign up/in if not).
+5. Pick date + time → confirm. **No account needed:** a guest enters name + phone (+ optional email). Logged-in users skip this. (Phone OTP verification deferred to the SMS phase.)
 6. Booking created → **auto-confirmed** (or "requested" if provider uses request mode).
-7. Confirmation email + dashboard entry; reminder email before the appointment.
+7. Confirmation (email if provided) + a **manage-booking link** for guests; reminder before the appointment.
+8. **After** confirming, suggest creating an account (pre-filled from name/phone) to track and rebook — suggested, never required.
 
 ### 7.2 Provider handling a booking
 1. New booking appears in dashboard + email/Telegram.

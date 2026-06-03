@@ -4,7 +4,8 @@
     "signup": "Sign up",
     "logout": "Log out",
     "loggingOut": "Logging out…",
-    "greeting": "Hi, {name}"
+    "greeting": "Hi, {name}",
+    "dashboard": "Dashboard"
   },
   "home": {
     "subtitle": "Book barbers in Yerevan.",
@@ -37,6 +38,34 @@
       "haveAccount": "Already have an account?",
       "login": "Log in",
       "failed": "Could not create the account."
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "loginRequired": "Please log in to access your dashboard.",
+    "loginLink": "Log in",
+    "customerOnly": "You're signed in as a customer. Browse barbers to book.",
+    "shop": {
+      "heading": "Your shop",
+      "name": "Shop name",
+      "description": "Description",
+      "address": "Address",
+      "phone": "Phone",
+      "instagram": "Instagram",
+      "create": "Create shop",
+      "save": "Save changes",
+      "created": "Shop created.",
+      "saved": "Shop updated."
+    },
+    "barber": {
+      "heading": "Your barber profile",
+      "displayName": "Display name",
+      "bio": "Bio",
+      "experienceYears": "Years of experience",
+      "create": "Create profile",
+      "save": "Save changes",
+      "created": "Profile created.",
+      "saved": "Profile updated."
     }
   }
 }

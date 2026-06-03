@@ -1,14 +1,25 @@
 'use client';
 
 import Link from 'next/link';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import {
+  Anchor,
+  Button,
+  Container,
+  Paper,
+  PasswordInput,
+  Select,
+  Stack,
+  Text,
+  TextInput,
+  Title,
+} from '@mantine/core';
 import { registerSchema, type RegisterInput } from '@/lib/validation/auth';
 import { useRegisterMutation } from '@/lib/store/api';
 import { apiErrorMessage } from '@/lib/api-error';
-import styles from '../auth.module.scss';
 
 export default function RegisterPage() {
   const t = useTranslations('auth.register');
@@ -16,6 +27,7 @@ export default function RegisterPage() {
   const [registerUser, { isLoading }] = useRegisterMutation();
   const {
     register,
+    control,
     handleSubmit,
     setError,
     formState: { errors },
@@ -23,6 +35,12 @@ export default function RegisterPage() {
     resolver: zodResolver(registerSchema),
     defaultValues: { role: 'customer' },
   });
+
+  const roleOptions = [
+    { value: 'customer', label: t('roleCustomer') },
+    { value: 'barber', label: t('roleBarber') },
+    { value: 'shop_owner', label: t('roleShopOwner') },
+  ];
 
   const onSubmit = handleSubmit(async (values) => {
     try {
@@ -34,63 +52,72 @@ export default function RegisterPage() {
   });
 
   return (
-    <main className={styles.wrap}>
-      <h1 className={styles.title}>{t('title')}</h1>
-      <p className={styles.sub}>{t('subtitle')}</p>
+    <Container size={420} py={60}>
+      <Title order={2} ta="center">
+        {t('title')}
+      </Title>
+      <Text c="dimmed" size="sm" ta="center" mt={4}>
+        {t('subtitle')}
+      </Text>
 
-      <form className={styles.form} onSubmit={onSubmit} noValidate>
-        <div className={styles.field}>
-          <label className={styles.label} htmlFor="fullName">
-            {t('fullName')}
-          </label>
-          <input id="fullName" autoComplete="name" className={styles.input} {...register('fullName')} />
-          {errors.fullName && <span className={styles.error}>{errors.fullName.message}</span>}
-        </div>
-
-        <div className={styles.field}>
-          <label className={styles.label} htmlFor="email">
-            {t('email')}
-          </label>
-          <input id="email" type="email" autoComplete="email" className={styles.input} {...register('email')} />
-          {errors.email && <span className={styles.error}>{errors.email.message}</span>}
-        </div>
-
-        <div className={styles.field}>
-          <label className={styles.label} htmlFor="password">
-            {t('password')}
-          </label>
-          <input
-            id="password"
-            type="password"
+      <Paper
+        withBorder
+        shadow="sm"
+        p="lg"
+        radius="md"
+        mt="lg"
+        component="form"
+        onSubmit={onSubmit}
+        noValidate
+      >
+        <Stack>
+          <TextInput
+            label={t('fullName')}
+            autoComplete="name"
+            error={errors.fullName?.message}
+            {...register('fullName')}
+          />
+          <TextInput
+            label={t('email')}
+            type="email"
+            autoComplete="email"
+            error={errors.email?.message}
+            {...register('email')}
+          />
+          <PasswordInput
+            label={t('password')}
             autoComplete="new-password"
-            className={styles.input}
+            error={errors.password?.message}
             {...register('password')}
           />
-          {errors.password && <span className={styles.error}>{errors.password.message}</span>}
-        </div>
+          <Controller
+            name="role"
+            control={control}
+            render={({ field }) => (
+              <Select
+                label={t('roleLabel')}
+                data={roleOptions}
+                value={field.value}
+                onChange={(value) => field.onChange(value ?? 'customer')}
+                allowDeselect={false}
+                error={errors.role?.message}
+              />
+            )}
+          />
+          {errors.root && (
+            <Text c="red" size="sm">
+              {errors.root.message}
+            </Text>
+          )}
+          <Button type="submit" loading={isLoading} fullWidth>
+            {t('submit')}
+          </Button>
+        </Stack>
+      </Paper>
 
-        <div className={styles.field}>
-          <label className={styles.label} htmlFor="role">
-            {t('roleLabel')}
-          </label>
-          <select id="role" className={styles.select} {...register('role')}>
-            <option value="customer">{t('roleCustomer')}</option>
-            <option value="barber">{t('roleBarber')}</option>
-            <option value="shop_owner">{t('roleShopOwner')}</option>
-          </select>
-          {errors.role && <span className={styles.error}>{errors.role.message}</span>}
-        </div>
-
-        {errors.root && <p className={styles.formError}>{errors.root.message}</p>}
-
-        <button className={styles.submit} type="submit" disabled={isLoading}>
-          {isLoading ? t('submitting') : t('submit')}
-        </button>
-      </form>
-
-      <p className={styles.foot}>
-        {t('haveAccount')} <Link href="/login">{t('login')}</Link>
-      </p>
-    </main>
+      <Text c="dimmed" size="sm" ta="center" mt="md">
+        {t('haveAccount')} <Anchor component={Link} href="/login">{t('login')}</Anchor>
+      </Text>
+    </Container>
   );
 }
