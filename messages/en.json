@@ -149,6 +149,24 @@
     "pending": "Pending approval",
     "approved": "Approved"
   },
+  "booking": {
+    "heading": "Book an appointment",
+    "selectServices": "Choose services",
+    "pickDate": "Pick a date",
+    "pickTime": "Pick a time",
+    "noSlots": "No free times that day.",
+    "total": "Total",
+    "yourName": "Your name",
+    "yourPhone": "Phone",
+    "yourEmail": "Email (optional)",
+    "guestHint": "No account needed — just your name and phone.",
+    "book": "Book",
+    "booking": "Booking…",
+    "confirmedTitle": "Booking confirmed",
+    "confirmedBody": "See you on {when}.",
+    "guestManageNote": "Save this link to manage your booking.",
+    "bookAnother": "Book another"
+  },
   "discover": {
     "barbersTitle": "Barbers",
     "browseBarbers": "Browse barbers",

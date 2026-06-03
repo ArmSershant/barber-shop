@@ -149,6 +149,24 @@
     "pending": "Ожидает подтверждения",
     "approved": "Подтверждено"
   },
+  "booking": {
+    "heading": "Записаться",
+    "selectServices": "Выберите услуги",
+    "pickDate": "Выберите дату",
+    "pickTime": "Выберите время",
+    "noSlots": "В этот день нет свободного времени.",
+    "total": "Итого",
+    "yourName": "Ваше имя",
+    "yourPhone": "Телефон",
+    "yourEmail": "Эл. почта (необязательно)",
+    "guestHint": "Аккаунт не нужен — только имя и телефон.",
+    "book": "Записаться",
+    "booking": "Запись…",
+    "confirmedTitle": "Запись подтверждена",
+    "confirmedBody": "До встречи {when}.",
+    "guestManageNote": "Сохраните эту ссылку для управления записью.",
+    "bookAnother": "Записаться ещё раз"
+  },
   "discover": {
     "barbersTitle": "Барберы",
     "browseBarbers": "Смотреть барберов",

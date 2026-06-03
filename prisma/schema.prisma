@@ -343,7 +343,11 @@ model Break {
 
 model Booking {
   id               String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  customerUserId   String        @map("customer_user_id") @db.Uuid
+  customerUserId   String?       @map("customer_user_id") @db.Uuid
+  guestName        String?       @map("guest_name")
+  guestPhone       String?       @map("guest_phone")
+  guestEmail       String?       @map("guest_email")
+  manageToken      String?       @map("manage_token")
   barberId         String        @map("barber_id") @db.Uuid
   shopId           String?       @map("shop_id") @db.Uuid
   startsAt         DateTime      @map("starts_at") @db.Timestamptz(6)
@@ -358,7 +362,7 @@ model Booking {
   createdAt        DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt        DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  customer User             @relation("CustomerBookings", fields: [customerUserId], references: [id])
+  customer User?            @relation("CustomerBookings", fields: [customerUserId], references: [id])
   barber   Barber           @relation(fields: [barberId], references: [id])
   shop     Shop?            @relation(fields: [shopId], references: [id])
   services BookingService[]

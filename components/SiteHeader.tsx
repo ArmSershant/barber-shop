@@ -4,13 +4,15 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Anchor, Button, Group, Text } from '@mantine/core';
-import { useMeQuery, useLogoutMutation } from '@/lib/store/api';
+import { api, useMeQuery, useLogoutMutation } from '@/lib/store/api';
+import { useAppDispatch } from '@/lib/store/hooks';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import styles from './SiteHeader.module.scss';
 
 export function SiteHeader() {
   const t = useTranslations('header');
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const { data, isLoading } = useMeQuery();
   const [logout, { isLoading: loggingOut }] = useLogoutMutation();
   const user = data?.user ?? null;
@@ -19,6 +21,8 @@ export function SiteHeader() {
     try {
       await logout().unwrap();
     } finally {
+      // Clear all cached data so the header (and any page) reflect logout immediately.
+      dispatch(api.util.resetApiState());
       router.push('/');
     }
   };

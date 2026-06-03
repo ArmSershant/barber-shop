@@ -44,5 +44,9 @@ export function errorResponse(err: unknown): NextResponse {
 
   // Unknown / unexpected: log server-side, hide details from the client.
   console.error('Unhandled API error:', err);
-  return NextResponse.json(envelope('INTERNAL', 'Something went wrong.'), { status: 500 });
+  const debug =
+    process.env.NODE_ENV !== 'production'
+      ? { debug: err instanceof Error ? err.message : String(err) }
+      : undefined;
+  return NextResponse.json(envelope('INTERNAL', 'Something went wrong.', debug), { status: 500 });
 }

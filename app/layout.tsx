@@ -5,6 +5,7 @@ import { Notifications } from '@mantine/notifications';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
 import '@mantine/notifications/styles.css';
 import './globals.scss';
 import 'flag-icons/css/flag-icons.min.css';

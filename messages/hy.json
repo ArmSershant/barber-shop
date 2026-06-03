@@ -149,6 +149,24 @@
     "pending": "Սպասում է հաստատման",
     "approved": "Հաստատված"
   },
+  "booking": {
+    "heading": "Ամրագրել այց",
+    "selectServices": "Ընտրեք ծառայությունները",
+    "pickDate": "Ընտրեք օրը",
+    "pickTime": "Ընտրեք ժամը",
+    "noSlots": "Այդ օրը ազատ ժամեր չկան։",
+    "total": "Ընդամենը",
+    "yourName": "Ձեր անունը",
+    "yourPhone": "Հեռախոս",
+    "yourEmail": "Էլ. փոստ (ոչ պարտադիր)",
+    "guestHint": "Հաշիվ պետք չէ — միայն անուն և հեռախոս։",
+    "book": "Ամրագրել",
+    "booking": "Ամրագրում…",
+    "confirmedTitle": "Ամրագրումը հաստատված է",
+    "confirmedBody": "Կտեսնվենք {when}-ին։",
+    "guestManageNote": "Պահպանեք այս հղումը՝ ամրագրումը կառավարելու համար։",
+    "bookAnother": "Ամրագրել ևս մեկը"
+  },
   "discover": {
     "barbersTitle": "Վարսավիրներ",
     "browseBarbers": "Դիտել վարսավիրներին",

@@ -2,8 +2,9 @@ import Link from 'next/link';
 import type { Route } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
-import { Anchor, Avatar, Button, Card, Container, Group, Stack, Text, Title } from '@mantine/core';
+import { Anchor, Avatar, Card, Container, Group, Stack, Text, Title } from '@mantine/core';
 import { getBarberProfile } from '@/lib/queries/barbers';
+import { BookingWidget } from '@/components/booking/BookingWidget';
 
 const DAY_KEYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
 
@@ -76,12 +77,7 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
                     ~{s.durationMin} {ts('minShort')}
                   </Text>
                 </div>
-                <Group gap="sm" wrap="nowrap">
-                  <Text fw={600}>{s.priceAmd.toLocaleString()} ֏</Text>
-                  <Button size="xs" disabled>
-                    {t('book')}
-                  </Button>
-                </Group>
+                <Text fw={600}>{s.priceAmd.toLocaleString()} ֏</Text>
               </Group>
             </Card>
           ))}
@@ -105,9 +101,11 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
         })}
       </Stack>
 
-      <Text c="dimmed" size="sm" mt="xl">
-        {t('bookingSoon')}
-      </Text>
+      {barber.ownedServices.length > 0 && (
+        <div style={{ marginTop: 'var(--mantine-spacing-xl)' }}>
+          <BookingWidget barberSlug={barber.slug} services={barber.ownedServices} />
+        </div>
+      )}
     </Container>
   );
 }

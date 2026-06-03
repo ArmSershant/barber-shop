@@ -135,6 +135,30 @@ export interface ShopDefaults {
   breaks: BreakRequest[];
 }
 
+export interface AvailabilityResponse {
+  date: string;
+  durationMin: number;
+  priceAmd: number;
+  slots: string[];
+}
+export interface CreateBookingRequest {
+  serviceIds: string[];
+  startsAt: string;
+  note?: string;
+  guest?: { name: string; phone: string; email?: string };
+}
+export interface CreateBookingResult {
+  booking: {
+    id: string;
+    startsAt: string;
+    endsAt: string;
+    status: string;
+    totalPriceAmd: number;
+    totalDurationMin: number;
+  };
+  manageToken: string | null;
+}
+
 // All requests are same-origin to /api; `credentials: 'include'` sends the
 // httpOnly auth cookies.
 const rawBaseQuery = fetchBaseQuery({ baseUrl: '/api', credentials: 'include' });
@@ -184,6 +208,7 @@ export const api = createApi({
     'Barber',
     'ShopBarbers',
     'ShopDefaults',
+    'Availability',
   ],
   endpoints: (builder) => ({
     me: builder.query<MeResponse, void>({
@@ -308,6 +333,19 @@ export const api = createApi({
       query: (shopSlug) => ({ url: `/shops/${shopSlug}/apply-defaults`, method: 'POST' }),
       invalidatesTags: ['WorkingHours', 'Breaks'],
     }),
+
+    getAvailability: builder.query<
+      AvailabilityResponse,
+      { slug: string; date: string; serviceIds: string[] }
+    >({
+      query: ({ slug, date, serviceIds }) =>
+        `/barbers/${slug}/availability?date=${date}&serviceIds=${serviceIds.join(',')}`,
+      providesTags: ['Availability'],
+    }),
+    createBooking: builder.mutation<CreateBookingResult, { slug: string } & CreateBookingRequest>({
+      query: ({ slug, ...body }) => ({ url: `/barbers/${slug}/bookings`, method: 'POST', body }),
+      invalidatesTags: ['Availability'],
+    }),
   }),
 });
 
@@ -339,4 +377,6 @@ export const {
   useGetShopDefaultsQuery,
   useSetShopDefaultsMutation,
   useApplyShopDefaultsMutation,
+  useGetAvailabilityQuery,
+  useCreateBookingMutation,
 } = api;
