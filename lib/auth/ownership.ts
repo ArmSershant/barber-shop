@@ -29,3 +29,23 @@ export async function assertCanEditBarberBySlug(slug: string, userId: string) {
   }
   return barber;
 }
+
+/**
+ * Resolve which catalog the current user owns: their shop's, or (for an
+ * independent barber) their own. Exactly one id is non-null. Throws 403 if the
+ * user has no provider profile yet.
+ */
+export async function getProviderCatalogOwner(
+  userId: string,
+): Promise<{ shopId: string | null; ownerBarberId: string | null }> {
+  const shop = await prisma.shop.findFirst({
+    where: { ownerUserId: userId, deletedAt: null },
+    select: { id: true },
+  });
+  if (shop) return { shopId: shop.id, ownerBarberId: null };
+
+  const barber = await prisma.barber.findUnique({ where: { userId }, select: { id: true } });
+  if (barber) return { shopId: null, ownerBarberId: barber.id };
+
+  throw new HttpError(403, 'NO_PROVIDER_PROFILE', 'Create a shop or barber profile first.');
+}

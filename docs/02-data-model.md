@@ -129,12 +129,16 @@ At the center sits **`bookings`**, each pointing to one **customer** (`users`) a
 | owner_barber_id | uuid FK→barbers | nullable (independent's own catalog) |
 | name | text | e.g. "Men's haircut", "Beard trim" |
 | description | text | |
-| duration_min | smallint | base duration |
+| duration_min | smallint | **estimated/typical** duration used by the scheduling engine — not a promise to the client |
 | price_amd | integer | whole drams |
 | is_active | boolean | |
 | created_at / updated_at | timestamptz | |
 
 > **Constraint:** exactly one of `shop_id` / `owner_barber_id` is set.
+
+> **Duration is an estimate, not a guarantee.** `duration_min` exists because the calendar must reserve a block of chair time and prevent overlaps — but real cut time varies by barber and request. Present it softly to clients ("~30 min"). Per-barber differences use `barber_services.duration_min_override`.
+>
+> **Planned (booking phase): average actual duration.** On completed bookings we record the real duration (e.g. `actual_duration_min`, derived from a barber "start/finish" action), then compute a rolling **average actual duration per barber/service** to (a) display on the barber's card ("avg 35 min") and (b) optionally auto-tune the scheduling estimate. Requires the booking + mark-completed flow, so it ships with/after booking.
 
 ### barber_services (which barber does which service, with optional overrides)
 | column | type | notes |

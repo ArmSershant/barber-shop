@@ -11,6 +11,7 @@ import type {
   CreateBarberInput,
   UpdateBarberInput,
 } from '@/lib/validation/provider';
+import type { CreateServiceInput, UpdateServiceInput } from '@/lib/validation/service';
 
 // ---- Types (mirror the API responses) ----
 export type Role = 'customer' | 'barber' | 'shop_owner' | 'admin';
@@ -72,6 +73,21 @@ export interface ProviderMeResponse {
   barber: Barber | null;
 }
 
+export interface Service {
+  id: string;
+  name: string;
+  description?: string | null;
+  durationMin: number;
+  priceAmd: number;
+  isActive: boolean;
+}
+
+export interface WorkingHourInterval {
+  weekday: number; // 0=Mon .. 6=Sun
+  startMinute: number;
+  endMinute: number;
+}
+
 // All requests are same-origin to /api; `credentials: 'include'` sends the
 // httpOnly auth cookies.
 const rawBaseQuery = fetchBaseQuery({ baseUrl: '/api', credentials: 'include' });
@@ -111,7 +127,7 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['Me', 'ProviderMe'],
+  tagTypes: ['Me', 'ProviderMe', 'Services', 'WorkingHours'],
   endpoints: (builder) => ({
     me: builder.query<MeResponse, void>({
       query: () => '/me',
@@ -150,6 +166,36 @@ export const api = createApi({
       query: ({ slug, data }) => ({ url: `/barbers/${slug}`, method: 'PATCH', body: data }),
       invalidatesTags: ['ProviderMe'],
     }),
+
+    providerServices: builder.query<{ services: Service[] }, void>({
+      query: () => '/provider/services',
+      providesTags: ['Services'],
+    }),
+    createService: builder.mutation<{ service: Service }, CreateServiceInput>({
+      query: (body) => ({ url: '/provider/services', method: 'POST', body }),
+      invalidatesTags: ['Services'],
+    }),
+    updateService: builder.mutation<{ service: Service }, { id: string; data: UpdateServiceInput }>({
+      query: ({ id, data }) => ({ url: `/provider/services/${id}`, method: 'PATCH', body: data }),
+      invalidatesTags: ['Services'],
+    }),
+    deleteService: builder.mutation<{ ok: boolean }, string>({
+      query: (id) => ({ url: `/provider/services/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['Services'],
+    }),
+
+    getWorkingHours: builder.query<{ intervals: WorkingHourInterval[] }, string>({
+      query: (slug) => `/barbers/${slug}/working-hours`,
+      providesTags: ['WorkingHours'],
+    }),
+    setWorkingHours: builder.mutation<{ ok: boolean }, { slug: string; intervals: WorkingHourInterval[] }>({
+      query: ({ slug, intervals }) => ({
+        url: `/barbers/${slug}/working-hours`,
+        method: 'PUT',
+        body: { intervals },
+      }),
+      invalidatesTags: ['WorkingHours'],
+    }),
   }),
 });
 
@@ -163,4 +209,10 @@ export const {
   useUpdateShopMutation,
   useCreateBarberMutation,
   useUpdateBarberMutation,
+  useProviderServicesQuery,
+  useCreateServiceMutation,
+  useUpdateServiceMutation,
+  useDeleteServiceMutation,
+  useGetWorkingHoursQuery,
+  useSetWorkingHoursMutation,
 } = api;

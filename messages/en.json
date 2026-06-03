@@ -67,5 +67,40 @@
       "created": "Profile created.",
       "saved": "Profile updated."
     }
+  },
+  "services": {
+    "heading": "Services",
+    "empty": "No services yet.",
+    "add": "Add service",
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleteConfirm": "Delete this service?",
+    "name": "Service name",
+    "description": "Description",
+    "duration": "Typical duration (min)",
+    "durationHint": "Estimate used for scheduling — actual time can vary by barber and request.",
+    "price": "Price (AMD)",
+    "create": "Add",
+    "save": "Save",
+    "created": "Service added.",
+    "updated": "Service updated.",
+    "deleted": "Service deleted.",
+    "modalAdd": "Add service",
+    "modalEdit": "Edit service",
+    "minShort": "min"
+  },
+  "hours": {
+    "heading": "Working hours",
+    "save": "Save hours",
+    "saved": "Working hours saved.",
+    "days": {
+      "mon": "Monday",
+      "tue": "Tuesday",
+      "wed": "Wednesday",
+      "thu": "Thursday",
+      "fri": "Friday",
+      "sat": "Saturday",
+      "sun": "Sunday"
+    }
   }
 }

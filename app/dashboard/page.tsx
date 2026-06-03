@@ -6,6 +6,8 @@ import { Alert, Anchor, Center, Container, Loader, Stack, Text, Title } from '@m
 import { useMeQuery, useProviderMeQuery } from '@/lib/store/api';
 import { ShopForm } from '@/components/dashboard/ShopForm';
 import { BarberForm } from '@/components/dashboard/BarberForm';
+import { ServicesSection } from '@/components/dashboard/ServicesSection';
+import { WorkingHoursSection } from '@/components/dashboard/WorkingHoursSection';
 
 export default function DashboardPage() {
   const t = useTranslations('dashboard');
@@ -47,6 +49,10 @@ export default function DashboardPage() {
           <>
             {isShopOwner && <ShopForm shop={provider?.shop ?? null} />}
             {isBarber && <BarberForm barber={provider?.barber ?? null} />}
+            {((isShopOwner && provider?.shop) || (isBarber && provider?.barber)) && <ServicesSection />}
+            {isBarber && provider?.barber && (
+              <WorkingHoursSection barberSlug={provider.barber.slug} />
+            )}
             {!isShopOwner && !isBarber && <Text c="dimmed">{t('customerOnly')}</Text>}
           </>
         )}
