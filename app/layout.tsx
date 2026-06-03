@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
+import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
@@ -28,13 +29,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body suppressHydrationWarning>
         <MantineProvider theme={theme} defaultColorScheme="dark">
-          <Notifications />
-          <NextIntlClientProvider locale={locale} messages={messages}>
-            <Providers>
-              <SiteHeader />
-              {children}
-            </Providers>
-          </NextIntlClientProvider>
+          <ModalsProvider>
+            <Notifications />
+            <NextIntlClientProvider locale={locale} messages={messages}>
+              <Providers>
+                <SiteHeader />
+                {children}
+              </Providers>
+            </NextIntlClientProvider>
+          </ModalsProvider>
         </MantineProvider>
       </body>
     </html>

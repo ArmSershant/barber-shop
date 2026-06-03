@@ -74,6 +74,7 @@
     "add": "Add service",
     "edit": "Edit",
     "delete": "Delete",
+    "cancel": "Cancel",
     "deleteConfirm": "Delete this service?",
     "name": "Service name",
     "description": "Description",

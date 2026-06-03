@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button, Group, Loader, Modal, Paper, Stack, Text, Title } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import { useProviderServicesQuery, useDeleteServiceMutation, type Service } from '@/lib/store/api';
 import { apiErrorMessage } from '@/lib/api-error';
@@ -27,14 +28,22 @@ export function ServicesSection() {
     open();
   };
 
-  const onDelete = async (service: Service) => {
-    if (!window.confirm(t('deleteConfirm'))) return;
-    try {
-      await deleteService(service.id).unwrap();
-      notifications.show({ message: t('deleted'), color: 'teal' });
-    } catch (e) {
-      notifications.show({ message: apiErrorMessage(e), color: 'red' });
-    }
+  const onDelete = (service: Service) => {
+    modals.openConfirmModal({
+      title: service.name,
+      centered: true,
+      children: <Text size="sm">{t('deleteConfirm')}</Text>,
+      labels: { confirm: t('delete'), cancel: t('cancel') },
+      confirmProps: { color: 'red' },
+      onConfirm: async () => {
+        try {
+          await deleteService(service.id).unwrap();
+          notifications.show({ message: t('deleted'), color: 'teal' });
+        } catch (e) {
+          notifications.show({ message: apiErrorMessage(e), color: 'red' });
+        }
+      },
+    });
   };
 
   return (
