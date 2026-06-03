@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale, getMessages } from 'next-intl/server';
 import './globals.scss';
 import { Providers } from './providers';
 import { SiteHeader } from '@/components/SiteHeader';
@@ -9,16 +11,19 @@ export const metadata: Metadata = {
     'Discover barber shops and independent barbers in Yerevan and book appointments online.',
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
-    <html lang="en">
-      {/* suppressHydrationWarning: browser extensions (e.g. ColorZilla) inject
-          attributes onto <body> before React hydrates; this ignores that noise. */}
+    <html lang={locale}>
       <body suppressHydrationWarning>
-        <Providers>
-          <SiteHeader />
-          {children}
-        </Providers>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <Providers>
+            <SiteHeader />
+            {children}
+          </Providers>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

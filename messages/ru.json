@@ -1,0 +1,42 @@
+{
+  "header": {
+    "login": "Войти",
+    "signup": "Регистрация",
+    "logout": "Выйти",
+    "loggingOut": "Выход…",
+    "greeting": "Привет, {name}"
+  },
+  "home": {
+    "subtitle": "Бронируйте барберов в Ереване.",
+    "note": "Платформа в разработке."
+  },
+  "auth": {
+    "login": {
+      "title": "Вход",
+      "subtitle": "С возвращением.",
+      "email": "Эл. почта",
+      "password": "Пароль",
+      "submit": "Войти",
+      "submitting": "Вход…",
+      "noAccount": "Нет аккаунта?",
+      "signup": "Регистрация",
+      "invalid": "Неверная почта или пароль."
+    },
+    "register": {
+      "title": "Создать аккаунт",
+      "subtitle": "Бронируйте барберов в Ереване.",
+      "fullName": "Имя и фамилия",
+      "email": "Эл. почта",
+      "password": "Пароль",
+      "roleLabel": "Я",
+      "roleCustomer": "Клиент",
+      "roleBarber": "Барбер",
+      "roleShopOwner": "Владелец барбершопа",
+      "submit": "Создать аккаунт",
+      "submitting": "Создание…",
+      "haveAccount": "Уже есть аккаунт?",
+      "login": "Войти",
+      "failed": "Не удалось создать аккаунт."
+    }
+  }
+}

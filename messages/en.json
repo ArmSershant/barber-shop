@@ -1,0 +1,42 @@
+{
+  "header": {
+    "login": "Log in",
+    "signup": "Sign up",
+    "logout": "Log out",
+    "loggingOut": "Logging out…",
+    "greeting": "Hi, {name}"
+  },
+  "home": {
+    "subtitle": "Book barbers in Yerevan.",
+    "note": "Platform skeleton — under construction."
+  },
+  "auth": {
+    "login": {
+      "title": "Log in",
+      "subtitle": "Welcome back.",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Log in",
+      "submitting": "Logging in…",
+      "noAccount": "No account?",
+      "signup": "Sign up",
+      "invalid": "Invalid email or password."
+    },
+    "register": {
+      "title": "Create account",
+      "subtitle": "Book barbers in Yerevan.",
+      "fullName": "Full name",
+      "email": "Email",
+      "password": "Password",
+      "roleLabel": "I am a",
+      "roleCustomer": "Customer",
+      "roleBarber": "Barber",
+      "roleShopOwner": "Barber shop owner",
+      "submit": "Create account",
+      "submitting": "Creating…",
+      "haveAccount": "Already have an account?",
+      "login": "Log in",
+      "failed": "Could not create the account."
+    }
+  }
+}
