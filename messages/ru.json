@@ -103,5 +103,21 @@
       "sat": "Суббота",
       "sun": "Воскресенье"
     }
+  },
+  "discover": {
+    "barbersTitle": "Барберы",
+    "browseBarbers": "Смотреть барберов",
+    "searchPlaceholder": "Поиск барберов…",
+    "empty": "Барберы не найдены.",
+    "independent": "Независимый",
+    "experience": "{years} лет опыта",
+    "reviews": "{count} отзывов",
+    "noReviews": "Пока нет отзывов",
+    "servicesHeading": "Услуги",
+    "noServices": "Услуги пока не указаны.",
+    "hoursHeading": "Рабочие часы",
+    "closed": "Закрыто",
+    "book": "Записаться",
+    "bookingSoon": "Запись скоро"
   }
 }

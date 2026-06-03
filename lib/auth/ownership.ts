@@ -49,3 +49,21 @@ export async function getProviderCatalogOwner(
 
   throw new HttpError(403, 'NO_PROVIDER_PROFILE', 'Create a shop or barber profile first.');
 }
+
+/**
+ * Decide the status of a time-off/break record based on who is acting:
+ * - shop owner editing one of their barbers → approved
+ * - independent barber editing their own profile → approved
+ * - shop-employed barber editing their own → pending (needs owner approval)
+ */
+export function requestStatusFor(
+  barber: { userId: string | null; shopId: string | null; shop?: { ownerUserId: string } | null },
+  userId: string,
+): { status: 'approved' | 'pending'; requestedBy: 'owner' | 'barber' } {
+  const isShopEmployee = barber.userId === userId && Boolean(barber.shopId);
+  const isOwner = barber.shop?.ownerUserId === userId;
+  return {
+    status: isShopEmployee ? 'pending' : 'approved',
+    requestedBy: isOwner ? 'owner' : 'barber',
+  };
+}

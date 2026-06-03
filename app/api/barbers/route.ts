@@ -4,6 +4,18 @@ import { errorResponse, HttpError, ok } from '@/lib/http';
 import { requireRole } from '@/lib/auth/rbac';
 import { createBarberSchema } from '@/lib/validation/provider';
 import { generateUniqueSlug } from '@/lib/slug';
+import { listBarbers } from '@/lib/queries/barbers';
+
+// Public: list barbers for discovery (optional ?q= name search).
+export async function GET(req: NextRequest) {
+  try {
+    const q = req.nextUrl.searchParams.get('q') ?? undefined;
+    const barbers = await listBarbers({ q });
+    return ok({ barbers });
+  } catch (err) {
+    return errorResponse(err);
+  }
+}
 
 // Independent barber creates their own profile (linked to their user). One per user.
 export async function POST(req: NextRequest) {

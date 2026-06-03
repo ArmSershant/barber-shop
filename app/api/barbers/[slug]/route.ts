@@ -4,22 +4,16 @@ import { errorResponse, HttpError, ok } from '@/lib/http';
 import { requireAuth } from '@/lib/auth/rbac';
 import { assertCanEditBarberBySlug } from '@/lib/auth/ownership';
 import { updateBarberSchema } from '@/lib/validation/provider';
+import { getBarberProfile } from '@/lib/queries/barbers';
 
 type Params = { params: Promise<{ slug: string }> };
 
-// Public: view a barber profile.
+// Public: view a barber profile (incl. services + working hours).
 export async function GET(_req: NextRequest, { params }: Params) {
   try {
     const { slug } = await params;
-    const barber = await prisma.barber.findUnique({
-      where: { slug },
-      include: {
-        shop: { select: { slug: true, name: true } },
-        district: { select: { nameEn: true, nameHy: true, slug: true } },
-        portfolioImages: { orderBy: { sortOrder: 'asc' } },
-      },
-    });
-    if (!barber || barber.deletedAt) throw new HttpError(404, 'BARBER_NOT_FOUND', 'Barber not found.');
+    const barber = await getBarberProfile(slug);
+    if (!barber) throw new HttpError(404, 'BARBER_NOT_FOUND', 'Barber not found.');
     return ok({ barber });
   } catch (err) {
     return errorResponse(err);

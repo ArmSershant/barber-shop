@@ -103,5 +103,21 @@
       "sat": "Saturday",
       "sun": "Sunday"
     }
+  },
+  "discover": {
+    "barbersTitle": "Barbers",
+    "browseBarbers": "Browse barbers",
+    "searchPlaceholder": "Search barbers…",
+    "empty": "No barbers found.",
+    "independent": "Independent",
+    "experience": "{years} yrs experience",
+    "reviews": "{count} reviews",
+    "noReviews": "No reviews yet",
+    "servicesHeading": "Services",
+    "noServices": "No services listed yet.",
+    "hoursHeading": "Working hours",
+    "closed": "Closed",
+    "book": "Book",
+    "bookingSoon": "Booking coming soon"
   }
 }

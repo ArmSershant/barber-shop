@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Anchor, Button, Group, Text } from '@mantine/core';
 import { useMeQuery, useLogoutMutation } from '@/lib/store/api';
@@ -9,9 +10,18 @@ import styles from './SiteHeader.module.scss';
 
 export function SiteHeader() {
   const t = useTranslations('header');
+  const router = useRouter();
   const { data, isLoading } = useMeQuery();
   const [logout, { isLoading: loggingOut }] = useLogoutMutation();
   const user = data?.user ?? null;
+
+  const onLogout = async () => {
+    try {
+      await logout().unwrap();
+    } finally {
+      router.push('/');
+    }
+  };
 
   return (
     <header className={styles.header}>
@@ -32,7 +42,7 @@ export function SiteHeader() {
               <Text c="dimmed" fz="sm">
                 {t('greeting', { name: user.fullName })}
               </Text>
-              <Button size="xs" variant="light" onClick={() => logout()} loading={loggingOut}>
+              <Button size="xs" variant="light" onClick={onLogout} loading={loggingOut}>
                 {t('logout')}
               </Button>
             </>

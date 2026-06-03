@@ -81,6 +81,17 @@ enum SubscriptionStatus {
   cancelled
 }
 
+enum RequestStatus {
+  pending
+  approved
+  rejected
+}
+
+enum RequestActor {
+  barber
+  owner
+}
+
 // ---------------------------------------------------------------------------
 // Identity
 // ---------------------------------------------------------------------------
@@ -216,6 +227,7 @@ model Barber {
   barberServices  BarberService[]
   workingHours    WorkingHours[]
   timeOff         TimeOff[]
+  breaks          Break[]
   bookings        Booking[]
   reviews         Review[]
   portfolioImages PortfolioImage[]
@@ -287,16 +299,39 @@ model WorkingHours {
 
 // One-off unavailable blocks: holidays, vacation, breaks.
 model TimeOff {
-  id       String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  barberId String   @map("barber_id") @db.Uuid
-  startsAt DateTime @map("starts_at") @db.Timestamptz(6)
-  endsAt   DateTime @map("ends_at") @db.Timestamptz(6)
-  reason   String?
+  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  barberId    String        @map("barber_id") @db.Uuid
+  startsAt    DateTime      @map("starts_at") @db.Timestamptz(6)
+  endsAt      DateTime      @map("ends_at") @db.Timestamptz(6)
+  reason      String?
+  status      RequestStatus @default(approved)
+  requestedBy RequestActor  @default(barber) @map("requested_by")
+  decidedById String?       @map("decided_by_id") @db.Uuid
+  decidedAt   DateTime?     @map("decided_at") @db.Timestamptz(6)
 
   barber Barber @relation(fields: [barberId], references: [id], onDelete: Cascade)
 
   @@index([barberId, startsAt])
   @@map("time_off")
+}
+
+// Recurring breaks. weekday null = every working day; 0=Mon..6=Sun otherwise.
+model Break {
+  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  barberId    String        @map("barber_id") @db.Uuid
+  weekday     Int?          @db.SmallInt
+  startMinute Int           @map("start_minute") @db.SmallInt
+  endMinute   Int           @map("end_minute") @db.SmallInt
+  status      RequestStatus @default(approved)
+  requestedBy RequestActor  @default(barber) @map("requested_by")
+  decidedById String?       @map("decided_by_id") @db.Uuid
+  decidedAt   DateTime?     @map("decided_at") @db.Timestamptz(6)
+  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  barber Barber @relation(fields: [barberId], references: [id], onDelete: Cascade)
+
+  @@index([barberId])
+  @@map("breaks")
 }
 
 // ---------------------------------------------------------------------------

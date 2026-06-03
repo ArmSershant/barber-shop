@@ -50,39 +50,37 @@ export function ServiceForm({ service, onDone }: { service: Service | null; onDo
       <Stack>
         <TextInput label={t('name')} error={errors.name?.message} {...register('name')} />
         <Textarea label={t('description')} autosize minRows={2} error={errors.description?.message} {...register('description')} />
-        <Group grow>
-          <Controller
-            name="durationMin"
-            control={control}
-            render={({ field }) => (
-              <NumberInput
-                label={t('duration')}
-                description={t('durationHint')}
-                min={5}
-                max={600}
-                step={5}
-                value={field.value}
-                onChange={(v) => field.onChange(v === '' ? undefined : Number(v))}
-                error={errors.durationMin?.message}
-              />
-            )}
-          />
-          <Controller
-            name="priceAmd"
-            control={control}
-            render={({ field }) => (
-              <NumberInput
-                label={t('price')}
-                min={0}
-                step={500}
-                thousandSeparator=" "
-                value={field.value}
-                onChange={(v) => field.onChange(v === '' ? undefined : Number(v))}
-                error={errors.priceAmd?.message}
-              />
-            )}
-          />
-        </Group>
+        <Controller
+          name="durationMin"
+          control={control}
+          render={({ field }) => (
+            <NumberInput
+              label={t('duration')}
+              description={t('durationHint')}
+              min={5}
+              max={600}
+              step={5}
+              value={field.value}
+              onChange={(v) => field.onChange(v === '' ? undefined : Number(v))}
+              error={errors.durationMin?.message}
+            />
+          )}
+        />
+        <Controller
+          name="priceAmd"
+          control={control}
+          render={({ field }) => (
+            <NumberInput
+              label={t('price')}
+              min={0}
+              step={500}
+              thousandSeparator=" "
+              value={field.value}
+              onChange={(v) => field.onChange(v === '' ? undefined : Number(v))}
+              error={errors.priceAmd?.message}
+            />
+          )}
+        />
         {errors.root && (
           <Text c="red" size="sm">
             {errors.root.message}

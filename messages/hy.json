@@ -103,5 +103,21 @@
       "sat": "Շաբաթ",
       "sun": "Կիրակի"
     }
+  },
+  "discover": {
+    "barbersTitle": "Վարսավիրներ",
+    "browseBarbers": "Դիտել վարսավիրներին",
+    "searchPlaceholder": "Փնտրել վարսավիրների…",
+    "empty": "Վարսավիրներ չեն գտնվել։",
+    "independent": "Անկախ",
+    "experience": "{years} տարվա փորձ",
+    "reviews": "{count} կարծիք",
+    "noReviews": "Դեռ կարծիքներ չկան",
+    "servicesHeading": "Ծառայություններ",
+    "noServices": "Դեռ ծառայություններ նշված չեն։",
+    "hoursHeading": "Աշխատանքային ժամեր",
+    "closed": "Փակ",
+    "book": "Ամրագրել",
+    "bookingSoon": "Ամրագրումը շուտով"
   }
 }
