@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { Button, Container, Stack, Title, Text } from '@mantine/core';
+import { Button, Container, Group, Stack, Title, Text } from '@mantine/core';
 
 export default function HomePage() {
   const t = useTranslations('home');
@@ -11,9 +11,14 @@ export default function HomePage() {
       <Stack align="center" gap="md" ta="center">
         <Title order={1}>Barber-Shop</Title>
         <Text fz="lg">{t('subtitle')}</Text>
-        <Button component={Link} href="/barbers" size="md">
-          {td('browseBarbers')}
-        </Button>
+        <Group justify="center">
+          <Button component={Link} href="/barbers" size="md">
+            {td('browseBarbers')}
+          </Button>
+          <Button component={Link} href="/shops" size="md" variant="light">
+            {td('browseShops')}
+          </Button>
+        </Group>
         <Text c="dimmed" size="sm">
           {t('note')}
         </Text>

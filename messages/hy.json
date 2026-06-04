@@ -235,6 +235,13 @@
   "discover": {
     "barbersTitle": "Վարսավիրներ",
     "browseBarbers": "Դիտել վարսավիրներին",
+    "shopsTitle": "Վարսավիրանոցներ",
+    "browseShops": "Դիտել վարսավիրանոցները",
+    "searchShopsPlaceholder": "Փնտրել վարսավիրանոցներ…",
+    "emptyShops": "Վարսավիրանոցներ չեն գտնվել։",
+    "barberCount": "{count} վարսավիր",
+    "view": "Դիտել",
+    "pickBarber": "Ընտրեք վարսավիր՝ ամրագրելու համար։",
     "searchPlaceholder": "Փնտրել վարսավիրների…",
     "empty": "Վարսավիրներ չեն գտնվել։",
     "independent": "Անկախ",

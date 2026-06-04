@@ -235,6 +235,13 @@
   "discover": {
     "barbersTitle": "Барберы",
     "browseBarbers": "Смотреть барберов",
+    "shopsTitle": "Барбершопы",
+    "browseShops": "Смотреть барбершопы",
+    "searchShopsPlaceholder": "Поиск барбершопов…",
+    "emptyShops": "Барбершопы не найдены.",
+    "barberCount": "{count} барберов",
+    "view": "Смотреть",
+    "pickBarber": "Выберите барбера для записи.",
     "searchPlaceholder": "Поиск барберов…",
     "empty": "Барберы не найдены.",
     "independent": "Независимый",

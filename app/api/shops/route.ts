@@ -4,6 +4,18 @@ import { errorResponse, HttpError, ok } from '@/lib/http';
 import { requireRole } from '@/lib/auth/rbac';
 import { createShopSchema } from '@/lib/validation/provider';
 import { generateUniqueSlug } from '@/lib/slug';
+import { listShops } from '@/lib/queries/shops';
+
+// Public: list shops for discovery (optional ?q= name search).
+export async function GET(req: NextRequest) {
+  try {
+    const q = req.nextUrl.searchParams.get('q') ?? undefined;
+    const shops = await listShops({ q });
+    return ok({ shops });
+  } catch (err) {
+    return errorResponse(err);
+  }
+}
 
 // Create a shop owned by the current shop_owner. One shop per owner for MVP.
 export async function POST(req: NextRequest) {

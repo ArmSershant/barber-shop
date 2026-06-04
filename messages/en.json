@@ -235,6 +235,13 @@
   "discover": {
     "barbersTitle": "Barbers",
     "browseBarbers": "Browse barbers",
+    "shopsTitle": "Barber shops",
+    "browseShops": "Browse shops",
+    "searchShopsPlaceholder": "Search shops…",
+    "emptyShops": "No shops found.",
+    "barberCount": "{count} barbers",
+    "view": "View",
+    "pickBarber": "Pick a barber to book.",
     "searchPlaceholder": "Search barbers…",
     "empty": "No barbers found.",
     "independent": "Independent",
