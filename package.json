@@ -36,7 +36,7 @@
     "flag-icons": "^7.2.3",
     "jose": "^5.9.6",
     "next": "^15.1.2",
-    "next-intl": "^3.26.0",
+    "next-intl": "^4.9.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
