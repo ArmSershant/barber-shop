@@ -14,8 +14,12 @@ export async function GET(_req: NextRequest, { params }: Params) {
     const { slug } = await params;
     const barber = await getBarberProfile(slug);
     if (!barber) throw new HttpError(404, 'BARBER_NOT_FOUND', 'Barber not found.');
-    // Don't expose the owner's user id publicly.
-    const { userId: _ownerUserId, ...publicBarber } = barber;
+    // Don't expose internal owner ids publicly.
+    const { userId: _ownerUserId, ...rest } = barber;
+    const publicBarber = {
+      ...rest,
+      shop: barber.shop ? { slug: barber.shop.slug, name: barber.shop.name } : null,
+    };
     return ok({ barber: publicBarber });
   } catch (err) {
     return errorResponse(err);

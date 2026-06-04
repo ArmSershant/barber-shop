@@ -53,7 +53,7 @@ export async function getBarberProfile(slug: string) {
       ratingAvg: true,
       ratingCount: true,
       deletedAt: true,
-      shop: { select: { slug: true, name: true } },
+      shop: { select: { slug: true, name: true, ownerUserId: true } },
       district: { select: { nameEn: true, nameHy: true, slug: true } },
       ownedServices: {
         where: { isActive: true },
@@ -64,6 +64,8 @@ export async function getBarberProfile(slug: string) {
       barberServices: {
         where: { service: { isActive: true } },
         select: {
+          priceAmdOverride: true,
+          durationMinOverride: true,
           service: {
             select: { id: true, type: true, name: true, description: true, durationMin: true, priceAmd: true },
           },
@@ -90,9 +92,14 @@ export async function getBarberProfile(slug: string) {
   });
   if (!barber || barber.deletedAt) return null;
 
-  // Bookable services: assigned ones for shop barbers, own catalog otherwise.
+  // Bookable services: assigned ones for shop barbers (with per-barber price
+  // and duration overrides applied), own catalog otherwise.
   const services = barber.shop
-    ? barber.barberServices.map((bs) => bs.service)
+    ? barber.barberServices.map((bs) => ({
+        ...bs.service,
+        priceAmd: bs.priceAmdOverride ?? bs.service.priceAmd,
+        durationMin: bs.durationMinOverride ?? bs.service.durationMin,
+      }))
     : barber.ownedServices;
   const { barberServices: _bs, ownedServices: _os, ...rest } = barber;
 

@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
       ({ userId, refreshRaw } = await rotateRefreshToken(rawToken, requestMeta(req)));
     } catch (e) {
       // On any refresh failure, also clear the (now useless) cookies.
-      const res = errorResponse(e);
+      const res = await errorResponse(e);
       clearAuthCookies(res);
       return res;
     }

@@ -136,6 +136,12 @@ export interface ShopDefaults {
   breaks: BreakRequest[];
 }
 
+export interface ServiceAssignment {
+  serviceId: string;
+  priceAmdOverride: number | null;
+  durationMinOverride: number | null;
+}
+
 export interface AvailabilityResponse {
   date: string;
   durationMin: number;
@@ -360,15 +366,18 @@ export const api = createApi({
       invalidatesTags: ['Breaks'],
     }),
 
-    getBarberAssignments: builder.query<{ serviceIds: string[] }, string>({
+    getBarberAssignments: builder.query<{ assignments: ServiceAssignment[] }, string>({
       query: (slug) => `/barbers/${slug}/services`,
       providesTags: ['Assignments'],
     }),
-    setBarberAssignments: builder.mutation<{ ok: boolean }, { slug: string; serviceIds: string[] }>({
-      query: ({ slug, serviceIds }) => ({
+    setBarberAssignments: builder.mutation<
+      { ok: boolean },
+      { slug: string; assignments: ServiceAssignment[] }
+    >({
+      query: ({ slug, assignments }) => ({
         url: `/barbers/${slug}/services`,
         method: 'PUT',
-        body: { serviceIds },
+        body: { assignments },
       }),
       invalidatesTags: ['Assignments'],
     }),

@@ -215,7 +215,10 @@
     "assignHint": "Pick which services this barber performs. Only assigned services are bookable.",
     "assignEmpty": "Add services to the shop catalog first.",
     "assignSave": "Save assignments",
-    "assignmentsSaved": "Assignments saved."
+    "assignmentsSaved": "Assignments saved.",
+    "overrideHint": "Set a custom price/duration per barber, or leave empty to use the catalog values.",
+    "overridePrice": "Price (AMD)",
+    "overrideDuration": "Duration (min)"
   },
   "availability": {
     "timeOffHeading": "Time off",

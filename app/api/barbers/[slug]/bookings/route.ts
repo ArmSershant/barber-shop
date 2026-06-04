@@ -53,13 +53,35 @@ export async function POST(req: NextRequest, { params }: Params) {
             : []),
         ],
       },
-      select: { id: true, type: true, name: true, durationMin: true, priceAmd: true },
+      select: {
+        id: true,
+        type: true,
+        name: true,
+        durationMin: true,
+        priceAmd: true,
+        barberServices: {
+          where: { barberId: barber.id },
+          select: { priceAmdOverride: true, durationMinOverride: true },
+        },
+      },
     });
     if (services.length !== body.serviceIds.length) {
       throw new HttpError(400, 'INVALID_SERVICES', 'Some services are not available for this barber.');
     }
-    const durationMin = services.reduce((s, x) => s + x.durationMin, 0);
-    const priceAmd = services.reduce((s, x) => s + x.priceAmd, 0);
+
+    // Apply per-barber price/duration overrides where present.
+    const effectiveServices = services.map((s) => {
+      const o = s.barberServices[0];
+      return {
+        id: s.id,
+        type: s.type,
+        name: s.name,
+        durationMin: o?.durationMinOverride ?? s.durationMin,
+        priceAmd: o?.priceAmdOverride ?? s.priceAmd,
+      };
+    });
+    const durationMin = effectiveServices.reduce((s, x) => s + x.durationMin, 0);
+    const priceAmd = effectiveServices.reduce((s, x) => s + x.priceAmd, 0);
 
     // The chosen start must be a real, currently-available slot.
     const date = dayjs(body.startsAt).tz(barber.timezone).format('YYYY-MM-DD');
@@ -79,7 +101,10 @@ export async function POST(req: NextRequest, { params }: Params) {
     if (!user && !body.guest) {
       throw new HttpError(400, 'GUEST_REQUIRED', 'Provide guest name and phone, or log in.');
     }
-    if (user && barber.userId === user.userId) {
+    if (
+      user &&
+      (barber.userId === user.userId || barber.shop?.ownerUserId === user.userId)
+    ) {
       throw new HttpError(403, 'OWN_PROFILE', 'You cannot book yourself.');
     }
     const manageToken = user ? null : crypto.randomBytes(18).toString('base64url');
@@ -102,7 +127,7 @@ export async function POST(req: NextRequest, { params }: Params) {
           totalDurationMin: durationMin,
           customerNote: body.note ?? null,
           services: {
-            create: services.map((s) => ({
+            create: effectiveServices.map((s) => ({
               serviceId: s.id,
               typeSnapshot: s.type,
               nameSnapshot: s.name,

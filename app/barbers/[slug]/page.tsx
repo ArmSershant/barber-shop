@@ -21,7 +21,10 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
   if (!barber) notFound();
 
   const viewer = await getCurrentUser();
-  const isOwnProfile = Boolean(viewer && barber.userId && viewer.userId === barber.userId);
+  const isOwnProfile = Boolean(
+    viewer &&
+      (barber.userId === viewer.userId || barber.shop?.ownerUserId === viewer.userId),
+  );
 
   const t = await getTranslations('discover');
   const th = await getTranslations('hours');

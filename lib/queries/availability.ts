@@ -134,12 +134,29 @@ export async function getServiceTotals(
           : []),
       ],
     },
-    select: { durationMin: true, priceAmd: true },
+    select: {
+      id: true,
+      durationMin: true,
+      priceAmd: true,
+      barberServices: {
+        where: { barberId: barber.id },
+        select: { priceAmdOverride: true, durationMinOverride: true },
+      },
+    },
+  });
+
+  // Apply per-barber overrides where present.
+  const effective = services.map((s) => {
+    const o = s.barberServices[0];
+    return {
+      durationMin: o?.durationMinOverride ?? s.durationMin,
+      priceAmd: o?.priceAmdOverride ?? s.priceAmd,
+    };
   });
 
   return {
-    durationMin: services.reduce((s, x) => s + x.durationMin, 0),
-    priceAmd: services.reduce((s, x) => s + x.priceAmd, 0),
+    durationMin: effective.reduce((sum, x) => sum + x.durationMin, 0),
+    priceAmd: effective.reduce((sum, x) => sum + x.priceAmd, 0),
     count: services.length,
   };
 }
