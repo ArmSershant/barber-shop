@@ -38,14 +38,22 @@ export function SiteHeader() {
           Barber-Shop
         </Anchor>
 
-        {isProvider && (
+        {user && (
           <nav className={styles.centerNav}>
-            <Anchor component={Link} href="/dashboard" c="inherit" fz="sm">
-              {t('dashboard')}
-            </Anchor>
-            <Anchor component={Link} href="/dashboard/bookings" c="inherit" fz="sm">
-              {t('bookings')}
-            </Anchor>
+            {isProvider ? (
+              <>
+                <Anchor component={Link} href="/dashboard" c="inherit" fz="sm">
+                  {t('dashboard')}
+                </Anchor>
+                <Anchor component={Link} href="/dashboard/bookings" c="inherit" fz="sm">
+                  {t('bookings')}
+                </Anchor>
+              </>
+            ) : (
+              <Anchor component={Link} href="/bookings" c="inherit" fz="sm">
+                {t('myBookings')}
+              </Anchor>
+            )}
           </nav>
         )}
 

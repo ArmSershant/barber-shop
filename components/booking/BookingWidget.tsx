@@ -25,6 +25,7 @@ import { apiErrorMessage } from '@/lib/api-error';
 
 export interface WidgetService {
   id: string;
+  type?: string | null;
   name: string;
   durationMin: number;
   priceAmd: number;
@@ -38,6 +39,8 @@ export function BookingWidget({
   services: WidgetService[];
 }) {
   const t = useTranslations('booking');
+  const tst = useTranslations('serviceTypes');
+  const serviceLabel = (s: WidgetService) => (s.type && s.type !== 'other' ? tst(s.type) : s.name);
   const { data: me } = useMeQuery();
   const [createBooking, { isLoading: booking }] = useCreateBookingMutation();
 
@@ -132,7 +135,7 @@ export function BookingWidget({
                 <Checkbox
                   key={s.id}
                   value={s.id}
-                  label={`${s.name} · ${s.durationMin} min · ${s.priceAmd.toLocaleString()} ֏`}
+                  label={`${serviceLabel(s)} · ${s.durationMin} min · ${s.priceAmd.toLocaleString()} ֏`}
                 />
               ))}
             </Stack>

@@ -249,6 +249,8 @@ model Service {
   id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   shopId        String?  @map("shop_id") @db.Uuid
   ownerBarberId String?  @map("owner_barber_id") @db.Uuid
+  // Canonical catalog key (lib/service-types.ts); null = legacy free-text row.
+  type          String?
   name          String
   description   String?
   durationMin   Int      @map("duration_min") @db.SmallInt
@@ -380,6 +382,7 @@ model BookingService {
   id                  String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   bookingId           String  @map("booking_id") @db.Uuid
   serviceId           String? @map("service_id") @db.Uuid
+  typeSnapshot        String? @map("type_snapshot")
   nameSnapshot        String  @map("name_snapshot")
   priceAmdSnapshot    Int     @map("price_amd_snapshot")
   durationMinSnapshot Int     @map("duration_min_snapshot") @db.SmallInt

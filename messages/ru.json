@@ -7,6 +7,7 @@
     "greeting": "Привет, {name}",
     "dashboard": "Панель",
     "bookings": "Записи",
+    "myBookings": "Мои записи",
     "theme": "Тема",
     "themeLight": "Светлая",
     "themeDark": "Тёмная",
@@ -25,7 +26,26 @@
     "cancelConfirm": "Отменить эту запись?",
     "cancelled": "Запись отменена.",
     "statusConfirmed": "Подтверждена",
-    "statusRequested": "Ожидает"
+    "statusRequested": "Ожидает",
+    "complete": "Выполнена",
+    "noShow": "Не пришёл",
+    "completedMsg": "Отмечена как выполненная.",
+    "noShowMsg": "Отмечена как неявка."
+  },
+  "myBookings": {
+    "title": "Мои записи",
+    "upcoming": "Предстоящие",
+    "past": "Прошедшие",
+    "empty": "Записей пока нет.",
+    "browse": "Смотреть барберов",
+    "cancel": "Отменить",
+    "cancelConfirm": "Отменить эту запись?",
+    "cancelled": "Запись отменена.",
+    "statusConfirmed": "Подтверждена",
+    "statusRequested": "Ожидает",
+    "statusCompleted": "Выполнена",
+    "statusCancelled": "Отменена",
+    "statusNoShow": "Неявка"
   },
   "home": {
     "subtitle": "Бронируйте барберов в Ереване.",
@@ -96,6 +116,7 @@
     "delete": "Удалить",
     "cancel": "Отмена",
     "deleteConfirm": "Удалить эту услугу?",
+    "typeLabel": "Услуга",
     "name": "Название услуги",
     "description": "Описание",
     "duration": "Примерная длительность (мин)",
@@ -109,6 +130,19 @@
     "modalAdd": "Добавить услугу",
     "modalEdit": "Изменить услугу",
     "minShort": "мин"
+  },
+  "serviceTypes": {
+    "haircut": "Мужская стрижка",
+    "kids_haircut": "Детская стрижка",
+    "beard_trim": "Стрижка бороды",
+    "haircut_beard": "Стрижка + борода",
+    "shave": "Бритьё",
+    "head_shave": "Бритьё головы",
+    "hair_wash": "Мытьё головы",
+    "styling": "Укладка",
+    "coloring": "Окрашивание",
+    "eyebrow_correction": "Коррекция бровей",
+    "other": "Другое"
   },
   "hours": {
     "heading": "Рабочие часы",

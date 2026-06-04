@@ -90,6 +90,7 @@ export interface BarberProfileData {
 
 export interface Service {
   id: string;
+  type?: string | null;
   name: string;
   description?: string | null;
   durationMin: number;
@@ -167,6 +168,21 @@ export interface NotificationItem {
   createdAt: string;
 }
 
+export interface BookedService {
+  type: string | null;
+  name: string;
+}
+
+export interface MyBooking {
+  id: string;
+  startsAt: string;
+  endsAt: string;
+  status: string;
+  totalPriceAmd: number;
+  services: BookedService[];
+  barber: { displayName: string; slug: string };
+}
+
 export interface ProviderBooking {
   id: string;
   startsAt: string;
@@ -178,7 +194,7 @@ export interface ProviderBooking {
   customerName: string;
   phone: string | null;
   barberName: string;
-  services: string[];
+  services: BookedService[];
 }
 
 // All requests are same-origin to /api; `credentials: 'include'` sends the
@@ -233,6 +249,7 @@ export const api = createApi({
     'Availability',
     'Notifications',
     'ProviderBookings',
+    'MyBookings',
   ],
   endpoints: (builder) => ({
     me: builder.query<MeResponse, void>({
@@ -385,7 +402,19 @@ export const api = createApi({
     }),
     cancelBooking: builder.mutation<{ ok: boolean }, { id: string; reason?: string }>({
       query: ({ id, reason }) => ({ url: `/bookings/${id}/cancel`, method: 'POST', body: { reason } }),
-      invalidatesTags: ['ProviderBookings', 'Availability'],
+      invalidatesTags: ['ProviderBookings', 'MyBookings', 'Availability'],
+    }),
+    getMyBookings: builder.query<{ bookings: MyBooking[] }, void>({
+      query: () => '/me/bookings',
+      providesTags: ['MyBookings'],
+    }),
+    completeBooking: builder.mutation<{ ok: boolean }, string>({
+      query: (id) => ({ url: `/bookings/${id}/complete`, method: 'POST' }),
+      invalidatesTags: ['ProviderBookings'],
+    }),
+    noShowBooking: builder.mutation<{ ok: boolean }, string>({
+      query: (id) => ({ url: `/bookings/${id}/no-show`, method: 'POST' }),
+      invalidatesTags: ['ProviderBookings'],
     }),
   }),
 });
@@ -424,4 +453,7 @@ export const {
   useReadAllNotificationsMutation,
   useGetProviderBookingsQuery,
   useCancelBookingMutation,
+  useGetMyBookingsQuery,
+  useCompleteBookingMutation,
+  useNoShowBookingMutation,
 } = api;

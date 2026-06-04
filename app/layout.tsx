@@ -4,6 +4,7 @@ import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
+import { Analytics } from '@vercel/analytics/next';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import '@mantine/notifications/styles.css';
@@ -40,6 +41,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </NextIntlClientProvider>
           </ModalsProvider>
         </MantineProvider>
+        <Analytics />
       </body>
     </html>
   );

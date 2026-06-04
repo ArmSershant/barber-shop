@@ -4,6 +4,7 @@ import { errorResponse, HttpError, ok } from '@/lib/http';
 import { requireRole } from '@/lib/auth/rbac';
 import { getProviderCatalogOwner } from '@/lib/auth/ownership';
 import { updateServiceSchema } from '@/lib/validation/service';
+import { SERVICE_TYPE_LABELS_EN } from '@/lib/service-types';
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -26,8 +27,16 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     const { id } = await params;
     await loadOwnedService(userId, id);
 
-    const data = updateServiceSchema.parse(await req.json());
-    const service = await prisma.service.update({ where: { id }, data });
+    const input = updateServiceSchema.parse(await req.json());
+    const service = await prisma.service.update({
+      where: { id },
+      data: {
+        ...input,
+        ...(input.type && input.type !== 'other'
+          ? { name: SERVICE_TYPE_LABELS_EN[input.type] }
+          : {}),
+      },
+    });
     return ok({ service });
   } catch (err) {
     return errorResponse(err);

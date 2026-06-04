@@ -3,32 +3,40 @@
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
-import { Button, Group, NumberInput, Stack, Text, Textarea, TextInput } from '@mantine/core';
+import { Button, Group, NumberInput, Select, Stack, Text, Textarea, TextInput } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { createServiceSchema, type CreateServiceInput } from '@/lib/validation/service';
+import { SERVICE_TYPES, type ServiceType } from '@/lib/service-types';
 import { useCreateServiceMutation, useUpdateServiceMutation, type Service } from '@/lib/store/api';
 import { apiErrorMessage } from '@/lib/api-error';
 
 export function ServiceForm({ service, onDone }: { service: Service | null; onDone: () => void }) {
   const t = useTranslations('services');
+  const tst = useTranslations('serviceTypes');
   const [createService, { isLoading: creating }] = useCreateServiceMutation();
   const [updateService, { isLoading: updating }] = useUpdateServiceMutation();
 
   const {
     register,
     control,
+    watch,
     handleSubmit,
     setError,
     formState: { errors },
   } = useForm<CreateServiceInput>({
     resolver: zodResolver(createServiceSchema),
     defaultValues: {
+      // Legacy rows (no type) edit as "other" with their stored name.
+      type: ((service?.type as ServiceType | null) ?? (service ? 'other' : 'haircut')) as ServiceType,
       name: service?.name ?? '',
       description: service?.description ?? '',
       durationMin: service?.durationMin ?? 30,
       priceAmd: service?.priceAmd ?? 0,
     },
   });
+
+  const typeValue = watch('type');
+  const typeOptions = SERVICE_TYPES.map((key) => ({ value: key, label: tst(key) }));
 
   const onSubmit = handleSubmit(async (values) => {
     try {
@@ -48,7 +56,24 @@ export function ServiceForm({ service, onDone }: { service: Service | null; onDo
   return (
     <form onSubmit={onSubmit} noValidate>
       <Stack>
-        <TextInput label={t('name')} error={errors.name?.message} {...register('name')} />
+        <Controller
+          name="type"
+          control={control}
+          render={({ field }) => (
+            <Select
+              label={t('typeLabel')}
+              data={typeOptions}
+              value={field.value}
+              onChange={(v) => field.onChange((v ?? 'haircut') as ServiceType)}
+              allowDeselect={false}
+              searchable
+              error={errors.type?.message}
+            />
+          )}
+        />
+        {typeValue === 'other' && (
+          <TextInput label={t('name')} error={errors.name?.message} {...register('name')} />
+        )}
         <Textarea label={t('description')} autosize minRows={2} error={errors.description?.message} {...register('description')} />
         <Controller
           name="durationMin"

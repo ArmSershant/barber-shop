@@ -7,6 +7,7 @@
     "greeting": "Բարև, {name}",
     "dashboard": "Վահանակ",
     "bookings": "Ամրագրումներ",
+    "myBookings": "Իմ ամրագրումները",
     "theme": "Թեմա",
     "themeLight": "Լուսավոր",
     "themeDark": "Մուգ",
@@ -25,7 +26,26 @@
     "cancelConfirm": "Չեղարկե՞լ այս ամրագրումը։",
     "cancelled": "Ամրագրումը չեղարկվեց։",
     "statusConfirmed": "Հաստատված",
-    "statusRequested": "Սպասում է"
+    "statusRequested": "Սպասում է",
+    "complete": "Կատարված",
+    "noShow": "Չներկայացավ",
+    "completedMsg": "Նշվեց որպես կատարված։",
+    "noShowMsg": "Նշվեց որպես չներկայացած։"
+  },
+  "myBookings": {
+    "title": "Իմ ամրագրումները",
+    "upcoming": "Առաջիկա",
+    "past": "Անցած",
+    "empty": "Դեռ ամրագրումներ չկան։",
+    "browse": "Դիտել վարսավիրներին",
+    "cancel": "Չեղարկել",
+    "cancelConfirm": "Չեղարկե՞լ այս ամրագրումը։",
+    "cancelled": "Ամրագրումը չեղարկվեց։",
+    "statusConfirmed": "Հաստատված",
+    "statusRequested": "Սպասում է",
+    "statusCompleted": "Կատարված",
+    "statusCancelled": "Չեղարկված",
+    "statusNoShow": "Չներկայացավ"
   },
   "home": {
     "subtitle": "Ամրագրեք վարսավիրներ Երևանում։",
@@ -96,6 +116,7 @@
     "delete": "Ջնջել",
     "cancel": "Չեղարկել",
     "deleteConfirm": "Ջնջե՞լ այս ծառայությունը։",
+    "typeLabel": "Ծառայություն",
     "name": "Ծառայության անվանումը",
     "description": "Նկարագրություն",
     "duration": "Մոտավոր տևողություն (րոպե)",
@@ -109,6 +130,19 @@
     "modalAdd": "Ավելացնել ծառայություն",
     "modalEdit": "Խմբագրել ծառայությունը",
     "minShort": "ր"
+  },
+  "serviceTypes": {
+    "haircut": "Տղամարդու սանրվածք",
+    "kids_haircut": "Մանկական սանրվածք",
+    "beard_trim": "Մորուքի կտրում",
+    "haircut_beard": "Սանրվածք + մորուք",
+    "shave": "Ածելիով սափրում",
+    "head_shave": "Գլխի սափրում",
+    "hair_wash": "Մազերի լվացում",
+    "styling": "Հարդարում",
+    "coloring": "Մազերի ներկում",
+    "eyebrow_correction": "Հոնքերի շտկում",
+    "other": "Այլ"
   },
   "hours": {
     "heading": "Աշխատանքային ժամեր",

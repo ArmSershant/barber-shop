@@ -7,6 +7,7 @@
     "greeting": "Hi, {name}",
     "dashboard": "Dashboard",
     "bookings": "Bookings",
+    "myBookings": "My bookings",
     "theme": "Theme",
     "themeLight": "Light",
     "themeDark": "Dark",
@@ -25,7 +26,26 @@
     "cancelConfirm": "Cancel this booking?",
     "cancelled": "Booking cancelled.",
     "statusConfirmed": "Confirmed",
-    "statusRequested": "Pending"
+    "statusRequested": "Pending",
+    "complete": "Completed",
+    "noShow": "No-show",
+    "completedMsg": "Marked as completed.",
+    "noShowMsg": "Marked as no-show."
+  },
+  "myBookings": {
+    "title": "My bookings",
+    "upcoming": "Upcoming",
+    "past": "Past",
+    "empty": "No bookings yet.",
+    "browse": "Browse barbers",
+    "cancel": "Cancel",
+    "cancelConfirm": "Cancel this booking?",
+    "cancelled": "Booking cancelled.",
+    "statusConfirmed": "Confirmed",
+    "statusRequested": "Pending",
+    "statusCompleted": "Completed",
+    "statusCancelled": "Cancelled",
+    "statusNoShow": "No-show"
   },
   "home": {
     "subtitle": "Book barbers in Yerevan.",
@@ -96,6 +116,7 @@
     "delete": "Delete",
     "cancel": "Cancel",
     "deleteConfirm": "Delete this service?",
+    "typeLabel": "Service",
     "name": "Service name",
     "description": "Description",
     "duration": "Typical duration (min)",
@@ -109,6 +130,19 @@
     "modalAdd": "Add service",
     "modalEdit": "Edit service",
     "minShort": "min"
+  },
+  "serviceTypes": {
+    "haircut": "Men's haircut",
+    "kids_haircut": "Kids' haircut",
+    "beard_trim": "Beard trim",
+    "haircut_beard": "Haircut + beard",
+    "shave": "Razor shave",
+    "head_shave": "Head shave",
+    "hair_wash": "Hair wash",
+    "styling": "Styling",
+    "coloring": "Hair coloring",
+    "eyebrow_correction": "Eyebrow correction",
+    "other": "Other"
   },
   "hours": {
     "heading": "Working hours",

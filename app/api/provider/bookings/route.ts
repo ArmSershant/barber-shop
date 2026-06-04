@@ -36,7 +36,7 @@ export async function GET() {
         guestPhone: true,
         customer: { select: { fullName: true, phone: true } },
         barber: { select: { displayName: true } },
-        services: { select: { nameSnapshot: true } },
+        services: { select: { typeSnapshot: true, nameSnapshot: true } },
       },
     });
 
@@ -52,7 +52,7 @@ export async function GET() {
         customerName: b.customer?.fullName ?? b.guestName ?? '',
         phone: b.customer?.phone ?? b.guestPhone ?? null,
         barberName: b.barber.displayName,
-        services: b.services.map((s) => s.nameSnapshot),
+        services: b.services.map((s) => ({ type: s.typeSnapshot, name: s.nameSnapshot })),
       })),
     });
   } catch (err) {

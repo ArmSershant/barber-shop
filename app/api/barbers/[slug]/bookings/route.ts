@@ -48,7 +48,7 @@ export async function POST(req: NextRequest, { params }: Params) {
         isActive: true,
         OR: [{ ownerBarberId: barber.id }, ...(barber.shopId ? [{ shopId: barber.shopId }] : [])],
       },
-      select: { id: true, name: true, durationMin: true, priceAmd: true },
+      select: { id: true, type: true, name: true, durationMin: true, priceAmd: true },
     });
     if (services.length !== body.serviceIds.length) {
       throw new HttpError(400, 'INVALID_SERVICES', 'Some services are not available for this barber.');
@@ -96,6 +96,7 @@ export async function POST(req: NextRequest, { params }: Params) {
           services: {
             create: services.map((s) => ({
               serviceId: s.id,
+              typeSnapshot: s.type,
               nameSnapshot: s.name,
               priceAmdSnapshot: s.priceAmd,
               durationMinSnapshot: s.durationMin,

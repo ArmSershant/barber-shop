@@ -57,7 +57,7 @@ export async function getBarberProfile(slug: string) {
       ownedServices: {
         where: { isActive: true },
         orderBy: { createdAt: 'asc' },
-        select: { id: true, name: true, description: true, durationMin: true, priceAmd: true },
+        select: { id: true, type: true, name: true, description: true, durationMin: true, priceAmd: true },
       },
       workingHours: {
         orderBy: [{ weekday: 'asc' }, { startMinute: 'asc' }],

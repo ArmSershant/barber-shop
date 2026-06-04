@@ -12,6 +12,8 @@ import { ServiceForm } from './ServiceForm';
 
 export function ServicesSection() {
   const t = useTranslations('services');
+  const tst = useTranslations('serviceTypes');
+  const label = (s: Service) => (s.type && s.type !== 'other' ? tst(s.type) : s.name);
   const { data, isLoading } = useProviderServicesQuery();
   const [deleteService] = useDeleteServiceMutation();
   const [opened, { open, close }] = useDisclosure(false);
@@ -66,7 +68,7 @@ export function ServicesSection() {
           {services.map((service) => (
             <Group key={service.id} justify="space-between" wrap="nowrap">
               <div>
-                <Text fw={500}>{service.name}</Text>
+                <Text fw={500}>{label(service)}</Text>
                 <Text c="dimmed" size="sm">
                   {service.durationMin} {t('minShort')} · {service.priceAmd.toLocaleString()} ֏
                 </Text>

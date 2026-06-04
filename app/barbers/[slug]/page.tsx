@@ -22,6 +22,9 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
   const t = await getTranslations('discover');
   const th = await getTranslations('hours');
   const ts = await getTranslations('services');
+  const tst = await getTranslations('serviceTypes');
+  const serviceLabel = (s: { type: string | null; name: string }) =>
+    s.type && s.type !== 'other' ? tst(s.type) : s.name;
 
   // First interval per weekday (single-shift display).
   const hoursByDay = new Map<number, { startMinute: number; endMinute: number }>();
@@ -72,7 +75,7 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
             <Card key={s.id} withBorder radius="md" padding="sm">
               <Group justify="space-between" wrap="nowrap">
                 <div>
-                  <Text fw={500}>{s.name}</Text>
+                  <Text fw={500}>{serviceLabel(s)}</Text>
                   <Text size="sm" c="dimmed">
                     ~{s.durationMin} {ts('minShort')}
                   </Text>
