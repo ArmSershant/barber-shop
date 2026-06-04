@@ -17,7 +17,8 @@
     "title": "Ծանուցումներ",
     "empty": "Ծանուցումներ չկան։",
     "newBooking": "Նոր ամրագրում՝ {name} — {when}",
-    "cancelled": "Ամրագրումը չեղարկվել է՝ {name} — {when}"
+    "cancelled": "Ամրագրումը չեղարկվել է՝ {name} — {when}",
+    "reviewReceived": "Նոր կարծիք՝ {rating}★ — {name}"
   },
   "providerBookings": {
     "title": "Ամրագրումներ",

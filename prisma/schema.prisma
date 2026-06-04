@@ -73,6 +73,7 @@ enum NotificationType {
   booking_cancelled
   reminder
   review_request
+  review_received
 }
 
 enum SubscriptionStatus {

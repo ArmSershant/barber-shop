@@ -17,7 +17,8 @@
     "title": "Уведомления",
     "empty": "Нет уведомлений.",
     "newBooking": "Новая запись: {name} — {when}",
-    "cancelled": "Запись отменена: {name} — {when}"
+    "cancelled": "Запись отменена: {name} — {when}",
+    "reviewReceived": "Новый отзыв: {rating}★ — {name}"
   },
   "providerBookings": {
     "title": "Записи",

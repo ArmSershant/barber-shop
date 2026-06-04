@@ -17,7 +17,8 @@
     "title": "Notifications",
     "empty": "No notifications.",
     "newBooking": "New booking: {name} — {when}",
-    "cancelled": "Booking cancelled: {name} — {when}"
+    "cancelled": "Booking cancelled: {name} — {when}",
+    "reviewReceived": "New review: {rating}★ — {name}"
   },
   "providerBookings": {
     "title": "Bookings",

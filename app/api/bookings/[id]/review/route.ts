@@ -17,7 +17,15 @@ export async function POST(req: NextRequest, { params }: Params) {
 
     const booking = await prisma.booking.findUnique({
       where: { id },
-      select: { id: true, customerUserId: true, barberId: true, status: true },
+      select: {
+        id: true,
+        customerUserId: true,
+        barberId: true,
+        status: true,
+        barber: {
+          select: { userId: true, slug: true, shop: { select: { ownerUserId: true } } },
+        },
+      },
     });
     if (!booking) throw new HttpError(404, 'BOOKING_NOT_FOUND', 'Booking not found.');
     if (booking.customerUserId !== userId) {
@@ -56,6 +64,33 @@ export async function POST(req: NextRequest, { params }: Params) {
         throw new HttpError(409, 'ALREADY_REVIEWED', 'You already reviewed this booking.');
       }
       throw e;
+    }
+
+    // Notify the provider about the new review. Best-effort.
+    try {
+      const recipientUserId =
+        booking.barber.userId ?? booking.barber.shop?.ownerUserId ?? null;
+      if (recipientUserId && recipientUserId !== userId) {
+        const reviewer = await prisma.user.findUnique({
+          where: { id: userId },
+          select: { fullName: true },
+        });
+        await prisma.notification.create({
+          data: {
+            userId: recipientUserId,
+            type: 'review_received',
+            channel: 'inapp',
+            payload: {
+              bookingId: booking.id,
+              rating,
+              customerName: reviewer?.fullName ?? '',
+              barberSlug: booking.barber.slug,
+            },
+          },
+        });
+      }
+    } catch (notifyErr) {
+      console.error('Failed to write review notification:', notifyErr);
     }
 
     return ok({ ok: true }, { status: 201 });

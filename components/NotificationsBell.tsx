@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import type { Route } from 'next';
 import { useTranslations } from 'next-intl';
 import {
   ActionIcon,
@@ -34,9 +35,13 @@ export function NotificationsBell() {
     if (next && unread > 0) readAll();
   };
 
-  const openBooking = () => {
+  const openTarget = (n: NotificationItem) => {
     setOpened(false);
-    router.push('/dashboard/bookings');
+    if (n.type === 'review_received' && n.payload?.barberSlug) {
+      router.push(`/barbers/${String(n.payload.barberSlug)}` as Route);
+    } else {
+      router.push('/dashboard/bookings');
+    }
   };
 
   const message = (n: NotificationItem) => {
@@ -46,6 +51,8 @@ export function NotificationsBell() {
       : '';
     if (n.type === 'booking_created') return t('newBooking', { name, when });
     if (n.type === 'booking_cancelled') return t('cancelled', { name, when });
+    if (n.type === 'review_received')
+      return t('reviewReceived', { name, rating: String(n.payload?.rating ?? '') });
     return n.type;
   };
 
@@ -70,7 +77,7 @@ export function NotificationsBell() {
           <ScrollArea.Autosize mah={300}>
             <Stack gap="xs">
               {items.map((n) => (
-                <UnstyledButton key={n.id} onClick={openBooking}>
+                <UnstyledButton key={n.id} onClick={() => openTarget(n)}>
                   <Text size="sm" fw={n.readAt ? 400 : 600}>
                     {message(n)}
                   </Text>
