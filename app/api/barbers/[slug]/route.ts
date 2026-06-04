@@ -14,7 +14,9 @@ export async function GET(_req: NextRequest, { params }: Params) {
     const { slug } = await params;
     const barber = await getBarberProfile(slug);
     if (!barber) throw new HttpError(404, 'BARBER_NOT_FOUND', 'Barber not found.');
-    return ok({ barber });
+    // Don't expose the owner's user id publicly.
+    const { userId: _ownerUserId, ...publicBarber } = barber;
+    return ok({ barber: publicBarber });
   } catch (err) {
     return errorResponse(err);
   }

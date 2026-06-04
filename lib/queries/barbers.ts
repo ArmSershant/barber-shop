@@ -45,6 +45,7 @@ export async function getBarberProfile(slug: string) {
     select: {
       id: true,
       slug: true,
+      userId: true, // for "is this my own profile" checks — strip before public API output
       displayName: true,
       bio: true,
       photoUrl: true,

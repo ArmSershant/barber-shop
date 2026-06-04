@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { Anchor, Avatar, Card, Container, Group, Rating, Stack, Text, Title } from '@mantine/core';
 import { getBarberProfile } from '@/lib/queries/barbers';
+import { getCurrentUser } from '@/lib/auth/session';
 import { BookingWidget } from '@/components/booking/BookingWidget';
 
 const DAY_KEYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
@@ -19,11 +20,15 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
   const barber = await getBarberProfile(slug);
   if (!barber) notFound();
 
+  const viewer = await getCurrentUser();
+  const isOwnProfile = Boolean(viewer && barber.userId && viewer.userId === barber.userId);
+
   const t = await getTranslations('discover');
   const th = await getTranslations('hours');
   const ts = await getTranslations('services');
   const tst = await getTranslations('serviceTypes');
   const trv = await getTranslations('reviews');
+  const tb = await getTranslations('booking');
   const serviceLabel = (s: { type: string | null; name: string }) =>
     s.type && s.type !== 'other' ? tst(s.type) : s.name;
 
@@ -105,10 +110,15 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
         })}
       </Stack>
 
-      {barber.ownedServices.length > 0 && (
+      {barber.ownedServices.length > 0 && !isOwnProfile && (
         <div style={{ marginTop: 'var(--mantine-spacing-xl)' }}>
           <BookingWidget barberSlug={barber.slug} services={barber.ownedServices} />
         </div>
+      )}
+      {isOwnProfile && (
+        <Text c="dimmed" size="sm" mt="xl">
+          {tb('ownProfile')}
+        </Text>
       )}
 
       <Title order={3} mt="xl" mb="sm">

@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { Alert, Anchor, Center, Container, Loader, Stack, Text, Title } from '@mantine/core';
+import type { Route } from 'next';
+import { Alert, Anchor, Button, Center, Container, Group, Loader, Stack, Text, Title } from '@mantine/core';
 import { useMeQuery, useProviderMeQuery } from '@/lib/store/api';
 import { ShopForm } from '@/components/dashboard/ShopForm';
 import { BarberForm } from '@/components/dashboard/BarberForm';
@@ -43,7 +44,19 @@ export default function DashboardPage() {
   return (
     <Container size="sm" py="xl">
       <Stack>
-        <Title order={2}>{t('title')}</Title>
+        <Group justify="space-between">
+          <Title order={2}>{t('title')}</Title>
+          {isBarber && provider?.barber && (
+            <Button
+              component={Link}
+              href={`/barbers/${provider.barber.slug}` as Route}
+              variant="light"
+              size="xs"
+            >
+              {t('viewProfile')}
+            </Button>
+          )}
+        </Group>
 
         {provLoading ? (
           <Center py={40}>

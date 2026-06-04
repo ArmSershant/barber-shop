@@ -74,6 +74,9 @@ export async function POST(req: NextRequest, { params }: Params) {
     if (!user && !body.guest) {
       throw new HttpError(400, 'GUEST_REQUIRED', 'Provide guest name and phone, or log in.');
     }
+    if (user && barber.userId === user.userId) {
+      throw new HttpError(403, 'OWN_PROFILE', 'You cannot book yourself.');
+    }
     const manageToken = user ? null : crypto.randomBytes(18).toString('base64url');
     const endsAt = new Date(body.startsAt.getTime() + durationMin * 60_000);
 

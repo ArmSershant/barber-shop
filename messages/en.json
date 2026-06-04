@@ -86,6 +86,7 @@
     "loginRequired": "Please log in to access your dashboard.",
     "loginLink": "Log in",
     "customerOnly": "You're signed in as a customer. Browse barbers to book.",
+    "viewProfile": "View public profile",
     "shop": {
       "heading": "Your shop",
       "name": "Shop name",
@@ -228,7 +229,8 @@
     "confirmedTitle": "Booking confirmed",
     "confirmedBody": "See you on {when}.",
     "guestManageNote": "Save this link to manage your booking.",
-    "bookAnother": "Book another"
+    "bookAnother": "Book another",
+    "ownProfile": "This is your own profile — booking is disabled."
   },
   "discover": {
     "barbersTitle": "Barbers",
