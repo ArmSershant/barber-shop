@@ -60,6 +60,15 @@ export async function getBarberProfile(slug: string) {
         orderBy: { createdAt: 'asc' },
         select: { id: true, type: true, name: true, description: true, durationMin: true, priceAmd: true },
       },
+      // Shop barbers offer the services assigned to them from the shop catalog.
+      barberServices: {
+        where: { service: { isActive: true } },
+        select: {
+          service: {
+            select: { id: true, type: true, name: true, description: true, durationMin: true, priceAmd: true },
+          },
+        },
+      },
       workingHours: {
         orderBy: [{ weekday: 'asc' }, { startMinute: 'asc' }],
         select: { weekday: true, startMinute: true, endMinute: true },
@@ -80,7 +89,14 @@ export async function getBarberProfile(slug: string) {
     },
   });
   if (!barber || barber.deletedAt) return null;
-  return { ...barber, ratingAvg: Number(barber.ratingAvg) };
+
+  // Bookable services: assigned ones for shop barbers, own catalog otherwise.
+  const services = barber.shop
+    ? barber.barberServices.map((bs) => bs.service)
+    : barber.ownedServices;
+  const { barberServices: _bs, ownedServices: _os, ...rest } = barber;
+
+  return { ...rest, services, ratingAvg: Number(barber.ratingAvg) };
 }
 
 export type BarberProfile = NonNullable<Awaited<ReturnType<typeof getBarberProfile>>>;

@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import { Anchor, Button, Center, Container, Group, Loader, Stack, Title } from '@mantine/core';
 import { useGetBarberQuery } from '@/lib/store/api';
 import { BarberForm } from '@/components/dashboard/BarberForm';
+import { AssignedServicesSection } from '@/components/dashboard/AssignedServicesSection';
 import { WorkingHoursSection } from '@/components/dashboard/WorkingHoursSection';
 import { BreaksSection } from '@/components/dashboard/BreaksSection';
 import { TimeOffSection } from '@/components/dashboard/TimeOffSection';
@@ -45,6 +46,7 @@ export default function ManageBarberPage() {
         {barber && (
           <>
             <BarberForm barber={barber} />
+            <AssignedServicesSection barberSlug={slug} />
             <WorkingHoursSection barberSlug={slug} />
             <BreaksSection barberSlug={slug} />
             <TimeOffSection barberSlug={slug} />

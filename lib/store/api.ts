@@ -247,6 +247,7 @@ export const api = createApi({
     'Barber',
     'ShopBarbers',
     'ShopDefaults',
+    'Assignments',
     'Availability',
     'Notifications',
     'ProviderBookings',
@@ -359,6 +360,18 @@ export const api = createApi({
       invalidatesTags: ['Breaks'],
     }),
 
+    getBarberAssignments: builder.query<{ serviceIds: string[] }, string>({
+      query: (slug) => `/barbers/${slug}/services`,
+      providesTags: ['Assignments'],
+    }),
+    setBarberAssignments: builder.mutation<{ ok: boolean }, { slug: string; serviceIds: string[] }>({
+      query: ({ slug, serviceIds }) => ({
+        url: `/barbers/${slug}/services`,
+        method: 'PUT',
+        body: { serviceIds },
+      }),
+      invalidatesTags: ['Assignments'],
+    }),
     getShopDefaults: builder.query<ShopDefaults, string>({
       query: (shopSlug) => `/shops/${shopSlug}/defaults`,
       providesTags: ['ShopDefaults'],
@@ -449,6 +462,8 @@ export const {
   useGetBreaksQuery,
   useCreateBreakMutation,
   useDeleteBreakMutation,
+  useGetBarberAssignmentsQuery,
+  useSetBarberAssignmentsMutation,
   useGetShopDefaultsQuery,
   useSetShopDefaultsMutation,
   useApplyShopDefaultsMutation,

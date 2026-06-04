@@ -46,7 +46,12 @@ export async function POST(req: NextRequest, { params }: Params) {
       where: {
         id: { in: body.serviceIds },
         isActive: true,
-        OR: [{ ownerBarberId: barber.id }, ...(barber.shopId ? [{ shopId: barber.shopId }] : [])],
+        OR: [
+          { ownerBarberId: barber.id },
+          ...(barber.shopId
+            ? [{ shopId: barber.shopId, barberServices: { some: { barberId: barber.id } } }]
+            : []),
+        ],
       },
       select: { id: true, type: true, name: true, durationMin: true, priceAmd: true },
     });

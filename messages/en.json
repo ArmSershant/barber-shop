@@ -48,6 +48,28 @@
     "statusCancelled": "Cancelled",
     "statusNoShow": "No-show"
   },
+  "apiErrors": {
+    "INVALID_CREDENTIALS": "Invalid email or password.",
+    "EMAIL_TAKEN": "An account with this email already exists.",
+    "ACCOUNT_SUSPENDED": "This account is suspended.",
+    "UNAUTHENTICATED": "Authentication required.",
+    "FORBIDDEN": "You don't have access to do this.",
+    "SHOP_EXISTS": "You already have a shop.",
+    "BARBER_EXISTS": "You already have a barber profile.",
+    "NO_PROVIDER_PROFILE": "Create a shop or barber profile first.",
+    "INVALID_SERVICES": "Some services are not available for this barber.",
+    "SLOT_UNAVAILABLE": "That time is not available.",
+    "SLOT_TAKEN": "That time was just booked.",
+    "GUEST_REQUIRED": "Provide your name and phone, or log in.",
+    "OWN_PROFILE": "You cannot book yourself.",
+    "NOT_CONFIRMED": "Only confirmed bookings can be updated.",
+    "NOT_STARTED": "The appointment has not started yet.",
+    "ALREADY_COMPLETED": "Cannot cancel a completed booking.",
+    "NOT_COMPLETED": "Only completed bookings can be reviewed.",
+    "ALREADY_REVIEWED": "You already reviewed this booking.",
+    "VALIDATION_ERROR": "Please check the entered data.",
+    "INTERNAL": "Something went wrong."
+  },
   "home": {
     "subtitle": "Book barbers in Yerevan.",
     "note": "Platform skeleton — under construction."
@@ -188,7 +210,12 @@
     "added": "Barber added.",
     "manage": "Manage",
     "back": "Back to dashboard",
-    "profileHeading": "Profile"
+    "profileHeading": "Profile",
+    "assignHeading": "Assigned services",
+    "assignHint": "Pick which services this barber performs. Only assigned services are bookable.",
+    "assignEmpty": "Add services to the shop catalog first.",
+    "assignSave": "Save assignments",
+    "assignmentsSaved": "Assignments saved."
   },
   "availability": {
     "timeOffHeading": "Time off",

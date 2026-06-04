@@ -127,7 +127,12 @@ export async function getServiceTotals(
     where: {
       id: { in: serviceIds },
       isActive: true,
-      OR: [{ ownerBarberId: barber.id }, ...(barber.shopId ? [{ shopId: barber.shopId }] : [])],
+      OR: [
+        { ownerBarberId: barber.id },
+        ...(barber.shopId
+          ? [{ shopId: barber.shopId, barberServices: { some: { barberId: barber.id } } }]
+          : []),
+      ],
     },
     select: { durationMin: true, priceAmd: true },
   });

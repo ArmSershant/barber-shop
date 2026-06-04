@@ -71,13 +71,13 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
       <Title order={3} mt="xl" mb="sm">
         {t('servicesHeading')}
       </Title>
-      {barber.ownedServices.length === 0 ? (
+      {barber.services.length === 0 ? (
         <Text c="dimmed" size="sm">
           {t('noServices')}
         </Text>
       ) : (
         <Stack gap="xs">
-          {barber.ownedServices.map((s) => (
+          {barber.services.map((s) => (
             <Card key={s.id} withBorder radius="md" padding="sm">
               <Group justify="space-between" wrap="nowrap">
                 <div>
@@ -110,9 +110,9 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
         })}
       </Stack>
 
-      {barber.ownedServices.length > 0 && !isOwnProfile && (
+      {barber.services.length > 0 && !isOwnProfile && (
         <div style={{ marginTop: 'var(--mantine-spacing-xl)' }}>
-          <BookingWidget barberSlug={barber.slug} services={barber.ownedServices} />
+          <BookingWidget barberSlug={barber.slug} services={barber.services} />
         </div>
       )}
       {isOwnProfile && (
