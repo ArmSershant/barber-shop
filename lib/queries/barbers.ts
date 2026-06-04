@@ -64,6 +64,18 @@ export async function getBarberProfile(slug: string) {
         select: { weekday: true, startMinute: true, endMinute: true },
       },
       portfolioImages: { orderBy: { sortOrder: 'asc' }, select: { id: true, url: true } },
+      reviews: {
+        where: { isHidden: false },
+        orderBy: { createdAt: 'desc' },
+        take: 10,
+        select: {
+          id: true,
+          rating: true,
+          comment: true,
+          createdAt: true,
+          customer: { select: { fullName: true } },
+        },
+      },
     },
   });
   if (!barber || barber.deletedAt) return null;

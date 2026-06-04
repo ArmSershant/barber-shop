@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { Route } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
-import { Anchor, Avatar, Card, Container, Group, Stack, Text, Title } from '@mantine/core';
+import { Anchor, Avatar, Card, Container, Group, Rating, Stack, Text, Title } from '@mantine/core';
 import { getBarberProfile } from '@/lib/queries/barbers';
 import { BookingWidget } from '@/components/booking/BookingWidget';
 
@@ -23,6 +23,7 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
   const th = await getTranslations('hours');
   const ts = await getTranslations('services');
   const tst = await getTranslations('serviceTypes');
+  const trv = await getTranslations('reviews');
   const serviceLabel = (s: { type: string | null; name: string }) =>
     s.type && s.type !== 'other' ? tst(s.type) : s.name;
 
@@ -108,6 +109,38 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
         <div style={{ marginTop: 'var(--mantine-spacing-xl)' }}>
           <BookingWidget barberSlug={barber.slug} services={barber.ownedServices} />
         </div>
+      )}
+
+      <Title order={3} mt="xl" mb="sm">
+        {trv('heading')}
+      </Title>
+      {barber.reviews.length === 0 ? (
+        <Text c="dimmed" size="sm">
+          {t('noReviews')}
+        </Text>
+      ) : (
+        <Stack gap="sm">
+          {barber.reviews.map((r) => (
+            <Card key={r.id} withBorder radius="md" padding="sm">
+              <Group justify="space-between">
+                <Group gap="xs">
+                  <Rating value={r.rating} readOnly size="sm" />
+                  <Text size="sm" fw={500}>
+                    {r.customer.fullName}
+                  </Text>
+                </Group>
+                <Text size="xs" c="dimmed">
+                  {new Date(r.createdAt).toLocaleDateString()}
+                </Text>
+              </Group>
+              {r.comment && (
+                <Text size="sm" mt={6}>
+                  {r.comment}
+                </Text>
+              )}
+            </Card>
+          ))}
+        </Stack>
       )}
     </Container>
   );

@@ -22,6 +22,7 @@ export async function GET() {
         totalPriceAmd: true,
         services: { select: { typeSnapshot: true, nameSnapshot: true } },
         barber: { select: { displayName: true, slug: true } },
+        review: { select: { id: true } },
       },
     });
 
@@ -34,6 +35,7 @@ export async function GET() {
         totalPriceAmd: b.totalPriceAmd,
         services: b.services.map((s) => ({ type: s.typeSnapshot, name: s.nameSnapshot })),
         barber: b.barber,
+        reviewed: Boolean(b.review),
       })),
     });
   } catch (err) {

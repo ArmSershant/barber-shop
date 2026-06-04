@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import type { Route } from 'next';
 import { useTranslations } from 'next-intl';
@@ -12,9 +13,12 @@ import {
   Container,
   Group,
   Loader,
+  Modal,
   Paper,
+  Rating,
   Stack,
   Text,
+  Textarea,
   Title,
 } from '@mantine/core';
 import { modals } from '@mantine/modals';
@@ -23,6 +27,7 @@ import {
   useMeQuery,
   useGetMyBookingsQuery,
   useCancelBookingMutation,
+  useCreateReviewMutation,
   type MyBooking,
 } from '@/lib/store/api';
 import { apiErrorMessage } from '@/lib/api-error';
@@ -49,9 +54,31 @@ export default function MyBookingsPage() {
   const tst = useTranslations('serviceTypes');
   const svcLabel = (s: { type: string | null; name: string }) =>
     s.type && s.type !== 'other' ? tst(s.type) : s.name;
+  const tr = useTranslations('reviews');
   const { data: me, isLoading: meLoading } = useMeQuery();
   const { data, isLoading } = useGetMyBookingsQuery(undefined, { skip: !me?.user });
   const [cancelBooking] = useCancelBookingMutation();
+  const [createReview, { isLoading: reviewing }] = useCreateReviewMutation();
+  const [reviewFor, setReviewFor] = useState<MyBooking | null>(null);
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState('');
+
+  const submitReview = async () => {
+    if (!reviewFor) return;
+    try {
+      await createReview({
+        id: reviewFor.id,
+        rating,
+        comment: comment.trim() || undefined,
+      }).unwrap();
+      notifications.show({ message: tr('submitted'), color: 'teal' });
+      setReviewFor(null);
+      setRating(5);
+      setComment('');
+    } catch (e) {
+      notifications.show({ message: apiErrorMessage(e), color: 'red' });
+    }
+  };
 
   if (meLoading) {
     return (
@@ -120,6 +147,19 @@ export default function MyBookingsPage() {
               {t('cancel')}
             </Button>
           )}
+          {!cancellable && b.status === 'completed' && !b.reviewed && (
+            <Button
+              variant="light"
+              size="xs"
+              onClick={() => {
+                setReviewFor(b);
+                setRating(5);
+                setComment('');
+              }}
+            >
+              {tr('leave')}
+            </Button>
+          )}
         </Stack>
       </Group>
     </Paper>
@@ -163,6 +203,22 @@ export default function MyBookingsPage() {
           </>
         )}
       </Stack>
+
+      <Modal opened={!!reviewFor} onClose={() => setReviewFor(null)} title={tr('title')} centered>
+        <Stack>
+          <Rating value={rating} onChange={setRating} size="lg" />
+          <Textarea
+            label={tr('comment')}
+            value={comment}
+            onChange={(e) => setComment(e.currentTarget.value)}
+            autosize
+            minRows={2}
+          />
+          <Button onClick={submitReview} loading={reviewing}>
+            {tr('submit')}
+          </Button>
+        </Stack>
+      </Modal>
     </Container>
   );
 }

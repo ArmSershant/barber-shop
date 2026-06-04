@@ -131,6 +131,14 @@
     "modalEdit": "Edit service",
     "minShort": "min"
   },
+  "reviews": {
+    "heading": "Reviews",
+    "leave": "Leave a review",
+    "title": "Rate your visit",
+    "comment": "Comment (optional)",
+    "submit": "Submit review",
+    "submitted": "Thanks for your review!"
+  },
   "serviceTypes": {
     "haircut": "Men's haircut",
     "kids_haircut": "Kids' haircut",

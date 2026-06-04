@@ -181,6 +181,7 @@ export interface MyBooking {
   totalPriceAmd: number;
   services: BookedService[];
   barber: { displayName: string; slug: string };
+  reviewed: boolean;
 }
 
 export interface ProviderBooking {
@@ -416,6 +417,10 @@ export const api = createApi({
       query: (id) => ({ url: `/bookings/${id}/no-show`, method: 'POST' }),
       invalidatesTags: ['ProviderBookings'],
     }),
+    createReview: builder.mutation<{ ok: boolean }, { id: string; rating: number; comment?: string }>({
+      query: ({ id, ...body }) => ({ url: `/bookings/${id}/review`, method: 'POST', body }),
+      invalidatesTags: ['MyBookings'],
+    }),
   }),
 });
 
@@ -456,4 +461,5 @@ export const {
   useGetMyBookingsQuery,
   useCompleteBookingMutation,
   useNoShowBookingMutation,
+  useCreateReviewMutation,
 } = api;
