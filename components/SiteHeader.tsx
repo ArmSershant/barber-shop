@@ -7,6 +7,8 @@ import { Anchor, Button, Group, Text } from '@mantine/core';
 import { api, useMeQuery, useLogoutMutation } from '@/lib/store/api';
 import { useAppDispatch } from '@/lib/store/hooks';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { ColorSchemeToggle } from './ColorSchemeToggle';
+import { NotificationsBell } from './NotificationsBell';
 import styles from './SiteHeader.module.scss';
 
 export function SiteHeader() {
@@ -16,6 +18,8 @@ export function SiteHeader() {
   const { data, isLoading } = useMeQuery();
   const [logout, { isLoading: loggingOut }] = useLogoutMutation();
   const user = data?.user ?? null;
+  const isProvider =
+    !!user && (user.roles.includes('shop_owner') || user.roles.includes('barber'));
 
   const onLogout = async () => {
     try {
@@ -29,29 +33,39 @@ export function SiteHeader() {
 
   return (
     <header className={styles.header}>
-      <Group justify="space-between" px="md" py="sm">
+      <div className={styles.inner}>
         <Anchor component={Link} href="/" fw={700} fz="lg" underline="never" c="inherit">
           Barber-Shop
         </Anchor>
 
+        {isProvider && (
+          <nav className={styles.centerNav}>
+            <Anchor component={Link} href="/dashboard" c="inherit" fz="sm">
+              {t('dashboard')}
+            </Anchor>
+            <Anchor component={Link} href="/dashboard/bookings" c="inherit" fz="sm">
+              {t('bookings')}
+            </Anchor>
+          </nav>
+        )}
+
         <Group gap="sm">
-          <LanguageSwitcher />
           {isLoading ? null : user ? (
             <>
-              {(user.roles.includes('shop_owner') || user.roles.includes('barber')) && (
-                <Anchor component={Link} href="/dashboard" c="inherit" fz="sm">
-                  {t('dashboard')}
-                </Anchor>
-              )}
               <Text c="dimmed" fz="sm">
                 {t('greeting', { name: user.fullName })}
               </Text>
+              <LanguageSwitcher />
+              <ColorSchemeToggle />
+              <NotificationsBell />
               <Button size="xs" variant="light" onClick={onLogout} loading={loggingOut}>
                 {t('logout')}
               </Button>
             </>
           ) : (
             <>
+              <LanguageSwitcher />
+              <ColorSchemeToggle />
               <Anchor component={Link} href="/login" c="inherit" fz="sm">
                 {t('login')}
               </Anchor>
@@ -61,7 +75,7 @@ export function SiteHeader() {
             </>
           )}
         </Group>
-      </Group>
+      </div>
     </header>
   );
 }

@@ -20,6 +20,9 @@ export async function POST(req: NextRequest, { params }: Params) {
         customerUserId: true,
         manageToken: true,
         status: true,
+        startsAt: true,
+        guestName: true,
+        customer: { select: { fullName: true } },
         barber: { select: { userId: true, shop: { select: { ownerUserId: true } } } },
       },
     });
@@ -47,6 +50,30 @@ export async function POST(req: NextRequest, { params }: Params) {
       where: { id },
       data: { status: 'cancelled', cancelReason: body.reason ?? null, cancelledBy },
     });
+
+    // Notify the other side. Best-effort.
+    try {
+      const payload = {
+        bookingId: booking.id,
+        customerName: booking.customer?.fullName ?? booking.guestName ?? '',
+        startsAt: booking.startsAt.toISOString(),
+      };
+      if (cancelledBy === 'customer') {
+        const recipientUserId = booking.barber.userId ?? booking.barber.shop?.ownerUserId ?? null;
+        if (recipientUserId) {
+          await prisma.notification.create({
+            data: { userId: recipientUserId, type: 'booking_cancelled', channel: 'inapp', payload },
+          });
+        }
+      } else if (cancelledBy === 'provider' && booking.customerUserId) {
+        await prisma.notification.create({
+          data: { userId: booking.customerUserId, type: 'booking_cancelled', channel: 'inapp', payload },
+        });
+      }
+    } catch (notifyErr) {
+      console.error('Failed to write cancel notification:', notifyErr);
+    }
+
     return ok({ ok: true });
   } catch (err) {
     return errorResponse(err);

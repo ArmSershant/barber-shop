@@ -31,10 +31,12 @@ export async function POST(req: NextRequest, { params }: Params) {
       select: {
         id: true,
         shopId: true,
+        userId: true,
         timezone: true,
         slotGranularityMin: true,
         defaultBufferMin: true,
         deletedAt: true,
+        shop: { select: { ownerUserId: true } },
       },
     });
     if (!barber || barber.deletedAt) throw new HttpError(404, 'BARBER_NOT_FOUND', 'Barber not found.');
@@ -102,6 +104,35 @@ export async function POST(req: NextRequest, { params }: Params) {
         },
         select: { id: true, startsAt: true, endsAt: true, status: true, totalPriceAmd: true, totalDurationMin: true },
       });
+      // Notify the provider (barber's own account, else the shop owner). Best-effort.
+      try {
+        const recipientUserId = barber.userId ?? barber.shop?.ownerUserId ?? null;
+        if (recipientUserId) {
+          const customerName = user
+            ? ((
+                await prisma.user.findUnique({
+                  where: { id: user.userId },
+                  select: { fullName: true },
+                })
+              )?.fullName ?? 'Customer')
+            : body.guest!.name;
+          await prisma.notification.create({
+            data: {
+              userId: recipientUserId,
+              type: 'booking_created',
+              channel: 'inapp',
+              payload: {
+                bookingId: booking.id,
+                customerName,
+                startsAt: booking.startsAt.toISOString(),
+              },
+            },
+          });
+        }
+      } catch (notifyErr) {
+        console.error('Failed to write booking notification:', notifyErr);
+      }
+
       return ok({ booking, manageToken }, { status: 201 });
     } catch (e) {
       if (isOverlapError(e)) throw new HttpError(409, 'SLOT_TAKEN', 'That time was just booked.');

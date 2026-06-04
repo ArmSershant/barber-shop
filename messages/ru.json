@@ -5,7 +5,27 @@
     "logout": "Выйти",
     "loggingOut": "Выход…",
     "greeting": "Привет, {name}",
-    "dashboard": "Панель"
+    "dashboard": "Панель",
+    "bookings": "Записи",
+    "theme": "Тема",
+    "themeLight": "Светлая",
+    "themeDark": "Тёмная",
+    "themeSystem": "Системная"
+  },
+  "notifications": {
+    "title": "Уведомления",
+    "empty": "Нет уведомлений.",
+    "newBooking": "Новая запись: {name} — {when}",
+    "cancelled": "Запись отменена: {name} — {when}"
+  },
+  "providerBookings": {
+    "title": "Записи",
+    "empty": "Нет предстоящих записей.",
+    "cancel": "Отменить запись",
+    "cancelConfirm": "Отменить эту запись?",
+    "cancelled": "Запись отменена.",
+    "statusConfirmed": "Подтверждена",
+    "statusRequested": "Ожидает"
   },
   "home": {
     "subtitle": "Бронируйте барберов в Ереване.",

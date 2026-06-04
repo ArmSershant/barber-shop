@@ -5,7 +5,27 @@
     "logout": "Log out",
     "loggingOut": "Logging out…",
     "greeting": "Hi, {name}",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "bookings": "Bookings",
+    "theme": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "No notifications.",
+    "newBooking": "New booking: {name} — {when}",
+    "cancelled": "Booking cancelled: {name} — {when}"
+  },
+  "providerBookings": {
+    "title": "Bookings",
+    "empty": "No upcoming bookings.",
+    "cancel": "Cancel booking",
+    "cancelConfirm": "Cancel this booking?",
+    "cancelled": "Booking cancelled.",
+    "statusConfirmed": "Confirmed",
+    "statusRequested": "Pending"
   },
   "home": {
     "subtitle": "Book barbers in Yerevan.",

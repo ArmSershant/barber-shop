@@ -5,7 +5,27 @@
     "logout": "Ելք",
     "loggingOut": "Դուրս ենք գալիս…",
     "greeting": "Բարև, {name}",
-    "dashboard": "Վահանակ"
+    "dashboard": "Վահանակ",
+    "bookings": "Ամրագրումներ",
+    "theme": "Թեմա",
+    "themeLight": "Լուսավոր",
+    "themeDark": "Մուգ",
+    "themeSystem": "Համակարգային"
+  },
+  "notifications": {
+    "title": "Ծանուցումներ",
+    "empty": "Ծանուցումներ չկան։",
+    "newBooking": "Նոր ամրագրում՝ {name} — {when}",
+    "cancelled": "Ամրագրումը չեղարկվել է՝ {name} — {when}"
+  },
+  "providerBookings": {
+    "title": "Ամրագրումներ",
+    "empty": "Առաջիկա ամրագրումներ չկան։",
+    "cancel": "Չեղարկել ամրագրումը",
+    "cancelConfirm": "Չեղարկե՞լ այս ամրագրումը։",
+    "cancelled": "Ամրագրումը չեղարկվեց։",
+    "statusConfirmed": "Հաստատված",
+    "statusRequested": "Սպասում է"
   },
   "home": {
     "subtitle": "Ամրագրեք վարսավիրներ Երևանում։",

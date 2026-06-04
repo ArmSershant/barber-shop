@@ -159,6 +159,28 @@ export interface CreateBookingResult {
   manageToken: string | null;
 }
 
+export interface NotificationItem {
+  id: string;
+  type: string;
+  payload: Record<string, unknown>;
+  readAt: string | null;
+  createdAt: string;
+}
+
+export interface ProviderBooking {
+  id: string;
+  startsAt: string;
+  endsAt: string;
+  status: string;
+  totalPriceAmd: number;
+  totalDurationMin: number;
+  note: string | null;
+  customerName: string;
+  phone: string | null;
+  barberName: string;
+  services: string[];
+}
+
 // All requests are same-origin to /api; `credentials: 'include'` sends the
 // httpOnly auth cookies.
 const rawBaseQuery = fetchBaseQuery({ baseUrl: '/api', credentials: 'include' });
@@ -209,6 +231,8 @@ export const api = createApi({
     'ShopBarbers',
     'ShopDefaults',
     'Availability',
+    'Notifications',
+    'ProviderBookings',
   ],
   endpoints: (builder) => ({
     me: builder.query<MeResponse, void>({
@@ -346,6 +370,23 @@ export const api = createApi({
       query: ({ slug, ...body }) => ({ url: `/barbers/${slug}/bookings`, method: 'POST', body }),
       invalidatesTags: ['Availability'],
     }),
+
+    getNotifications: builder.query<{ notifications: NotificationItem[]; unread: number }, void>({
+      query: () => '/notifications',
+      providesTags: ['Notifications'],
+    }),
+    readAllNotifications: builder.mutation<{ ok: boolean }, void>({
+      query: () => ({ url: '/notifications/read-all', method: 'POST' }),
+      invalidatesTags: ['Notifications'],
+    }),
+    getProviderBookings: builder.query<{ bookings: ProviderBooking[] }, void>({
+      query: () => '/provider/bookings',
+      providesTags: ['ProviderBookings'],
+    }),
+    cancelBooking: builder.mutation<{ ok: boolean }, { id: string; reason?: string }>({
+      query: ({ id, reason }) => ({ url: `/bookings/${id}/cancel`, method: 'POST', body: { reason } }),
+      invalidatesTags: ['ProviderBookings', 'Availability'],
+    }),
   }),
 });
 
@@ -379,4 +420,8 @@ export const {
   useApplyShopDefaultsMutation,
   useGetAvailabilityQuery,
   useCreateBookingMutation,
+  useGetNotificationsQuery,
+  useReadAllNotificationsMutation,
+  useGetProviderBookingsQuery,
+  useCancelBookingMutation,
 } = api;
