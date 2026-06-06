@@ -13,13 +13,17 @@ export interface BarberCardData {
 }
 
 /** Public list of barbers for discovery. Hides suspended/deleted. */
-export async function listBarbers(params: { q?: string } = {}): Promise<BarberCardData[]> {
+export async function listBarbers(
+  params: { q?: string; district?: string } = {},
+): Promise<BarberCardData[]> {
   const q = params.q?.trim();
+  const district = params.district?.trim();
   const barbers = await prisma.barber.findMany({
     where: {
       deletedAt: null,
       status: { not: 'suspended' },
       ...(q ? { displayName: { contains: q, mode: 'insensitive' } } : {}),
+      ...(district ? { district: { slug: district } } : {}),
     },
     orderBy: [{ ratingAvg: 'desc' }, { createdAt: 'desc' }],
     take: 60,
@@ -50,6 +54,7 @@ export async function getBarberProfile(slug: string) {
       bio: true,
       photoUrl: true,
       experienceYears: true,
+      districtId: true,
       ratingAvg: true,
       ratingCount: true,
       deletedAt: true,

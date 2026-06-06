@@ -272,6 +272,8 @@
     "barberCount": "{count} barbers",
     "view": "View",
     "pickBarber": "Pick a barber to book.",
+    "district": "District",
+    "allDistricts": "All districts",
     "searchPlaceholder": "Search barbers…",
     "empty": "No barbers found.",
     "independent": "Independent",

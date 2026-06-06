@@ -21,6 +21,7 @@
     "db:deploy": "prisma migrate deploy",
     "db:studio": "prisma studio",
     "db:reset": "prisma db execute --file scripts/reset-db.sql --schema prisma/schema.prisma",
+    "db:seed": "prisma db execute --file prisma/seed.sql --schema prisma/schema.prisma",
     "seed:test": "bash scripts/seed-test-accounts.sh"
   },
   "dependencies": {

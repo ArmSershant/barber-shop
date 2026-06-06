@@ -11,13 +11,17 @@ export interface ShopCardData {
 }
 
 /** Public list of shops for discovery. Hides suspended/deleted. */
-export async function listShops(params: { q?: string } = {}): Promise<ShopCardData[]> {
+export async function listShops(
+  params: { q?: string; district?: string } = {},
+): Promise<ShopCardData[]> {
   const q = params.q?.trim();
+  const district = params.district?.trim();
   const shops = await prisma.shop.findMany({
     where: {
       deletedAt: null,
       status: { not: 'suspended' },
       ...(q ? { name: { contains: q, mode: 'insensitive' } } : {}),
+      ...(district ? { district: { slug: district } } : {}),
     },
     orderBy: { createdAt: 'desc' },
     take: 60,

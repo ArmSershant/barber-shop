@@ -272,6 +272,8 @@
     "barberCount": "{count} барберов",
     "view": "Смотреть",
     "pickBarber": "Выберите барбера для записи.",
+    "district": "Район",
+    "allDistricts": "Все районы",
     "searchPlaceholder": "Поиск барберов…",
     "empty": "Барберы не найдены.",
     "independent": "Независимый",

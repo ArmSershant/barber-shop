@@ -85,6 +85,7 @@ export interface BarberProfileData {
   displayName: string;
   bio: string | null;
   experienceYears: number | null;
+  districtId: number | null;
   photoUrl: string | null;
 }
 
@@ -140,6 +141,13 @@ export interface ServiceAssignment {
   serviceId: string;
   priceAmdOverride: number | null;
   durationMinOverride: number | null;
+}
+
+export interface District {
+  id: number;
+  nameEn: string;
+  nameHy: string;
+  slug: string;
 }
 
 export interface AvailabilityResponse {
@@ -366,6 +374,9 @@ export const api = createApi({
       invalidatesTags: ['Breaks'],
     }),
 
+    getDistricts: builder.query<{ districts: District[] }, void>({
+      query: () => '/districts',
+    }),
     getBarberAssignments: builder.query<{ assignments: ServiceAssignment[] }, string>({
       query: (slug) => `/barbers/${slug}/services`,
       providesTags: ['Assignments'],
@@ -471,6 +482,7 @@ export const {
   useGetBreaksQuery,
   useCreateBreakMutation,
   useDeleteBreakMutation,
+  useGetDistrictsQuery,
   useGetBarberAssignmentsQuery,
   useSetBarberAssignmentsMutation,
   useGetShopDefaultsQuery,

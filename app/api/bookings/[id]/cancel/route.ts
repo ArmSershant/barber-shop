@@ -3,6 +3,8 @@ import { prisma } from '@/lib/db';
 import { errorResponse, HttpError, ok } from '@/lib/http';
 import { getCurrentUser } from '@/lib/auth/session';
 import { cancelBookingSchema } from '@/lib/validation/booking';
+import { sendEmail } from '@/lib/email';
+import { bookingCancelledEmail } from '@/lib/email-templates';
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -22,8 +24,16 @@ export async function POST(req: NextRequest, { params }: Params) {
         status: true,
         startsAt: true,
         guestName: true,
-        customer: { select: { fullName: true } },
-        barber: { select: { userId: true, shop: { select: { ownerUserId: true } } } },
+        guestEmail: true,
+        customer: { select: { fullName: true, email: true, phone: true } },
+        barber: {
+          select: {
+            userId: true,
+            displayName: true,
+            timezone: true,
+            shop: { select: { ownerUserId: true } },
+          },
+        },
       },
     });
     if (!booking) throw new HttpError(404, 'BOOKING_NOT_FOUND', 'Booking not found.');
@@ -72,6 +82,24 @@ export async function POST(req: NextRequest, { params }: Params) {
       }
     } catch (notifyErr) {
       console.error('Failed to write cancel notification:', notifyErr);
+    }
+
+    // When the provider cancels, email the customer (registered or guest).
+    if (cancelledBy === 'provider') {
+      const email = booking.customer?.email ?? booking.guestEmail ?? null;
+      if (email) {
+        const { subject, html } = bookingCancelledEmail(undefined, {
+          customerName: booking.customer?.fullName ?? booking.guestName ?? '',
+          barberName: booking.barber.displayName,
+          when: new Intl.DateTimeFormat('hy', {
+            dateStyle: 'medium',
+            timeStyle: 'short',
+            timeZone: booking.barber.timezone,
+          }).format(booking.startsAt),
+          appUrl: process.env.NEXT_PUBLIC_APP_URL ?? 'https://barber-shop-alpha-two.vercel.app',
+        });
+        void sendEmail({ to: email, subject, html });
+      }
     }
 
     return ok({ ok: true });

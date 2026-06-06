@@ -8,6 +8,7 @@ import { notifications } from '@mantine/notifications';
 import { createBarberSchema, type CreateBarberInput } from '@/lib/validation/provider';
 import { useCreateBarberMutation, useUpdateBarberMutation } from '@/lib/store/api';
 import { apiErrorMessage } from '@/lib/api-error';
+import { DistrictSelectField } from './DistrictSelectField';
 
 // Minimal shape the form needs — satisfied by both the RTK `Barber` type and
 // the public barber profile, so it works for self-edit and shop-roster edit.
@@ -16,6 +17,7 @@ export interface EditableBarber {
   displayName: string;
   bio?: string | null;
   experienceYears?: number | null;
+  districtId?: number | null;
 }
 
 export function BarberForm({ barber }: { barber: EditableBarber | null }) {
@@ -35,6 +37,7 @@ export function BarberForm({ barber }: { barber: EditableBarber | null }) {
       displayName: barber?.displayName ?? '',
       bio: barber?.bio ?? '',
       experienceYears: barber?.experienceYears ?? undefined,
+      districtId: barber?.districtId ?? undefined,
     },
   });
 
@@ -70,6 +73,13 @@ export function BarberForm({ barber }: { barber: EditableBarber | null }) {
               onChange={(value) => field.onChange(value === '' ? undefined : Number(value))}
               error={errors.experienceYears?.message}
             />
+          )}
+        />
+        <Controller
+          name="districtId"
+          control={control}
+          render={({ field }) => (
+            <DistrictSelectField value={field.value} onChange={field.onChange} error={errors.districtId?.message} />
           )}
         />
         {errors.root && (

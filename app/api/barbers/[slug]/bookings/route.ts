@@ -6,8 +6,11 @@ import timezone from 'dayjs/plugin/timezone';
 import { prisma } from '@/lib/db';
 import { errorResponse, HttpError, ok } from '@/lib/http';
 import { getCurrentUser } from '@/lib/auth/session';
+import { cookies } from 'next/headers';
 import { getAvailableSlots } from '@/lib/queries/availability';
 import { createBookingSchema } from '@/lib/validation/booking';
+import { sendEmail } from '@/lib/email';
+import { bookingConfirmationEmail } from '@/lib/email-templates';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -32,6 +35,7 @@ export async function POST(req: NextRequest, { params }: Params) {
         id: true,
         shopId: true,
         userId: true,
+        displayName: true,
         timezone: true,
         slotGranularityMin: true,
         defaultBufferMin: true,
@@ -138,18 +142,20 @@ export async function POST(req: NextRequest, { params }: Params) {
         },
         select: { id: true, startsAt: true, endsAt: true, status: true, totalPriceAmd: true, totalDurationMin: true },
       });
-      // Notify the provider (barber's own account, else the shop owner). Best-effort.
+      // Resolve customer name + email (registered user or guest).
+      const customerRecord = user
+        ? await prisma.user.findUnique({
+            where: { id: user.userId },
+            select: { fullName: true, email: true },
+          })
+        : null;
+      const customerName = user ? (customerRecord?.fullName ?? 'Customer') : body.guest!.name;
+      const customerEmail = user ? (customerRecord?.email ?? null) : (body.guest!.email ?? null);
+
+      // Notify the provider in-app (barber's own account, else the shop owner).
       try {
         const recipientUserId = barber.userId ?? barber.shop?.ownerUserId ?? null;
         if (recipientUserId) {
-          const customerName = user
-            ? ((
-                await prisma.user.findUnique({
-                  where: { id: user.userId },
-                  select: { fullName: true },
-                })
-              )?.fullName ?? 'Customer')
-            : body.guest!.name;
           await prisma.notification.create({
             data: {
               userId: recipientUserId,
@@ -165,6 +171,23 @@ export async function POST(req: NextRequest, { params }: Params) {
         }
       } catch (notifyErr) {
         console.error('Failed to write booking notification:', notifyErr);
+      }
+
+      // Email the customer a confirmation (best-effort, locale-aware).
+      if (customerEmail) {
+        const locale = (await cookies()).get('NEXT_LOCALE')?.value;
+        const when = new Intl.DateTimeFormat(locale ?? 'hy', {
+          dateStyle: 'medium',
+          timeStyle: 'short',
+          timeZone: barber.timezone,
+        }).format(booking.startsAt);
+        const { subject, html } = bookingConfirmationEmail(locale, {
+          customerName,
+          barberName: barber.displayName,
+          when,
+          appUrl: process.env.NEXT_PUBLIC_APP_URL ?? 'https://barber-shop-alpha-two.vercel.app',
+        });
+        void sendEmail({ to: customerEmail, subject, html });
       }
 
       return ok({ booking, manageToken }, { status: 201 });

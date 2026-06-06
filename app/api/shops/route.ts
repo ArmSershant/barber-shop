@@ -10,7 +10,8 @@ import { listShops } from '@/lib/queries/shops';
 export async function GET(req: NextRequest) {
   try {
     const q = req.nextUrl.searchParams.get('q') ?? undefined;
-    const shops = await listShops({ q });
+    const district = req.nextUrl.searchParams.get('district') ?? undefined;
+    const shops = await listShops({ q, district });
     return ok({ shops });
   } catch (err) {
     return errorResponse(err);
