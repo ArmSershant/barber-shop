@@ -38,6 +38,15 @@ export async function PATCH(req: NextRequest, { params }: Params) {
 
     const data = updateShopSchema.parse(await req.json());
     const shop = await prisma.shop.update({ where: { slug }, data });
+
+    // Barbers share the shop's location: cascade the district to the roster.
+    if (data.districtId !== undefined) {
+      await prisma.barber.updateMany({
+        where: { shopId: shop.id },
+        data: { districtId: shop.districtId },
+      });
+    }
+
     return ok({ shop });
   } catch (err) {
     return errorResponse(err);
