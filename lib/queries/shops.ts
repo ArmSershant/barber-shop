@@ -6,13 +6,13 @@ export interface ShopCardData {
   name: string;
   logoUrl: string | null;
   address: string | null;
-  district: { nameEn: string; nameHy: string; slug: string } | null;
+  district: { id: number; nameEn: string; nameHy: string; slug: string } | null;
   barberCount: number;
 }
 
 /** Public list of shops for discovery. Hides suspended/deleted. */
 export async function listShops(
-  params: { q?: string; district?: string } = {},
+  params: { q?: string; district?: string; preferredDistrictId?: number } = {},
 ): Promise<ShopCardData[]> {
   const q = params.q?.trim();
   const district = params.district?.trim();
@@ -31,11 +31,11 @@ export async function listShops(
       name: true,
       logoUrl: true,
       address: true,
-      district: { select: { nameEn: true, nameHy: true, slug: true } },
+      district: { select: { id: true, nameEn: true, nameHy: true, slug: true } },
       _count: { select: { barbers: { where: { deletedAt: null } } } },
     },
   });
-  return shops.map((s) => ({
+  const mapped = shops.map((s) => ({
     id: s.id,
     slug: s.slug,
     name: s.name,
@@ -44,6 +44,12 @@ export async function listShops(
     district: s.district,
     barberCount: s._count.barbers,
   }));
+
+  const pref = params.preferredDistrictId;
+  if (pref && !district) {
+    mapped.sort((a, b) => Number(b.district?.id === pref) - Number(a.district?.id === pref));
+  }
+  return mapped;
 }
 
 /** Full public shop profile, or null if not found/deleted. */
@@ -60,7 +66,7 @@ export async function getShopProfile(slug: string) {
       phone: true,
       instagram: true,
       deletedAt: true,
-      district: { select: { nameEn: true, nameHy: true, slug: true } },
+      district: { select: { id: true, nameEn: true, nameHy: true, slug: true } },
       photos: { orderBy: { sortOrder: 'asc' }, select: { id: true, url: true } },
       services: {
         where: { isActive: true },

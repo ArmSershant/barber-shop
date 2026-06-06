@@ -46,7 +46,10 @@
     "statusRequested": "Սպասում է",
     "statusCompleted": "Կատարված",
     "statusCancelled": "Չեղարկված",
-    "statusNoShow": "Չներկայացավ"
+    "statusNoShow": "Չներկայացավ",
+    "myArea": "Իմ շրջանը",
+    "myAreaHint": "Նշեք Ձեր շրջանը՝ մոտակա վարսավիրներին առաջինը տեսնելու համար։",
+    "areaSaved": "Պահպանվեց։"
   },
   "apiErrors": {
     "INVALID_CREDENTIALS": "Սխալ էլ. փոստ կամ գաղտնաբառ։",
@@ -274,6 +277,7 @@
     "pickBarber": "Ընտրեք վարսավիր՝ ամրագրելու համար։",
     "district": "Շրջան",
     "allDistricts": "Բոլոր շրջանները",
+    "showingFirst": "Նախ՝ {district}",
     "searchPlaceholder": "Փնտրել վարսավիրների…",
     "empty": "Վարսավիրներ չեն գտնվել։",
     "independent": "Անկախ",

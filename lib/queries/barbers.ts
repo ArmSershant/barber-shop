@@ -9,12 +9,12 @@ export interface BarberCardData {
   ratingAvg: number;
   ratingCount: number;
   shop: { slug: string; name: string } | null;
-  district: { nameEn: string; nameHy: string; slug: string } | null;
+  district: { id: number; nameEn: string; nameHy: string; slug: string } | null;
 }
 
 /** Public list of barbers for discovery. Hides suspended/deleted. */
 export async function listBarbers(
-  params: { q?: string; district?: string } = {},
+  params: { q?: string; district?: string; preferredDistrictId?: number } = {},
 ): Promise<BarberCardData[]> {
   const q = params.q?.trim();
   const district = params.district?.trim();
@@ -36,10 +36,17 @@ export async function listBarbers(
       ratingAvg: true,
       ratingCount: true,
       shop: { select: { slug: true, name: true } },
-      district: { select: { nameEn: true, nameHy: true, slug: true } },
+      district: { select: { id: true, nameEn: true, nameHy: true, slug: true } },
     },
   });
-  return barbers.map((b) => ({ ...b, ratingAvg: Number(b.ratingAvg) }));
+  const mapped = barbers.map((b) => ({ ...b, ratingAvg: Number(b.ratingAvg) }));
+
+  // Customer's home district first (stable sort keeps rating order within).
+  const pref = params.preferredDistrictId;
+  if (pref && !district) {
+    mapped.sort((a, b) => Number(b.district?.id === pref) - Number(a.district?.id === pref));
+  }
+  return mapped;
 }
 
 /** Full public profile for a barber, or null if not found/deleted. */

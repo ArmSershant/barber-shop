@@ -24,6 +24,7 @@ export interface User {
   phone?: string | null;
   avatarUrl?: string | null;
   emailVerified?: boolean;
+  preferredDistrictId?: number | null;
 }
 
 export interface MeResponse {
@@ -377,6 +378,10 @@ export const api = createApi({
     getDistricts: builder.query<{ districts: District[] }, void>({
       query: () => '/districts',
     }),
+    updateMe: builder.mutation<{ ok: boolean }, { preferredDistrictId: number | null }>({
+      query: (body) => ({ url: '/me', method: 'PATCH', body }),
+      invalidatesTags: ['Me'],
+    }),
     getBarberAssignments: builder.query<{ assignments: ServiceAssignment[] }, string>({
       query: (slug) => `/barbers/${slug}/services`,
       providesTags: ['Assignments'],
@@ -483,6 +488,7 @@ export const {
   useCreateBreakMutation,
   useDeleteBreakMutation,
   useGetDistrictsQuery,
+  useUpdateMeMutation,
   useGetBarberAssignmentsQuery,
   useSetBarberAssignmentsMutation,
   useGetShopDefaultsQuery,

@@ -46,7 +46,10 @@
     "statusRequested": "Pending",
     "statusCompleted": "Completed",
     "statusCancelled": "Cancelled",
-    "statusNoShow": "No-show"
+    "statusNoShow": "No-show",
+    "myArea": "My area",
+    "myAreaHint": "Set your district to see nearby barbers first.",
+    "areaSaved": "Saved."
   },
   "apiErrors": {
     "INVALID_CREDENTIALS": "Invalid email or password.",
@@ -274,6 +277,7 @@
     "pickBarber": "Pick a barber to book.",
     "district": "District",
     "allDistricts": "All districts",
+    "showingFirst": "Showing {district} first",
     "searchPlaceholder": "Search barbers…",
     "empty": "No barbers found.",
     "independent": "Independent",

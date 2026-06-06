@@ -1,6 +1,8 @@
-import { getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 import { Container, Group, SimpleGrid, Stack, Text, Title } from '@mantine/core';
 import { listShops } from '@/lib/queries/shops';
+import { getPreferredDistrict } from '@/lib/queries/districts';
+import { getCurrentUser } from '@/lib/auth/session';
 import { ShopCard } from '@/components/discover/ShopCard';
 import { ShopSearch } from '@/components/discover/ShopSearch';
 import { DistrictFilter } from '@/components/discover/DistrictFilter';
@@ -12,7 +14,12 @@ export default async function ShopsPage({
 }) {
   const { q, district } = await searchParams;
   const t = await getTranslations('discover');
-  const shops = await listShops({ q, district });
+  const locale = await getLocale();
+
+  const viewer = await getCurrentUser();
+  const pref = viewer ? await getPreferredDistrict(viewer.userId) : null;
+  const shops = await listShops({ q, district, preferredDistrictId: district ? undefined : pref?.id });
+  const showHint = pref && !district && shops.length > 0;
 
   return (
     <Container size="lg" py="xl">
@@ -24,6 +31,11 @@ export default async function ShopsPage({
           </div>
           <DistrictFilter basePath="/shops" q={q ?? ''} value={district ?? ''} />
         </Group>
+        {showHint && (
+          <Text size="sm" c="dimmed">
+            {t('showingFirst', { district: locale === 'hy' ? pref!.nameHy : pref!.nameEn })}
+          </Text>
+        )}
 
         {shops.length === 0 ? (
           <Text c="dimmed" mt="md">

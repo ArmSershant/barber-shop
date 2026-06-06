@@ -23,11 +23,15 @@ import {
 } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
+import { useLocale } from 'next-intl';
+import { Select } from '@mantine/core';
 import {
   useMeQuery,
   useGetMyBookingsQuery,
   useCancelBookingMutation,
   useCreateReviewMutation,
+  useGetDistrictsQuery,
+  useUpdateMeMutation,
   type MyBooking,
 } from '@/lib/store/api';
 import { apiErrorMessage } from '@/lib/api-error';
@@ -55,7 +59,24 @@ export default function MyBookingsPage() {
   const svcLabel = (s: { type: string | null; name: string }) =>
     s.type && s.type !== 'other' ? tst(s.type) : s.name;
   const tr = useTranslations('reviews');
+  const locale = useLocale();
   const { data: me, isLoading: meLoading } = useMeQuery();
+  const { data: districtsData } = useGetDistrictsQuery();
+  const [updateMe, { isLoading: savingArea }] = useUpdateMeMutation();
+
+  const districtOptions = (districtsData?.districts ?? []).map((d) => ({
+    value: String(d.id),
+    label: locale === 'hy' ? d.nameHy : d.nameEn,
+  }));
+
+  const onAreaChange = async (value: string | null) => {
+    try {
+      await updateMe({ preferredDistrictId: value ? Number(value) : null }).unwrap();
+      notifications.show({ message: t('areaSaved'), color: 'teal' });
+    } catch (e) {
+      notifications.show({ message: apiErrorMessage(e), color: 'red' });
+    }
+  };
   const { data, isLoading } = useGetMyBookingsQuery(undefined, { skip: !me?.user });
   const [cancelBooking] = useCancelBookingMutation();
   const [createReview, { isLoading: reviewing }] = useCreateReviewMutation();
@@ -169,6 +190,19 @@ export default function MyBookingsPage() {
     <Container size="sm" py="xl">
       <Stack>
         <Title order={2}>{t('title')}</Title>
+
+        <Select
+          label={t('myArea')}
+          description={t('myAreaHint')}
+          placeholder={t('myArea')}
+          data={districtOptions}
+          value={me.user.preferredDistrictId ? String(me.user.preferredDistrictId) : null}
+          onChange={onAreaChange}
+          disabled={savingArea}
+          clearable
+          searchable
+          maw={300}
+        />
 
         {isLoading ? (
           <Center py={40}>

@@ -46,7 +46,10 @@
     "statusRequested": "Ожидает",
     "statusCompleted": "Выполнена",
     "statusCancelled": "Отменена",
-    "statusNoShow": "Неявка"
+    "statusNoShow": "Неявка",
+    "myArea": "Мой район",
+    "myAreaHint": "Укажите район, чтобы видеть ближайших барберов первыми.",
+    "areaSaved": "Сохранено."
   },
   "apiErrors": {
     "INVALID_CREDENTIALS": "Неверная почта или пароль.",
@@ -274,6 +277,7 @@
     "pickBarber": "Выберите барбера для записи.",
     "district": "Район",
     "allDistricts": "Все районы",
+    "showingFirst": "Сначала: {district}",
     "searchPlaceholder": "Поиск барберов…",
     "empty": "Барберы не найдены.",
     "independent": "Независимый",
