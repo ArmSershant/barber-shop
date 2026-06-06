@@ -26,8 +26,18 @@ export async function POST(req: NextRequest) {
       return res;
     }
 
-    const roleRows = await prisma.userRole.findMany({ where: { userId }, select: { role: true } });
-    const roles = roleRows.map((r) => r.role) as Role[];
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { status: true, roles: { select: { role: true } } },
+    });
+    // Suspended (or vanished) accounts can't renew a session — drop the cookies.
+    if (!user || user.status === 'suspended') {
+      const res = await errorResponse(new HttpError(403, 'ACCOUNT_SUSPENDED', 'This account is suspended.'));
+      clearAuthCookies(res);
+      return res;
+    }
+
+    const roles = user.roles.map((r) => r.role) as Role[];
 
     const accessToken = await signAccessToken({ sub: userId, roles });
     const res = ok({ ok: true });

@@ -20,6 +20,7 @@ export function SiteHeader() {
   const user = data?.user ?? null;
   const isProvider =
     !!user && (user.roles.includes('shop_owner') || user.roles.includes('barber'));
+  const isAdmin = !!user && user.roles.includes('admin');
 
   const onLogout = async () => {
     try {
@@ -52,6 +53,11 @@ export function SiteHeader() {
             ) : (
               <Anchor component={Link} href="/bookings" c="inherit" fz="sm">
                 {t('myBookings')}
+              </Anchor>
+            )}
+            {isAdmin && (
+              <Anchor component={Link} href="/admin" c="inherit" fz="sm">
+                {t('admin')}
               </Anchor>
             )}
           </nav>

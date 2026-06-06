@@ -224,6 +224,50 @@ export interface ProviderBooking {
   services: BookedService[];
 }
 
+// ---- Admin ----
+export interface AdminStats {
+  users: number;
+  shops: number;
+  barbers: number;
+  bookings: number;
+  reviews: number;
+}
+export interface AdminShop {
+  slug: string;
+  name: string;
+  status: string;
+  ownerEmail: string;
+}
+export interface AdminBarber {
+  slug: string;
+  displayName: string;
+  status: string;
+  shopName: string | null;
+}
+export interface AdminReview {
+  id: string;
+  rating: number;
+  comment: string | null;
+  isHidden: boolean;
+  barberSlug: string;
+  barberName: string;
+  customerName: string;
+}
+export interface AdminUser {
+  id: string;
+  email: string;
+  fullName: string;
+  status: string;
+  roles: Role[];
+}
+export interface AdminOverview {
+  stats: AdminStats;
+  shops: AdminShop[];
+  barbers: AdminBarber[];
+  reviews: AdminReview[];
+  users: AdminUser[];
+}
+
 // All requests are same-origin to /api; `credentials: 'include'` sends the
 // httpOnly auth cookies.
 const rawBaseQuery = fetchBaseQuery({ baseUrl: '/api', credentials: 'include' });
@@ -279,6 +323,7 @@ export const api = createApi({
     'ProviderBookings',
     'MyBookings',
     'ManagedBooking',
+    'AdminOverview',
   ],
   endpoints: (builder) => ({
     me: builder.query<MeResponse, void>({
@@ -479,6 +524,27 @@ export const api = createApi({
       query: ({ id, ...body }) => ({ url: `/bookings/${id}/review`, method: 'POST', body }),
       invalidatesTags: ['MyBookings'],
     }),
+
+    getAdminOverview: builder.query<AdminOverview, void>({
+      query: () => '/admin/overview',
+      providesTags: ['AdminOverview'],
+    }),
+    setShopStatus: builder.mutation<{ ok: boolean }, { slug: string; status: string }>({
+      query: ({ slug, status }) => ({ url: `/admin/shops/${slug}/status`, method: 'POST', body: { status } }),
+      invalidatesTags: ['AdminOverview'],
+    }),
+    setBarberStatus: builder.mutation<{ ok: boolean }, { slug: string; status: string }>({
+      query: ({ slug, status }) => ({ url: `/admin/barbers/${slug}/status`, method: 'POST', body: { status } }),
+      invalidatesTags: ['AdminOverview'],
+    }),
+    setUserStatus: builder.mutation<{ ok: boolean }, { id: string; status: string }>({
+      query: ({ id, status }) => ({ url: `/admin/users/${id}/status`, method: 'POST', body: { status } }),
+      invalidatesTags: ['AdminOverview'],
+    }),
+    setReviewVisibility: builder.mutation<{ ok: boolean }, { id: string; hidden: boolean }>({
+      query: ({ id, hidden }) => ({ url: `/admin/reviews/${id}/visibility`, method: 'POST', body: { hidden } }),
+      invalidatesTags: ['AdminOverview'],
+    }),
   }),
 });
 
@@ -525,4 +591,9 @@ export const {
   useNoShowBookingMutation,
   useCreateReviewMutation,
   useGetManagedBookingQuery,
+  useGetAdminOverviewQuery,
+  useSetShopStatusMutation,
+  useSetBarberStatusMutation,
+  useSetUserStatusMutation,
+  useSetReviewVisibilityMutation,
 } = api;
