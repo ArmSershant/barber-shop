@@ -263,7 +263,19 @@
     "confirmedBody": "See you on {when}.",
     "guestManageNote": "Save this link to manage your booking.",
     "bookAnother": "Book another",
-    "ownProfile": "This is your own profile — booking is disabled."
+    "ownProfile": "This is your own profile — booking is disabled.",
+    "manageLink": "Manage your booking"
+  },
+  "manage": {
+    "title": "Your booking",
+    "notFound": "Booking not found. Check your link.",
+    "cancel": "Cancel booking",
+    "cancelConfirm": "Cancel this booking?",
+    "cancelled": "Booking cancelled.",
+    "statusConfirmed": "Confirmed",
+    "statusCancelled": "Cancelled",
+    "statusCompleted": "Completed",
+    "statusNoShow": "No-show"
   },
   "discover": {
     "barbersTitle": "Barbers",

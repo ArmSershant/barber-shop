@@ -181,11 +181,13 @@ export async function POST(req: NextRequest, { params }: Params) {
           timeStyle: 'short',
           timeZone: barber.timezone,
         }).format(booking.startsAt);
+        const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://barber-shop-alpha-two.vercel.app';
         const { subject, html } = bookingConfirmationEmail(locale, {
           customerName,
           barberName: barber.displayName,
           when,
-          appUrl: process.env.NEXT_PUBLIC_APP_URL ?? 'https://barber-shop-alpha-two.vercel.app',
+          appUrl,
+          manageUrl: manageToken ? `${appUrl}/manage?token=${encodeURIComponent(manageToken)}` : undefined,
         });
         void sendEmail({ to: customerEmail, subject, html });
       }

@@ -263,7 +263,19 @@
     "confirmedBody": "Կտեսնվենք {when}-ին։",
     "guestManageNote": "Պահպանեք այս հղումը՝ ամրագրումը կառավարելու համար։",
     "bookAnother": "Ամրագրել ևս մեկը",
-    "ownProfile": "Սա Ձեր սեփական էջն է — ամրագրումն անջատված է։"
+    "ownProfile": "Սա Ձեր սեփական էջն է — ամրագրումն անջատված է։",
+    "manageLink": "Կառավարել ամրագրումը"
+  },
+  "manage": {
+    "title": "Ձեր ամրագրումը",
+    "notFound": "Ամրագրումը չգտնվեց։ Ստուգեք հղումը։",
+    "cancel": "Չեղարկել ամրագրումը",
+    "cancelConfirm": "Չեղարկե՞լ այս ամրագրումը։",
+    "cancelled": "Ամրագրումը չեղարկվեց։",
+    "statusConfirmed": "Հաստատված",
+    "statusCancelled": "Չեղարկված",
+    "statusCompleted": "Կատարված",
+    "statusNoShow": "Չներկայացավ"
   },
   "discover": {
     "barbersTitle": "Վարսավիրներ",

@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import { useTranslations } from 'next-intl';
 import {
   Alert,
+  Anchor,
   Button,
   Checkbox,
   Group,
@@ -110,7 +111,16 @@ export function BookingWidget({
         <Alert color="teal" title={t('confirmedTitle')}>
           <Stack gap="xs">
             <Text>{t('confirmedBody', { when: confirmed.when })}</Text>
-            {confirmed.manageToken && <Text size="sm" c="dimmed">{t('guestManageNote')}</Text>}
+            {confirmed.manageToken && (
+              <>
+                <Text size="sm" c="dimmed">
+                  {t('guestManageNote')}
+                </Text>
+                <Anchor href={`/manage?token=${encodeURIComponent(confirmed.manageToken)}`} size="sm">
+                  {t('manageLink')}
+                </Anchor>
+              </>
+            )}
             <Button variant="light" onClick={reset} mt="sm">
               {t('bookAnother')}
             </Button>

@@ -8,6 +8,7 @@ export interface BookingEmailData {
   barberName: string;
   when: string; // pre-formatted date/time string
   appUrl: string;
+  manageUrl?: string; // guest manage link (optional)
 }
 
 const COPY: Record<
@@ -22,6 +23,7 @@ const COPY: Record<
     withLabel: string;
     whenLabel: string;
     cta: string;
+    manageLink: string;
     footer: string;
   }
 > = {
@@ -35,6 +37,7 @@ const COPY: Record<
     withLabel: 'Վարսավիր',
     whenLabel: 'Ժամ',
     cta: 'Բացել Barber-Shop',
+    manageLink: 'Կառավարել ամրագրումը',
     footer: 'Barber-Shop — Երևան',
   },
   en: {
@@ -47,6 +50,7 @@ const COPY: Record<
     withLabel: 'Barber',
     whenLabel: 'When',
     cta: 'Open Barber-Shop',
+    manageLink: 'Manage your booking',
     footer: 'Barber-Shop — Yerevan',
   },
   ru: {
@@ -59,6 +63,7 @@ const COPY: Record<
     withLabel: 'Барбер',
     whenLabel: 'Когда',
     cta: 'Открыть Barber-Shop',
+    manageLink: 'Управлять записью',
     footer: 'Barber-Shop — Ереван',
   },
 };
@@ -87,9 +92,12 @@ function detailRows(c: (typeof COPY)['en'], d: BookingEmailData): string {
 
 export function bookingConfirmationEmail(locale: string | undefined, d: BookingEmailData) {
   const c = COPY[pickLocale(locale)];
+  const manage = d.manageUrl
+    ? `<p style="margin:12px 0 0"><a href="${d.manageUrl}" style="color:#12b886">${c.manageLink}</a></p>`
+    : '';
   return {
     subject: c.confirmSubject,
-    html: layout(c.confirmTitle, detailRows(c, d), c, d.appUrl),
+    html: layout(c.confirmTitle, detailRows(c, d) + manage, c, d.appUrl),
   };
 }
 

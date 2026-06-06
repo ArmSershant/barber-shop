@@ -199,6 +199,17 @@ export interface MyBooking {
   reviewed: boolean;
 }
 
+export interface ManagedBooking {
+  id: string;
+  startsAt: string;
+  endsAt: string;
+  status: string;
+  totalPriceAmd: number;
+  guestName: string | null;
+  services: BookedService[];
+  barber: { displayName: string; slug: string };
+}
+
 export interface ProviderBooking {
   id: string;
   startsAt: string;
@@ -267,6 +278,7 @@ export const api = createApi({
     'Notifications',
     'ProviderBookings',
     'MyBookings',
+    'ManagedBooking',
   ],
   endpoints: (builder) => ({
     me: builder.query<MeResponse, void>({
@@ -439,9 +451,17 @@ export const api = createApi({
       query: () => '/provider/bookings',
       providesTags: ['ProviderBookings'],
     }),
-    cancelBooking: builder.mutation<{ ok: boolean }, { id: string; reason?: string }>({
-      query: ({ id, reason }) => ({ url: `/bookings/${id}/cancel`, method: 'POST', body: { reason } }),
-      invalidatesTags: ['ProviderBookings', 'MyBookings', 'Availability'],
+    cancelBooking: builder.mutation<{ ok: boolean }, { id: string; reason?: string; token?: string }>({
+      query: ({ id, reason, token }) => ({
+        url: `/bookings/${id}/cancel`,
+        method: 'POST',
+        body: { reason, token },
+      }),
+      invalidatesTags: ['ProviderBookings', 'MyBookings', 'ManagedBooking', 'Availability'],
+    }),
+    getManagedBooking: builder.query<{ booking: ManagedBooking }, string>({
+      query: (token) => `/bookings/manage?token=${encodeURIComponent(token)}`,
+      providesTags: ['ManagedBooking'],
     }),
     getMyBookings: builder.query<{ bookings: MyBooking[] }, void>({
       query: () => '/me/bookings',
@@ -504,4 +524,5 @@ export const {
   useCompleteBookingMutation,
   useNoShowBookingMutation,
   useCreateReviewMutation,
+  useGetManagedBookingQuery,
 } = api;

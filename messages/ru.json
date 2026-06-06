@@ -263,7 +263,19 @@
     "confirmedBody": "До встречи {when}.",
     "guestManageNote": "Сохраните эту ссылку для управления записью.",
     "bookAnother": "Записаться ещё раз",
-    "ownProfile": "Это ваш собственный профиль — запись отключена."
+    "ownProfile": "Это ваш собственный профиль — запись отключена.",
+    "manageLink": "Управлять записью"
+  },
+  "manage": {
+    "title": "Ваша запись",
+    "notFound": "Запись не найдена. Проверьте ссылку.",
+    "cancel": "Отменить запись",
+    "cancelConfirm": "Отменить эту запись?",
+    "cancelled": "Запись отменена.",
+    "statusConfirmed": "Подтверждена",
+    "statusCancelled": "Отменена",
+    "statusCompleted": "Выполнена",
+    "statusNoShow": "Неявка"
   },
   "discover": {
     "barbersTitle": "Барберы",
