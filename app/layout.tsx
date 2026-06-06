@@ -27,10 +27,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang={locale} {...mantineHtmlProps}>
       <head>
-        <ColorSchemeScript defaultColorScheme="dark" />
+        <ColorSchemeScript defaultColorScheme="auto" />
       </head>
       <body suppressHydrationWarning>
-        <MantineProvider theme={theme} defaultColorScheme="dark">
+        <MantineProvider theme={theme} defaultColorScheme="auto">
           <ModalsProvider>
             <Notifications />
             <NextIntlClientProvider locale={locale} messages={messages}>

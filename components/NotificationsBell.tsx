@@ -13,6 +13,7 @@ import {
   Text,
   UnstyledButton,
 } from '@mantine/core';
+import { IconBell } from '@tabler/icons-react';
 import {
   useGetNotificationsQuery,
   useReadAllNotificationsMutation,
@@ -61,7 +62,7 @@ export function NotificationsBell() {
       <Popover.Target>
         <Indicator disabled={unread === 0} label={unread > 9 ? '9+' : unread} size={16} color="red">
           <ActionIcon variant="default" size="lg" aria-label={t('title')} onClick={toggle}>
-            <span style={{ fontSize: 14 }}>🔔</span>
+            <IconBell size={18} />
           </ActionIcon>
         </Indicator>
       </Popover.Target>

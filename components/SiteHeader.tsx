@@ -1,9 +1,19 @@
 'use client';
 
+import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Anchor, Button, Group, Text } from '@mantine/core';
+import { Anchor, Burger, Button, Divider, Drawer, Group, Stack, Text } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import {
+  IconScissors,
+  IconLayoutDashboard,
+  IconCalendarEvent,
+  IconCalendarHeart,
+  IconShieldCog,
+  IconLogout,
+} from '@tabler/icons-react';
 import { api, useMeQuery, useLogoutMutation } from '@/lib/store/api';
 import { useAppDispatch } from '@/lib/store/hooks';
 import { LanguageSwitcher } from './LanguageSwitcher';
@@ -15,6 +25,7 @@ export function SiteHeader() {
   const t = useTranslations('header');
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
   const { data, isLoading } = useMeQuery();
   const [logout, { isLoading: loggingOut }] = useLogoutMutation();
   const user = data?.user ?? null;
@@ -23,6 +34,7 @@ export function SiteHeader() {
   const isAdmin = !!user && user.roles.includes('admin');
 
   const onLogout = async () => {
+    closeDrawer();
     try {
       await logout().unwrap();
     } finally {
@@ -32,47 +44,74 @@ export function SiteHeader() {
     }
   };
 
+  const NavLink = ({
+    href,
+    icon,
+    label,
+  }: {
+    href: string;
+    icon: ReactNode;
+    label: string;
+  }) => (
+    <Anchor
+      component={Link}
+      href={href}
+      c="inherit"
+      fz="sm"
+      underline="never"
+      onClick={closeDrawer}
+    >
+      <Group gap={6} wrap="nowrap" className={styles.navLink}>
+        {icon}
+        <span>{label}</span>
+      </Group>
+    </Anchor>
+  );
+
+  const navLinks = (
+    <>
+      {isProvider ? (
+        <>
+          <NavLink href="/dashboard" icon={<IconLayoutDashboard size={16} />} label={t('dashboard')} />
+          <NavLink href="/dashboard/bookings" icon={<IconCalendarEvent size={16} />} label={t('bookings')} />
+        </>
+      ) : (
+        <NavLink href="/bookings" icon={<IconCalendarHeart size={16} />} label={t('myBookings')} />
+      )}
+      {isAdmin && <NavLink href="/admin" icon={<IconShieldCog size={16} />} label={t('admin')} />}
+    </>
+  );
+
   return (
     <header className={styles.header}>
       <div className={styles.inner}>
-        <Anchor component={Link} href="/" fw={700} fz="lg" underline="never" c="inherit">
+        <Anchor
+          component={Link}
+          href="/"
+          fw={700}
+          fz="lg"
+          underline="never"
+          c="inherit"
+          className={styles.brand}
+        >
+          <IconScissors size={20} stroke={2} />
           Barber-Shop
         </Anchor>
 
-        {user && (
-          <nav className={styles.centerNav}>
-            {isProvider ? (
-              <>
-                <Anchor component={Link} href="/dashboard" c="inherit" fz="sm">
-                  {t('dashboard')}
-                </Anchor>
-                <Anchor component={Link} href="/dashboard/bookings" c="inherit" fz="sm">
-                  {t('bookings')}
-                </Anchor>
-              </>
-            ) : (
-              <Anchor component={Link} href="/bookings" c="inherit" fz="sm">
-                {t('myBookings')}
-              </Anchor>
-            )}
-            {isAdmin && (
-              <Anchor component={Link} href="/admin" c="inherit" fz="sm">
-                {t('admin')}
-              </Anchor>
-            )}
-          </nav>
-        )}
+        {/* Desktop: centered nav */}
+        {user && <nav className={styles.centerNav}>{navLinks}</nav>}
 
-        <Group gap="sm">
+        {/* Desktop: right-side controls */}
+        <Group gap="sm" visibleFrom="sm" wrap="nowrap">
           {isLoading ? null : user ? (
             <>
-              <Text c="dimmed" fz="sm">
+              <Text c="dimmed" fz="sm" lineClamp={1} maw={160}>
                 {t('greeting', { name: user.fullName })}
               </Text>
               <LanguageSwitcher />
               <ColorSchemeToggle />
               <NotificationsBell />
-              <Button size="xs" variant="light" onClick={onLogout} loading={loggingOut}>
+              <Button size="xs" variant="light" onClick={onLogout} loading={loggingOut} leftSection={<IconLogout size={14} />}>
                 {t('logout')}
               </Button>
             </>
@@ -89,7 +128,57 @@ export function SiteHeader() {
             </>
           )}
         </Group>
+
+        {/* Mobile: burger */}
+        <Group gap="xs" hiddenFrom="sm" wrap="nowrap">
+          {user && <NotificationsBell />}
+          <Burger opened={drawerOpened} onClick={toggleDrawer} size="sm" aria-label="Menu" />
+        </Group>
       </div>
+
+      <Drawer
+        opened={drawerOpened}
+        onClose={closeDrawer}
+        position="right"
+        size="78%"
+        title="Barber-Shop"
+        hiddenFrom="sm"
+        zIndex={1000}
+      >
+        <Stack gap="lg">
+          {user && (
+            <>
+              <Text c="dimmed" fz="sm">
+                {t('greeting', { name: user.fullName })}
+              </Text>
+              <Stack gap="sm">{navLinks}</Stack>
+              <Divider />
+            </>
+          )}
+
+          <Group justify="space-between">
+            <LanguageSwitcher />
+            <ColorSchemeToggle />
+          </Group>
+
+          <Divider />
+
+          {isLoading ? null : user ? (
+            <Button variant="light" onClick={onLogout} loading={loggingOut} leftSection={<IconLogout size={16} />} fullWidth>
+              {t('logout')}
+            </Button>
+          ) : (
+            <Stack gap="sm">
+              <Button component={Link} href="/login" variant="default" onClick={closeDrawer} fullWidth>
+                {t('login')}
+              </Button>
+              <Button component={Link} href="/register" onClick={closeDrawer} fullWidth>
+                {t('signup')}
+              </Button>
+            </Stack>
+          )}
+        </Stack>
+      </Drawer>
     </header>
   );
 }

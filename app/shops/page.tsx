@@ -1,5 +1,7 @@
 import { getLocale, getTranslations } from 'next-intl/server';
 import { Container, Group, SimpleGrid, Stack, Text, Title } from '@mantine/core';
+import { IconBuildingStore } from '@tabler/icons-react';
+import { EmptyState } from '@/components/EmptyState';
 import { listShops } from '@/lib/queries/shops';
 import { getPreferredDistrict } from '@/lib/queries/districts';
 import { getCurrentUser } from '@/lib/auth/session';
@@ -38,9 +40,7 @@ export default async function ShopsPage({
         )}
 
         {shops.length === 0 ? (
-          <Text c="dimmed" mt="md">
-            {t('emptyShops')}
-          </Text>
+          <EmptyState icon={<IconBuildingStore size={30} />} title={t('emptyShops')} />
         ) : (
           <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="md">
             {shops.map((shop) => (

@@ -1,5 +1,7 @@
 import { getLocale, getTranslations } from 'next-intl/server';
 import { Container, Group, SimpleGrid, Stack, Text, Title } from '@mantine/core';
+import { IconMoodEmpty } from '@tabler/icons-react';
+import { EmptyState } from '@/components/EmptyState';
 import { listBarbers } from '@/lib/queries/barbers';
 import { getPreferredDistrict } from '@/lib/queries/districts';
 import { getCurrentUser } from '@/lib/auth/session';
@@ -42,9 +44,7 @@ export default async function BarbersPage({
         )}
 
         {barbers.length === 0 ? (
-          <Text c="dimmed" mt="md">
-            {t('empty')}
-          </Text>
+          <EmptyState icon={<IconMoodEmpty size={30} />} title={t('empty')} />
         ) : (
           <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="md">
             {barbers.map((barber) => (

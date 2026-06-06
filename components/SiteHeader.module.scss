@@ -1,5 +1,9 @@
 .header {
   border-bottom: 1px solid var(--mantine-color-default-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--mantine-color-body);
 }
 
 .inner {
@@ -11,6 +15,18 @@
   padding: 0.75rem 1rem;
 }
 
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
+
+.brand :global(svg) {
+  color: var(--mantine-primary-color-filled);
+  display: block;
+}
+
 .centerNav {
   position: absolute;
   left: 50%;
@@ -20,10 +36,14 @@
   gap: 1.25rem;
 }
 
-// On narrow screens, fall back to in-flow so nothing overlaps.
-@media (max-width: 62em) {
+// Hide the centered desktop nav on mobile (handled by the drawer instead).
+@media (max-width: 48em) {
   .centerNav {
-    position: static;
-    transform: none;
+    display: none;
   }
+}
+
+.navLink :global(svg) {
+  display: block;
+  opacity: 0.7;
 }
