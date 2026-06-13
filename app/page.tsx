@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import { getLocale, getTranslations } from 'next-intl/server';
 import {
   Badge,
   Button,
@@ -20,10 +20,14 @@ import {
   IconBuildingStore,
 } from '@tabler/icons-react';
 import { HeroSearch } from '@/components/HeroSearch';
+import { DistrictChips } from '@/components/DistrictChips';
+import { listDistricts } from '@/lib/queries/districts';
 
-export default function HomePage() {
-  const t = useTranslations('home');
-  const td = useTranslations('discover');
+export default async function HomePage() {
+  const t = await getTranslations('home');
+  const td = await getTranslations('discover');
+  const locale = await getLocale();
+  const districts = await listDistricts();
 
   const features = [
     { icon: IconMapPin, title: t('feat1Title'), desc: t('feat1Desc') },
@@ -97,6 +101,15 @@ export default function HomePage() {
             </Card>
           ))}
         </SimpleGrid>
+
+        {districts.length > 0 && (
+          <Stack gap="sm" align="center">
+            <Title order={3} ta="center">
+              {t('browseByDistrict')}
+            </Title>
+            <DistrictChips districts={districts} locale={locale} />
+          </Stack>
+        )}
 
         <Card
           withBorder

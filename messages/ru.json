@@ -123,7 +123,8 @@
     "providerTitle": "Вы барбер или владелец салона?",
     "providerLead": "Добавьте свой бизнес и принимайте записи онлайн — бесплатно.",
     "providerCta": "Начать",
-    "searchButton": "Найти"
+    "searchButton": "Найти",
+    "browseByDistrict": "Поиск по районам"
   },
   "profile": {
     "openNow": "Открыто сейчас",
@@ -363,6 +364,8 @@
   },
   "discover": {
     "barbersTitle": "Барберы",
+    "barbersInDistrict": "Барберы в районе {district}",
+    "shopsInDistrict": "Барбершопы в районе {district}",
     "browseBarbers": "Смотреть барберов",
     "shopsTitle": "Барбершопы",
     "browseShops": "Смотреть барбершопы",

@@ -123,7 +123,8 @@
     "providerTitle": "Are you a barber or shop owner?",
     "providerLead": "List your business and take bookings online — free to join.",
     "providerCta": "Get started",
-    "searchButton": "Search"
+    "searchButton": "Search",
+    "browseByDistrict": "Browse by district"
   },
   "profile": {
     "openNow": "Open now",
@@ -363,6 +364,8 @@
   },
   "discover": {
     "barbersTitle": "Barbers",
+    "barbersInDistrict": "Barbers in {district}",
+    "shopsInDistrict": "Barbershops in {district}",
     "browseBarbers": "Browse barbers",
     "shopsTitle": "Barber shops",
     "browseShops": "Browse shops",

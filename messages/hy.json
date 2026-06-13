@@ -123,7 +123,8 @@
     "providerTitle": "Դուք վարսավի՞ր եք կամ սրահի սեփականատե՞ր",
     "providerLead": "Ավելացրեք ձեր բիզնեսը և ընդունեք ամրագրումներ առցանց՝ անվճար։",
     "providerCta": "Սկսել",
-    "searchButton": "Փնտրել"
+    "searchButton": "Փնտրել",
+    "browseByDistrict": "Ընտրեք ըստ շրջանի"
   },
   "profile": {
     "openNow": "Բաց է հիմա",
@@ -363,6 +364,8 @@
   },
   "discover": {
     "barbersTitle": "Վարսավիրներ",
+    "barbersInDistrict": "Վարսավիրներ {district}-ում",
+    "shopsInDistrict": "Վարսավիրանոցներ {district}-ում",
     "browseBarbers": "Դիտել վարսավիրներին",
     "shopsTitle": "Վարսավիրանոցներ",
     "browseShops": "Դիտել վարսավիրանոցները",

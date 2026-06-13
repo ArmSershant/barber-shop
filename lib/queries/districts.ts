@@ -14,6 +14,14 @@ export async function listDistricts(): Promise<DistrictItem[]> {
   });
 }
 
+/** Look up a single district by its slug, or null. */
+export async function getDistrictBySlug(slug: string): Promise<DistrictItem | null> {
+  return prisma.district.findUnique({
+    where: { slug },
+    select: { id: true, nameEn: true, nameHy: true, slug: true },
+  });
+}
+
 /** The user's saved home district (id + names), or null. */
 export async function getPreferredDistrict(userId: string): Promise<DistrictItem | null> {
   const user = await prisma.user.findUnique({
