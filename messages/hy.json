@@ -125,6 +125,37 @@
     "providerCta": "Սկսել",
     "searchButton": "Փնտրել"
   },
+  "profile": {
+    "openNow": "Բաց է հիմա",
+    "closed": "Փակ է",
+    "closesAt": "Փակվում է {time}",
+    "opensAt": "Բացվում է {time}",
+    "from": "{price} ֏-ից",
+    "portfolio": "Աշխատանքներ",
+    "photos": "Լուսանկարներ",
+    "book": "Ամրագրել այց"
+  },
+  "gallery": {
+    "heading": "Պատկերասրահ",
+    "add": "Ավելացնել նկար",
+    "empty": "Դեռ նկարներ չկան։ Ավելացրեք ձեր աշխատանքներից։",
+    "delete": "Ջնջել"
+  },
+  "account": {
+    "title": "Հաշիվ",
+    "profile": "Պրոֆիլ",
+    "avatar": "Նկար",
+    "fullName": "Անուն ազգանուն",
+    "phone": "Հեռախոս",
+    "district": "Բնակության շրջան",
+    "save": "Պահպանել",
+    "saved": "Պրոֆիլը թարմացվեց։",
+    "password": "Փոխել գաղտնաբառը",
+    "currentPassword": "Ընթացիկ գաղտնաբառ",
+    "newPassword": "Նոր գաղտնաբառ",
+    "changePassword": "Փոխել գաղտնաբառը",
+    "passwordChanged": "Գաղտնաբառը փոխվեց։"
+  },
   "auth": {
     "login": {
       "title": "Մուտք",
@@ -178,6 +209,7 @@
     "barber": {
       "heading": "Ձեր վարսավիրի էջը",
       "photo": "Պրոֆիլի նկար",
+      "cover": "Շապիկի նկար",
       "displayName": "Անուն",
       "bio": "Կենսագրություն",
       "experienceYears": "Փորձառության տարիներ",

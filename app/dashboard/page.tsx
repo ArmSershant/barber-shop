@@ -13,6 +13,7 @@ import { TimeOffSection } from '@/components/dashboard/TimeOffSection';
 import { BreaksSection } from '@/components/dashboard/BreaksSection';
 import { ShopRosterSection } from '@/components/dashboard/ShopRosterSection';
 import { ShopDefaultsSection } from '@/components/dashboard/ShopDefaultsSection';
+import { BarberPortfolioSection, ShopPhotosSection } from '@/components/dashboard/GallerySection';
 import { ListSkeleton } from '@/components/ListSkeleton';
 
 export default function DashboardPage() {
@@ -64,7 +65,9 @@ export default function DashboardPage() {
         ) : (
           <>
             {isShopOwner && <ShopForm shop={provider?.shop ?? null} />}
+            {isShopOwner && provider?.shop && <ShopPhotosSection slug={provider.shop.slug} />}
             {isBarber && <BarberForm barber={provider?.barber ?? null} />}
+            {isBarber && provider?.barber && <BarberPortfolioSection slug={provider.barber.slug} />}
             {((isShopOwner && provider?.shop) || (isBarber && provider?.barber)) && <ServicesSection />}
             {isShopOwner && provider?.shop && <ShopDefaultsSection shopSlug={provider.shop.slug} />}
             {isShopOwner && provider?.shop && <ShopRosterSection shopSlug={provider.shop.slug} />}

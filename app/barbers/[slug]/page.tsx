@@ -2,12 +2,15 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import type { Route } from 'next';
 import { notFound } from 'next/navigation';
-import { getTranslations } from 'next-intl/server';
-import { Anchor, Avatar, Button, Card, Container, Group, Rating, Stack, Text, Title } from '@mantine/core';
-import { IconCalendarPlus } from '@tabler/icons-react';
+import { getLocale, getTranslations } from 'next-intl/server';
+import { Anchor, Avatar, Badge, Box, Button, Card, Container, Group, Paper, Rating, Stack, Text, Title } from '@mantine/core';
+import { IconCalendarPlus, IconStarFilled, IconMapPin, IconClock } from '@tabler/icons-react';
 import { getBarberProfile } from '@/lib/queries/barbers';
 import { getCurrentUser } from '@/lib/auth/session';
+import { getOpenStatus } from '@/lib/open-now';
 import { BookingWidget } from '@/components/booking/BookingWidget';
+import { PortfolioGrid } from '@/components/profile/PortfolioGrid';
+import { StickyBookBar } from '@/components/profile/StickyBookBar';
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://barber-shop.am';
 const DAY_KEYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
@@ -61,7 +64,9 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
       (barber.userId === viewer.userId || barber.shop?.ownerUserId === viewer.userId),
   );
 
+  const locale = await getLocale();
   const t = await getTranslations('discover');
+  const tp = await getTranslations('profile');
   const th = await getTranslations('hours');
   const ts = await getTranslations('services');
   const tst = await getTranslations('serviceTypes');
@@ -69,6 +74,17 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
   const tb = await getTranslations('booking');
   const serviceLabel = (s: { type: string | null; name: string }) =>
     s.type && s.type !== 'other' ? tst(s.type) : s.name;
+
+  const districtName = barber.district
+    ? locale === 'hy'
+      ? barber.district.nameHy
+      : barber.district.nameEn
+    : null;
+  const openStatus = getOpenStatus(barber.workingHours);
+  const priceFrom = barber.services.length
+    ? Math.min(...barber.services.map((s) => s.priceAmd))
+    : null;
+  const bookable = barber.services.length > 0 && !isOwnProfile;
 
   // First interval per weekday (single-shift display).
   const hoursByDay = new Map<number, { startMinute: number; endMinute: number }>();
@@ -117,33 +133,94 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Group wrap="nowrap">
-        <Avatar src={barber.photoUrl ?? undefined} size="xl" radius="xl" color="teal">
-          {barber.displayName.charAt(0).toUpperCase()}
-        </Avatar>
-        <Stack gap={4}>
-          <Title order={2}>{barber.displayName}</Title>
-          <Text c="dimmed">
-            {barber.shop ? (
-              <Anchor component={Link} href={`/shops/${barber.shop.slug}` as Route}>
-                {barber.shop.name}
-              </Anchor>
-            ) : (
-              t('independent')
+      <Paper withBorder radius="lg" style={{ overflow: 'hidden' }}>
+        <Box
+          h={120}
+          style={{
+            backgroundImage: absoluteImage(barber.coverUrl)
+              ? `url(${barber.coverUrl})`
+              : 'linear-gradient(135deg, var(--mantine-color-brand-7), var(--mantine-color-brand-5))',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        />
+        <Box px="lg" pb="lg">
+          <Group wrap="nowrap" align="flex-end" gap="md" mt={-48} mb="md">
+            <Avatar
+              src={barber.photoUrl ?? undefined}
+              size={96}
+              radius="xl"
+              color="teal"
+              style={{ border: '4px solid var(--mantine-color-body)' }}
+            >
+              {barber.displayName.charAt(0).toUpperCase()}
+            </Avatar>
+            <Stack gap={2} pb={4}>
+              <Title order={2}>{barber.displayName}</Title>
+              <Text c="dimmed" size="sm">
+                {barber.shop ? (
+                  <Anchor component={Link} href={`/shops/${barber.shop.slug}` as Route}>
+                    {barber.shop.name}
+                  </Anchor>
+                ) : (
+                  t('independent')
+                )}
+                {barber.experienceYears
+                  ? ` · ${t('experience', { years: barber.experienceYears })}`
+                  : ''}
+              </Text>
+            </Stack>
+          </Group>
+
+          <Group gap="xs">
+            {barber.ratingCount > 0 && (
+              <Badge
+                size="lg"
+                radius="sm"
+                color="gold"
+                variant="light"
+                leftSection={<IconStarFilled size={12} />}
+              >
+                {barber.ratingAvg.toFixed(1)} ({barber.ratingCount})
+              </Badge>
             )}
-            {barber.experienceYears
-              ? ` · ${t('experience', { years: barber.experienceYears })}`
-              : ''}
-          </Text>
-          <Text size="sm" c="dimmed">
-            {barber.ratingCount > 0
-              ? `★ ${barber.ratingAvg.toFixed(1)} · ${t('reviews', { count: barber.ratingCount })}`
-              : t('noReviews')}
-          </Text>
-        </Stack>
-      </Group>
+            {districtName && (
+              <Badge size="lg" radius="sm" variant="light" color="gray" leftSection={<IconMapPin size={12} />}>
+                {districtName}
+              </Badge>
+            )}
+            <Badge
+              size="lg"
+              radius="sm"
+              variant="light"
+              color={openStatus.open ? 'teal' : 'gray'}
+              leftSection={<IconClock size={12} />}
+            >
+              {openStatus.open
+                ? openStatus.closesAt
+                  ? tp('closesAt', { time: openStatus.closesAt })
+                  : tp('openNow')
+                : tp('closed')}
+            </Badge>
+            {priceFrom != null && (
+              <Badge size="lg" radius="sm" variant="light">
+                {tp('from', { price: priceFrom.toLocaleString() })}
+              </Badge>
+            )}
+          </Group>
+        </Box>
+      </Paper>
 
       {barber.bio && <Text mt="lg">{barber.bio}</Text>}
+
+      {barber.portfolioImages.length > 0 && (
+        <>
+          <Title order={3} mt="xl" mb="sm">
+            {tp('portfolio')}
+          </Title>
+          <PortfolioGrid images={barber.portfolioImages} alt={barber.displayName} />
+        </>
+      )}
 
       <Title order={3} mt="xl" mb="sm">
         {t('servicesHeading')}
@@ -200,7 +277,7 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
         })}
       </Stack>
 
-      {barber.services.length > 0 && !isOwnProfile && (
+      {bookable && (
         <div id="book" style={{ marginTop: 'var(--mantine-spacing-xl)', scrollMarginTop: '1rem' }}>
           <BookingWidget barberSlug={barber.slug} services={barber.services} />
         </div>
@@ -241,6 +318,13 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
             </Card>
           ))}
         </Stack>
+      )}
+
+      {bookable && (
+        <StickyBookBar
+          priceLabel={priceFrom != null ? tp('from', { price: priceFrom.toLocaleString() }) : undefined}
+          bookLabel={tp('book')}
+        />
       )}
     </Container>
   );

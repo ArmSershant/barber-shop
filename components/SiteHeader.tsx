@@ -5,7 +5,7 @@ import type { Route } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Anchor, Burger, Button, Divider, Drawer, Group, Stack, Text } from '@mantine/core';
+import { Anchor, Avatar, Burger, Button, Divider, Drawer, Group, Stack, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import {
   IconScissors,
@@ -106,9 +106,16 @@ export function SiteHeader() {
         <Group gap="sm" visibleFrom="sm" wrap="nowrap">
           {isLoading ? null : user ? (
             <>
-              <Text c="dimmed" fz="sm" lineClamp={1} maw={160}>
-                {t('greeting', { name: user.fullName })}
-              </Text>
+              <Anchor component={Link} href="/account" c="inherit" underline="never">
+                <Group gap={6} wrap="nowrap">
+                  <Avatar src={user.avatarUrl ?? undefined} size={28} radius="xl" color="brand">
+                    {user.fullName.charAt(0).toUpperCase()}
+                  </Avatar>
+                  <Text fz="sm" lineClamp={1} maw={130}>
+                    {user.fullName}
+                  </Text>
+                </Group>
+              </Anchor>
               <LanguageSwitcher />
               <ColorSchemeToggle />
               <NotificationsBell />
@@ -149,9 +156,14 @@ export function SiteHeader() {
         <Stack gap="lg">
           {user && (
             <>
-              <Text c="dimmed" fz="sm">
-                {t('greeting', { name: user.fullName })}
-              </Text>
+              <Anchor component={Link} href="/account" c="inherit" underline="never" onClick={closeDrawer}>
+                <Group gap="sm" wrap="nowrap">
+                  <Avatar src={user.avatarUrl ?? undefined} size={36} radius="xl" color="brand">
+                    {user.fullName.charAt(0).toUpperCase()}
+                  </Avatar>
+                  <Text fw={500}>{user.fullName}</Text>
+                </Group>
+              </Anchor>
               <Stack gap="sm">{navLinks}</Stack>
               <Divider />
             </>

@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getLocale, getTranslations } from 'next-intl/server';
-import { Anchor, Avatar, Card, Container, Group, SimpleGrid, Stack, Text, Title } from '@mantine/core';
+import { Anchor, Avatar, Badge, Box, Card, Container, Group, Paper, SimpleGrid, Stack, Text, Title } from '@mantine/core';
+import { IconMapPin, IconUsers, IconBrandInstagram, IconPhone } from '@tabler/icons-react';
 import { getShopProfile } from '@/lib/queries/shops';
 import { BarberCard } from '@/components/discover/BarberCard';
+import { PortfolioGrid } from '@/components/profile/PortfolioGrid';
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://barber-shop.am';
 
@@ -46,6 +48,7 @@ export default async function ShopProfilePage({ params }: { params: Promise<{ sl
 
   const locale = await getLocale();
   const t = await getTranslations('discover');
+  const tp = await getTranslations('profile');
   const ts = await getTranslations('services');
   const tst = await getTranslations('serviceTypes');
   const serviceLabel = (s: { type: string | null; name: string }) =>
@@ -57,6 +60,9 @@ export default async function ShopProfilePage({ params }: { params: Promise<{ sl
       : shop.district.nameEn
     : null;
   const instagramHandle = shop.instagram?.replace(/^@/, '') ?? null;
+  const priceFrom = shop.services.length
+    ? Math.min(...shop.services.map((s) => s.priceAmd))
+    : null;
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -93,31 +99,78 @@ export default async function ShopProfilePage({ params }: { params: Promise<{ sl
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Group wrap="nowrap">
-        <Avatar src={shop.logoUrl ?? undefined} size="xl" radius="md" color="teal">
-          {shop.name.charAt(0).toUpperCase()}
-        </Avatar>
-        <Stack gap={4}>
-          <Title order={2}>{shop.name}</Title>
-          <Text c="dimmed" size="sm">
-            {[districtName, shop.address].filter(Boolean).join(' · ')}
-          </Text>
-          <Group gap="md">
-            {shop.phone && (
-              <Anchor href={`tel:${shop.phone}`} size="sm">
-                {shop.phone}
-              </Anchor>
+      <Paper withBorder radius="lg" style={{ overflow: 'hidden' }}>
+        <Box
+          h={140}
+          style={{
+            backgroundImage: absoluteImage(shop.photos[0]?.url)
+              ? `url(${shop.photos[0].url})`
+              : 'linear-gradient(135deg, var(--mantine-color-brand-7), var(--mantine-color-brand-5))',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        />
+        <Box px="lg" pb="lg">
+          <Group wrap="nowrap" align="flex-end" gap="md" mt={-48} mb="md">
+            <Avatar
+              src={shop.logoUrl ?? undefined}
+              size={96}
+              radius="md"
+              color="teal"
+              style={{ border: '4px solid var(--mantine-color-body)' }}
+            >
+              {shop.name.charAt(0).toUpperCase()}
+            </Avatar>
+            <Stack gap={2} pb={4}>
+              <Title order={2}>{shop.name}</Title>
+              <Group gap="md">
+                {shop.phone && (
+                  <Anchor href={`tel:${shop.phone}`} size="sm" style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                    <IconPhone size={14} /> {shop.phone}
+                  </Anchor>
+                )}
+                {instagramHandle && (
+                  <Anchor
+                    href={`https://instagram.com/${instagramHandle}`}
+                    target="_blank"
+                    size="sm"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}
+                  >
+                    <IconBrandInstagram size={14} /> Instagram
+                  </Anchor>
+                )}
+              </Group>
+            </Stack>
+          </Group>
+
+          <Group gap="xs">
+            {(districtName || shop.address) && (
+              <Badge size="lg" radius="sm" variant="light" color="gray" leftSection={<IconMapPin size={12} />}>
+                {[districtName, shop.address].filter(Boolean).join(' · ')}
+              </Badge>
             )}
-            {instagramHandle && (
-              <Anchor href={`https://instagram.com/${instagramHandle}`} target="_blank" size="sm">
-                Instagram
-              </Anchor>
+            <Badge size="lg" radius="sm" variant="light" leftSection={<IconUsers size={12} />}>
+              {t('barberCount', { count: shop.barbers.length })}
+            </Badge>
+            {priceFrom != null && (
+              <Badge size="lg" radius="sm" variant="light">
+                {tp('from', { price: priceFrom.toLocaleString() })}
+              </Badge>
             )}
           </Group>
-        </Stack>
-      </Group>
+        </Box>
+      </Paper>
 
       {shop.description && <Text mt="lg">{shop.description}</Text>}
+
+      {shop.photos.length > 0 && (
+        <>
+          <Title order={3} mt="xl" mb="sm">
+            {tp('photos')}
+          </Title>
+          <PortfolioGrid images={shop.photos} alt={shop.name} />
+        </>
+      )}
 
       <Title order={3} mt="xl" mb="sm">
         {t('barbersTitle')}

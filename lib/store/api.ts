@@ -64,6 +64,7 @@ export interface Barber {
   bio?: string | null;
   experienceYears?: number | null;
   photoUrl?: string | null;
+  coverUrl?: string | null;
   districtId?: number | null;
   shopId?: string | null;
   status: string;
@@ -88,6 +89,12 @@ export interface BarberProfileData {
   experienceYears: number | null;
   districtId: number | null;
   photoUrl: string | null;
+  coverUrl: string | null;
+}
+
+export interface GalleryImage {
+  id: string;
+  url: string;
 }
 
 export interface Service {
@@ -324,6 +331,8 @@ export const api = createApi({
     'MyBookings',
     'ManagedBooking',
     'AdminOverview',
+    'Portfolio',
+    'ShopPhotos',
   ],
   endpoints: (builder) => ({
     me: builder.query<MeResponse, void>({
@@ -435,9 +444,23 @@ export const api = createApi({
     getDistricts: builder.query<{ districts: District[] }, void>({
       query: () => '/districts',
     }),
-    updateMe: builder.mutation<{ ok: boolean }, { preferredDistrictId: number | null }>({
+    updateMe: builder.mutation<
+      { ok: boolean },
+      {
+        fullName?: string;
+        phone?: string | null;
+        avatarUrl?: string | null;
+        preferredDistrictId?: number | null;
+      }
+    >({
       query: (body) => ({ url: '/me', method: 'PATCH', body }),
       invalidatesTags: ['Me'],
+    }),
+    changePassword: builder.mutation<
+      { ok: boolean },
+      { currentPassword: string; newPassword: string }
+    >({
+      query: (body) => ({ url: '/me/password', method: 'POST', body }),
     }),
     getBarberAssignments: builder.query<{ assignments: ServiceAssignment[] }, string>({
       query: (slug) => `/barbers/${slug}/services`,
@@ -545,6 +568,32 @@ export const api = createApi({
       query: ({ id, hidden }) => ({ url: `/admin/reviews/${id}/visibility`, method: 'POST', body: { hidden } }),
       invalidatesTags: ['AdminOverview'],
     }),
+
+    getBarberPortfolio: builder.query<{ images: GalleryImage[] }, string>({
+      query: (slug) => `/barbers/${slug}/portfolio`,
+      providesTags: ['Portfolio'],
+    }),
+    addBarberPortfolio: builder.mutation<{ image: GalleryImage }, { slug: string; url: string }>({
+      query: ({ slug, url }) => ({ url: `/barbers/${slug}/portfolio`, method: 'POST', body: { url } }),
+      invalidatesTags: ['Portfolio'],
+    }),
+    deleteBarberPortfolio: builder.mutation<{ ok: boolean }, { slug: string; id: string }>({
+      query: ({ slug, id }) => ({ url: `/barbers/${slug}/portfolio/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['Portfolio'],
+    }),
+
+    getShopPhotos: builder.query<{ photos: GalleryImage[] }, string>({
+      query: (slug) => `/shops/${slug}/photos`,
+      providesTags: ['ShopPhotos'],
+    }),
+    addShopPhoto: builder.mutation<{ photo: GalleryImage }, { slug: string; url: string }>({
+      query: ({ slug, url }) => ({ url: `/shops/${slug}/photos`, method: 'POST', body: { url } }),
+      invalidatesTags: ['ShopPhotos'],
+    }),
+    deleteShopPhoto: builder.mutation<{ ok: boolean }, { slug: string; id: string }>({
+      query: ({ slug, id }) => ({ url: `/shops/${slug}/photos/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['ShopPhotos'],
+    }),
   }),
 });
 
@@ -596,4 +645,11 @@ export const {
   useSetBarberStatusMutation,
   useSetUserStatusMutation,
   useSetReviewVisibilityMutation,
+  useChangePasswordMutation,
+  useGetBarberPortfolioQuery,
+  useAddBarberPortfolioMutation,
+  useDeleteBarberPortfolioMutation,
+  useGetShopPhotosQuery,
+  useAddShopPhotoMutation,
+  useDeleteShopPhotoMutation,
 } = api;

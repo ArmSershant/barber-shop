@@ -17,6 +17,7 @@ export const createBarberSchema = z.object({
   experienceYears: z.number().int().min(0).max(80).optional(),
   districtId: z.number().int().positive().optional(),
   photoUrl: z.string().url().optional(),
+  coverUrl: z.string().url().optional(),
 });
 export const updateBarberSchema = createBarberSchema.partial();
 

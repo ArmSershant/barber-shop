@@ -213,6 +213,7 @@ model Barber {
   bio                String?
   experienceYears    Int?           @map("experience_years") @db.SmallInt
   photoUrl           String?        @map("photo_url")
+  coverUrl           String?        @map("cover_url")
   districtId         Int?           @map("district_id") @db.SmallInt
   timezone           String         @default("Asia/Yerevan")
   slotGranularityMin Int            @default(15) @map("slot_granularity_min") @db.SmallInt

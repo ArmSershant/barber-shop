@@ -62,6 +62,7 @@ export const getBarberProfile = cache(async (slug: string) => {
       displayName: true,
       bio: true,
       photoUrl: true,
+      coverUrl: true,
       experienceYears: true,
       districtId: true,
       ratingAvg: true,

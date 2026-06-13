@@ -125,6 +125,37 @@
     "providerCta": "Начать",
     "searchButton": "Найти"
   },
+  "profile": {
+    "openNow": "Открыто сейчас",
+    "closed": "Закрыто",
+    "closesAt": "Закрывается в {time}",
+    "opensAt": "Открывается в {time}",
+    "from": "от {price} ֏",
+    "portfolio": "Работы",
+    "photos": "Фотографии",
+    "book": "Записаться"
+  },
+  "gallery": {
+    "heading": "Галерея",
+    "add": "Добавить фото",
+    "empty": "Пока нет фото. Добавьте примеры своих работ.",
+    "delete": "Удалить"
+  },
+  "account": {
+    "title": "Аккаунт",
+    "profile": "Профиль",
+    "avatar": "Аватар",
+    "fullName": "Имя и фамилия",
+    "phone": "Телефон",
+    "district": "Район проживания",
+    "save": "Сохранить",
+    "saved": "Профиль обновлён.",
+    "password": "Сменить пароль",
+    "currentPassword": "Текущий пароль",
+    "newPassword": "Новый пароль",
+    "changePassword": "Сменить пароль",
+    "passwordChanged": "Пароль изменён."
+  },
   "auth": {
     "login": {
       "title": "Вход",
@@ -178,6 +209,7 @@
     "barber": {
       "heading": "Ваш профиль барбера",
       "photo": "Фото профиля",
+      "cover": "Обложка",
       "displayName": "Имя",
       "bio": "О себе",
       "experienceYears": "Лет опыта",

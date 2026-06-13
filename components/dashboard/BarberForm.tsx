@@ -20,6 +20,7 @@ export interface EditableBarber {
   experienceYears?: number | null;
   districtId?: number | null;
   photoUrl?: string | null;
+  coverUrl?: string | null;
 }
 
 export function BarberForm({ barber }: { barber: EditableBarber | null }) {
@@ -41,6 +42,7 @@ export function BarberForm({ barber }: { barber: EditableBarber | null }) {
       experienceYears: barber?.experienceYears ?? undefined,
       districtId: barber?.districtId ?? undefined,
       photoUrl: barber?.photoUrl ?? undefined,
+      coverUrl: barber?.coverUrl ?? undefined,
     },
   });
 
@@ -67,6 +69,13 @@ export function BarberForm({ barber }: { barber: EditableBarber | null }) {
           control={control}
           render={({ field }) => (
             <ImageUpload value={field.value} onChange={field.onChange} label={t('photo')} radius="xl" />
+          )}
+        />
+        <Controller
+          name="coverUrl"
+          control={control}
+          render={({ field }) => (
+            <ImageUpload value={field.value} onChange={field.onChange} label={t('cover')} radius="md" />
           )}
         />
         <TextInput label={t('displayName')} error={errors.displayName?.message} {...register('displayName')} />

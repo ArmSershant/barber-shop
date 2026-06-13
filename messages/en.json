@@ -125,6 +125,37 @@
     "providerCta": "Get started",
     "searchButton": "Search"
   },
+  "profile": {
+    "openNow": "Open now",
+    "closed": "Closed",
+    "closesAt": "Closes {time}",
+    "opensAt": "Opens {time}",
+    "from": "from {price} ֏",
+    "portfolio": "Portfolio",
+    "photos": "Photos",
+    "book": "Book appointment"
+  },
+  "gallery": {
+    "heading": "Gallery",
+    "add": "Add photo",
+    "empty": "No photos yet. Add some of your work.",
+    "delete": "Delete"
+  },
+  "account": {
+    "title": "Account",
+    "profile": "Profile",
+    "avatar": "Avatar",
+    "fullName": "Full name",
+    "phone": "Phone",
+    "district": "Home district",
+    "save": "Save",
+    "saved": "Profile updated.",
+    "password": "Change password",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "changePassword": "Change password",
+    "passwordChanged": "Password changed."
+  },
   "auth": {
     "login": {
       "title": "Log in",
@@ -178,6 +209,7 @@
     "barber": {
       "heading": "Your barber profile",
       "photo": "Profile photo",
+      "cover": "Cover image",
       "displayName": "Display name",
       "bio": "Bio",
       "experienceYears": "Years of experience",
