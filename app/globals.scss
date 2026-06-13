@@ -28,6 +28,11 @@ html {
   scroll-behavior: smooth;
 }
 
+// Soft off-white page in light mode so white cards/surfaces gain definition.
+:root[data-mantine-color-scheme='light'] {
+  --mantine-color-body: #f6f8f9;
+}
+
 // ---- Motion ----
 @keyframes fadeInUp {
   from {
@@ -43,6 +48,22 @@ html {
 // Entrance animation for content blocks. Pair with inline animation-delay for stagger.
 .animate-in {
   animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+// Page-level entrance, replayed on every route change (see app/template.tsx).
+.page-enter {
+  animation: pageEnter 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 // Gentle lift + shadow on hover, for cards and tappable tiles.
@@ -72,7 +93,8 @@ html {
     transition-duration: 0.001ms !important;
   }
 
-  .animate-in {
+  .animate-in,
+  .page-enter {
     animation: none !important;
   }
 

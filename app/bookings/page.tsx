@@ -146,7 +146,7 @@ export default function MyBookingsPage() {
   };
 
   const renderCard = (b: MyBooking, cancellable: boolean) => (
-    <Paper key={b.id} withBorder p="md" radius="md">
+    <Paper key={b.id} withBorder p="md" radius="md" className="hoverLift">
       <Group justify="space-between" wrap="nowrap" align="flex-start">
         <div>
           <Text fw={600}>

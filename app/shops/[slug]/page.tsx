@@ -148,7 +148,7 @@ export default async function ShopProfilePage({ params }: { params: Promise<{ sl
         <>
           <Stack gap="xs">
             {shop.services.map((s) => (
-              <Card key={s.id} withBorder radius="md" padding="sm">
+              <Card key={s.id} withBorder radius="md" padding="sm" className="hoverLift">
                 <Group justify="space-between" wrap="nowrap">
                   <div>
                     <Text fw={500}>{serviceLabel(s)}</Text>
