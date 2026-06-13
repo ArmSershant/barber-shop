@@ -33,7 +33,7 @@ export function BarberCard({ barber }: { barber: BarberCardData }) {
       <Group justify="space-between" mt="md">
         {barber.ratingCount > 0 ? (
           <Group gap={4} wrap="nowrap">
-            <IconStarFilled size={14} color="var(--mantine-color-yellow-6)" />
+            <IconStarFilled size={14} color="var(--mantine-color-gold-6)" />
             <Text size="sm" fw={500}>
               {barber.ratingAvg.toFixed(1)}
             </Text>

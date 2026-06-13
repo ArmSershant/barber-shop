@@ -19,6 +19,7 @@ import {
   IconArrowRight,
   IconBuildingStore,
 } from '@tabler/icons-react';
+import { HeroSearch } from '@/components/HeroSearch';
 
 export default function HomePage() {
   const t = useTranslations('home');
@@ -50,6 +51,8 @@ export default function HomePage() {
           <Text fz="lg" c="dimmed" maw={560}>
             {t('heroLead')}
           </Text>
+
+          <HeroSearch />
 
           <Group justify="center" mt="xs">
             <Button

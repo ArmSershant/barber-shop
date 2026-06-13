@@ -13,6 +13,7 @@ import { TimeOffSection } from '@/components/dashboard/TimeOffSection';
 import { BreaksSection } from '@/components/dashboard/BreaksSection';
 import { ShopRosterSection } from '@/components/dashboard/ShopRosterSection';
 import { ShopDefaultsSection } from '@/components/dashboard/ShopDefaultsSection';
+import { ListSkeleton } from '@/components/ListSkeleton';
 
 export default function DashboardPage() {
   const t = useTranslations('dashboard');
@@ -59,9 +60,7 @@ export default function DashboardPage() {
         </Group>
 
         {provLoading ? (
-          <Center py={40}>
-            <Loader />
-          </Center>
+          <ListSkeleton rows={3} />
         ) : (
           <>
             {isShopOwner && <ShopForm shop={provider?.shop ?? null} />}

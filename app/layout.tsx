@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Oswald } from 'next/font/google';
 import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
@@ -14,6 +15,15 @@ import 'flag-icons/css/flag-icons.min.css';
 import { Providers } from './providers';
 import { SiteHeader } from '@/components/SiteHeader';
 import { theme } from '@/lib/theme';
+
+// Condensed display face for headings (Latin + Cyrillic). Armenian glyphs are not
+// covered, so they fall back per-character to the system font via the var() stack.
+const displayFont = Oswald({
+  subsets: ['latin', 'cyrillic'],
+  weight: ['500', '600', '700'],
+  variable: '--font-display',
+  display: 'swap',
+});
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://barber-shop.am';
 const siteName = 'Barber-Shop';
@@ -67,7 +77,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const messages = await getMessages();
 
   return (
-    <html lang={locale} {...mantineHtmlProps}>
+    <html lang={locale} className={displayFont.variable} {...mantineHtmlProps}>
       <head>
         <ColorSchemeScript defaultColorScheme="auto" />
       </head>

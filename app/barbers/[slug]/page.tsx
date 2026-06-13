@@ -3,7 +3,8 @@ import Link from 'next/link';
 import type { Route } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
-import { Anchor, Avatar, Card, Container, Group, Rating, Stack, Text, Title } from '@mantine/core';
+import { Anchor, Avatar, Button, Card, Container, Group, Rating, Stack, Text, Title } from '@mantine/core';
+import { IconCalendarPlus } from '@tabler/icons-react';
 import { getBarberProfile } from '@/lib/queries/barbers';
 import { getCurrentUser } from '@/lib/auth/session';
 import { BookingWidget } from '@/components/booking/BookingWidget';
@@ -162,7 +163,20 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
                     ~{s.durationMin} {ts('minShort')}
                   </Text>
                 </div>
-                <Text fw={600}>{s.priceAmd.toLocaleString()} ֏</Text>
+                <Group gap="sm" wrap="nowrap">
+                  <Text fw={600}>{s.priceAmd.toLocaleString()} ֏</Text>
+                  {!isOwnProfile && (
+                    <Button
+                      component="a"
+                      href="#book"
+                      size="xs"
+                      variant="light"
+                      leftSection={<IconCalendarPlus size={14} />}
+                    >
+                      {t('book')}
+                    </Button>
+                  )}
+                </Group>
               </Group>
             </Card>
           ))}
@@ -187,7 +201,7 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
       </Stack>
 
       {barber.services.length > 0 && !isOwnProfile && (
-        <div style={{ marginTop: 'var(--mantine-spacing-xl)' }}>
+        <div id="book" style={{ marginTop: 'var(--mantine-spacing-xl)', scrollMarginTop: '1rem' }}>
           <BookingWidget barberSlug={barber.slug} services={barber.services} />
         </div>
       )}

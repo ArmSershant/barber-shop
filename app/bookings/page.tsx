@@ -35,6 +35,7 @@ import {
   type MyBooking,
 } from '@/lib/store/api';
 import { apiErrorMessage } from '@/lib/api-error';
+import { ListSkeleton } from '@/components/ListSkeleton';
 
 const STATUS_KEY: Record<string, string> = {
   confirmed: 'statusConfirmed',
@@ -205,9 +206,7 @@ export default function MyBookingsPage() {
         />
 
         {isLoading ? (
-          <Center py={40}>
-            <Loader />
-          </Center>
+          <ListSkeleton rows={3} />
         ) : bookings.length === 0 ? (
           <Stack align="flex-start">
             <Text c="dimmed">{t('empty')}</Text>

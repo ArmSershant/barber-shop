@@ -15,6 +15,21 @@ const brand: MantineColorsTuple = [
   '#044a37',
 ];
 
+// Warm brass/amber accent — a heritage "barber" cue used sparingly for highlights,
+// rating stars, and "featured" badges.
+const gold: MantineColorsTuple = [
+  '#fff8e6',
+  '#fdedcc',
+  '#f8d99b',
+  '#f3c564',
+  '#efb438',
+  '#edab1d',
+  '#eca50e',
+  '#d29000',
+  '#bb7f00',
+  '#a16d00',
+];
+
 // Refined slate dark neutrals (slight cool cast) — softer than near-black,
 // with card surfaces (dark[6]) sitting just above the page body (dark[7]).
 const dark: MantineColorsTuple = [
@@ -35,14 +50,15 @@ export const theme = createTheme({
   primaryShade: { light: 6, dark: 5 },
   autoContrast: true,
   luminanceThreshold: 0.45,
-  colors: { brand, dark },
+  colors: { brand, dark, gold },
   fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
   defaultRadius: 'md',
   headings: {
-    fontWeight: '700',
+    fontFamily: 'var(--font-display), system-ui, -apple-system, sans-serif',
+    fontWeight: '600',
     sizes: {
-      h1: { fontSize: '2.25rem', lineHeight: '1.15' },
-      h2: { fontSize: '1.6rem', lineHeight: '1.25' },
+      h1: { fontSize: '2.6rem', lineHeight: '1.1' },
+      h2: { fontSize: '1.9rem', lineHeight: '1.2' },
     },
   },
   components: {

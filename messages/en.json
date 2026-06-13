@@ -122,7 +122,8 @@
     "feat3Desc": "Book as a guest and manage your appointment with a private link.",
     "providerTitle": "Are you a barber or shop owner?",
     "providerLead": "List your business and take bookings online — free to join.",
-    "providerCta": "Get started"
+    "providerCta": "Get started",
+    "searchButton": "Search"
   },
   "auth": {
     "login": {

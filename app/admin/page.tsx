@@ -30,6 +30,7 @@ import {
   useSetReviewVisibilityMutation,
 } from '@/lib/store/api';
 import { apiErrorMessage } from '@/lib/api-error';
+import { ListSkeleton } from '@/components/ListSkeleton';
 
 const STATUS_COLOR: Record<string, string> = {
   active: 'teal',
@@ -89,9 +90,7 @@ export default function AdminPage() {
         <Title order={2}>{t('title')}</Title>
 
         {isLoading || !o ? (
-          <Center py={40}>
-            <Loader />
-          </Center>
+          <ListSkeleton rows={5} />
         ) : (
           <Tabs defaultValue="overview">
             <Tabs.List>
