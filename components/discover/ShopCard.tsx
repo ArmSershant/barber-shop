@@ -3,8 +3,13 @@
 import Link from 'next/link';
 import type { Route } from 'next';
 import { useLocale, useTranslations } from 'next-intl';
-import { Avatar, Button, Card, Group, Stack, Text } from '@mantine/core';
-import { IconMapPin, IconUsers, IconArrowRight } from '@tabler/icons-react';
+import { Avatar, Badge, Button, Card, Group, Stack, Text } from '@mantine/core';
+import {
+  IconMapPin,
+  IconUsers,
+  IconArrowRight,
+  IconRosetteDiscountCheckFilled,
+} from '@tabler/icons-react';
 import type { ShopCardData } from '@/lib/queries/shops';
 
 export function ShopCard({ shop }: { shop: ShopCardData }) {
@@ -18,15 +23,35 @@ export function ShopCard({ shop }: { shop: ShopCardData }) {
   const location = [districtName, shop.address].filter(Boolean).join(' · ');
 
   return (
-    <Card withBorder radius="md" padding="lg" className="hoverLift">
+    <Card
+      withBorder
+      radius="md"
+      padding="lg"
+      className="hoverLift"
+      style={shop.isFeatured ? { borderColor: 'var(--mantine-color-gold-5)' } : undefined}
+    >
+      {shop.isFeatured && (
+        <Badge size="xs" color="gold" variant="light" mb="xs">
+          {t('featured')}
+        </Badge>
+      )}
       <Group wrap="nowrap">
         <Avatar src={shop.logoUrl ?? undefined} radius="md" size="lg" color="teal">
           {shop.name.charAt(0).toUpperCase()}
         </Avatar>
         <Stack gap={2} style={{ flex: 1, minWidth: 0 }}>
-          <Text fw={600} truncate>
-            {shop.name}
-          </Text>
+          <Group gap={4} wrap="nowrap">
+            <Text fw={600} truncate>
+              {shop.name}
+            </Text>
+            {shop.isVerified && (
+              <IconRosetteDiscountCheckFilled
+                size={16}
+                color="var(--mantine-color-brand-6)"
+                aria-label={t('verified')}
+              />
+            )}
+          </Group>
           {location && (
             <Group gap={4} wrap="nowrap" c="dimmed">
               <IconMapPin size={14} />

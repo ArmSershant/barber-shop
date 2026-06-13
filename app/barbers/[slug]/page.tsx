@@ -4,7 +4,7 @@ import type { Route } from 'next';
 import { notFound } from 'next/navigation';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { Anchor, Avatar, Badge, Box, Button, Card, Container, Group, Paper, Rating, Stack, Text, Title } from '@mantine/core';
-import { IconCalendarPlus, IconStarFilled, IconMapPin, IconClock } from '@tabler/icons-react';
+import { IconCalendarPlus, IconStarFilled, IconMapPin, IconClock, IconRosetteDiscountCheckFilled } from '@tabler/icons-react';
 import { getBarberProfile } from '@/lib/queries/barbers';
 import { getCurrentUser } from '@/lib/auth/session';
 import { getOpenStatus } from '@/lib/open-now';
@@ -156,7 +156,12 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
               {barber.displayName.charAt(0).toUpperCase()}
             </Avatar>
             <Stack gap={2} pb={4}>
-              <Title order={2}>{barber.displayName}</Title>
+              <Group gap={6} wrap="nowrap">
+                <Title order={2}>{barber.displayName}</Title>
+                {barber.isVerified && (
+                  <IconRosetteDiscountCheckFilled size={22} color="var(--mantine-color-brand-6)" />
+                )}
+              </Group>
               <Text c="dimmed" size="sm">
                 {barber.shop ? (
                   <Anchor component={Link} href={`/shops/${barber.shop.slug}` as Route}>

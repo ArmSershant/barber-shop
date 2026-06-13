@@ -14,13 +14,27 @@ export async function getAdminOverview() {
       where: { deletedAt: null },
       orderBy: { createdAt: 'desc' },
       take: 100,
-      select: { slug: true, name: true, status: true, owner: { select: { email: true } } },
+      select: {
+        slug: true,
+        name: true,
+        status: true,
+        isVerified: true,
+        isFeatured: true,
+        owner: { select: { email: true } },
+      },
     }),
     prisma.barber.findMany({
       where: { deletedAt: null },
       orderBy: { createdAt: 'desc' },
       take: 100,
-      select: { slug: true, displayName: true, status: true, shop: { select: { name: true } } },
+      select: {
+        slug: true,
+        displayName: true,
+        status: true,
+        isVerified: true,
+        isFeatured: true,
+        shop: { select: { name: true } },
+      },
     }),
     prisma.review.findMany({
       orderBy: { createdAt: 'desc' },
@@ -49,11 +63,20 @@ export async function getAdminOverview() {
 
   return {
     stats: { users, shops, barbers, bookings, reviews },
-    shops: shopList.map((s) => ({ slug: s.slug, name: s.name, status: s.status, ownerEmail: s.owner.email })),
+    shops: shopList.map((s) => ({
+      slug: s.slug,
+      name: s.name,
+      status: s.status,
+      isVerified: s.isVerified,
+      isFeatured: s.isFeatured,
+      ownerEmail: s.owner.email,
+    })),
     barbers: barberList.map((b) => ({
       slug: b.slug,
       displayName: b.displayName,
       status: b.status,
+      isVerified: b.isVerified,
+      isFeatured: b.isFeatured,
       shopName: b.shop?.name ?? null,
     })),
     reviews: reviewList.map((r) => ({

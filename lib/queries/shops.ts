@@ -7,6 +7,8 @@ export interface ShopCardData {
   name: string;
   logoUrl: string | null;
   address: string | null;
+  isVerified: boolean;
+  isFeatured: boolean;
   district: { id: number; nameEn: string; nameHy: string; slug: string } | null;
   barberCount: number;
 }
@@ -24,7 +26,7 @@ export async function listShops(
       ...(q ? { name: { contains: q, mode: 'insensitive' } } : {}),
       ...(district ? { district: { slug: district } } : {}),
     },
-    orderBy: { createdAt: 'desc' },
+    orderBy: [{ isFeatured: 'desc' }, { createdAt: 'desc' }],
     take: 60,
     select: {
       id: true,
@@ -32,6 +34,8 @@ export async function listShops(
       name: true,
       logoUrl: true,
       address: true,
+      isVerified: true,
+      isFeatured: true,
       district: { select: { id: true, nameEn: true, nameHy: true, slug: true } },
       _count: { select: { barbers: { where: { deletedAt: null } } } },
     },
@@ -42,6 +46,8 @@ export async function listShops(
     name: s.name,
     logoUrl: s.logoUrl,
     address: s.address,
+    isVerified: s.isVerified,
+    isFeatured: s.isFeatured,
     district: s.district,
     barberCount: s._count.barbers,
   }));
@@ -67,6 +73,7 @@ export const getShopProfile = cache(async (slug: string) => {
       address: true,
       phone: true,
       instagram: true,
+      isVerified: true,
       deletedAt: true,
       district: { select: { id: true, nameEn: true, nameHy: true, slug: true } },
       photos: { orderBy: { sortOrder: 'asc' }, select: { id: true, url: true } },
@@ -85,6 +92,8 @@ export const getShopProfile = cache(async (slug: string) => {
           experienceYears: true,
           ratingAvg: true,
           ratingCount: true,
+          isVerified: true,
+          isFeatured: true,
         },
       },
     },

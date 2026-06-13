@@ -3,8 +3,14 @@
 import Link from 'next/link';
 import type { Route } from 'next';
 import { useTranslations } from 'next-intl';
-import { Avatar, Button, Card, Group, Stack, Text } from '@mantine/core';
-import { IconStarFilled, IconBuildingStore, IconUser, IconCalendarPlus } from '@tabler/icons-react';
+import { Avatar, Badge, Button, Card, Group, Stack, Text } from '@mantine/core';
+import {
+  IconStarFilled,
+  IconBuildingStore,
+  IconUser,
+  IconCalendarPlus,
+  IconRosetteDiscountCheckFilled,
+} from '@tabler/icons-react';
 import type { BarberCardData } from '@/lib/queries/barbers';
 
 export function BarberCard({ barber }: { barber: BarberCardData }) {
@@ -12,15 +18,35 @@ export function BarberCard({ barber }: { barber: BarberCardData }) {
   const hasShop = !!barber.shop?.name;
 
   return (
-    <Card withBorder radius="md" padding="lg" className="hoverLift">
+    <Card
+      withBorder
+      radius="md"
+      padding="lg"
+      className="hoverLift"
+      style={barber.isFeatured ? { borderColor: 'var(--mantine-color-gold-5)' } : undefined}
+    >
+      {barber.isFeatured && (
+        <Badge size="xs" color="gold" variant="light" mb="xs">
+          {t('featured')}
+        </Badge>
+      )}
       <Group wrap="nowrap">
         <Avatar src={barber.photoUrl ?? undefined} radius="xl" size="lg" color="teal">
           {barber.displayName.charAt(0).toUpperCase()}
         </Avatar>
         <Stack gap={2} style={{ flex: 1, minWidth: 0 }}>
-          <Text fw={600} truncate>
-            {barber.displayName}
-          </Text>
+          <Group gap={4} wrap="nowrap">
+            <Text fw={600} truncate>
+              {barber.displayName}
+            </Text>
+            {barber.isVerified && (
+              <IconRosetteDiscountCheckFilled
+                size={16}
+                color="var(--mantine-color-brand-6)"
+                aria-label={t('verified')}
+              />
+            )}
+          </Group>
           <Group gap={4} wrap="nowrap" c="dimmed">
             {hasShop ? <IconBuildingStore size={14} /> : <IconUser size={14} />}
             <Text size="sm" truncate>

@@ -9,6 +9,8 @@ export interface BarberCardData {
   experienceYears: number | null;
   ratingAvg: number;
   ratingCount: number;
+  isVerified: boolean;
+  isFeatured: boolean;
   shop: { slug: string; name: string } | null;
   district: { id: number; nameEn: string; nameHy: string; slug: string } | null;
 }
@@ -26,7 +28,7 @@ export async function listBarbers(
       ...(q ? { displayName: { contains: q, mode: 'insensitive' } } : {}),
       ...(district ? { district: { slug: district } } : {}),
     },
-    orderBy: [{ ratingAvg: 'desc' }, { createdAt: 'desc' }],
+    orderBy: [{ isFeatured: 'desc' }, { ratingAvg: 'desc' }, { createdAt: 'desc' }],
     take: 60,
     select: {
       id: true,
@@ -36,6 +38,8 @@ export async function listBarbers(
       experienceYears: true,
       ratingAvg: true,
       ratingCount: true,
+      isVerified: true,
+      isFeatured: true,
       shop: { select: { slug: true, name: true } },
       district: { select: { id: true, nameEn: true, nameHy: true, slug: true } },
     },
@@ -64,6 +68,7 @@ export const getBarberProfile = cache(async (slug: string) => {
       photoUrl: true,
       coverUrl: true,
       experienceYears: true,
+      isVerified: true,
       districtId: true,
       ratingAvg: true,
       ratingCount: true,

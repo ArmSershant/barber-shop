@@ -243,12 +243,16 @@ export interface AdminShop {
   slug: string;
   name: string;
   status: string;
+  isVerified: boolean;
+  isFeatured: boolean;
   ownerEmail: string;
 }
 export interface AdminBarber {
   slug: string;
   displayName: string;
   status: string;
+  isVerified: boolean;
+  isFeatured: boolean;
   shopName: string | null;
 }
 export interface AdminReview {
@@ -568,6 +572,20 @@ export const api = createApi({
       query: ({ id, hidden }) => ({ url: `/admin/reviews/${id}/visibility`, method: 'POST', body: { hidden } }),
       invalidatesTags: ['AdminOverview'],
     }),
+    setBarberFlags: builder.mutation<
+      { ok: boolean },
+      { slug: string; isVerified?: boolean; isFeatured?: boolean }
+    >({
+      query: ({ slug, ...body }) => ({ url: `/admin/barbers/${slug}/flags`, method: 'POST', body }),
+      invalidatesTags: ['AdminOverview'],
+    }),
+    setShopFlags: builder.mutation<
+      { ok: boolean },
+      { slug: string; isVerified?: boolean; isFeatured?: boolean }
+    >({
+      query: ({ slug, ...body }) => ({ url: `/admin/shops/${slug}/flags`, method: 'POST', body }),
+      invalidatesTags: ['AdminOverview'],
+    }),
 
     getBarberPortfolio: builder.query<{ images: GalleryImage[] }, string>({
       query: (slug) => `/barbers/${slug}/portfolio`,
@@ -645,6 +663,8 @@ export const {
   useSetBarberStatusMutation,
   useSetUserStatusMutation,
   useSetReviewVisibilityMutation,
+  useSetBarberFlagsMutation,
+  useSetShopFlagsMutation,
   useChangePasswordMutation,
   useGetBarberPortfolioQuery,
   useAddBarberPortfolioMutation,

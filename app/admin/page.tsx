@@ -28,6 +28,8 @@ import {
   useSetBarberStatusMutation,
   useSetUserStatusMutation,
   useSetReviewVisibilityMutation,
+  useSetBarberFlagsMutation,
+  useSetShopFlagsMutation,
 } from '@/lib/store/api';
 import { apiErrorMessage } from '@/lib/api-error';
 import { ListSkeleton } from '@/components/ListSkeleton';
@@ -49,6 +51,8 @@ export default function AdminPage() {
   const [setBarberStatus] = useSetBarberStatusMutation();
   const [setUserStatus] = useSetUserStatusMutation();
   const [setReviewVisibility] = useSetReviewVisibilityMutation();
+  const [setBarberFlags] = useSetBarberFlagsMutation();
+  const [setShopFlags] = useSetShopFlagsMutation();
 
   const run = async (fn: () => Promise<unknown>) => {
     try {
@@ -163,6 +167,22 @@ export default function AdminPage() {
                                     {t('suspend')}
                                   </Button>
                                 )}
+                                <Button
+                                  size="xs"
+                                  variant={s.isVerified ? 'filled' : 'default'}
+                                  color="brand"
+                                  onClick={() => run(() => setShopFlags({ slug: s.slug, isVerified: !s.isVerified }).unwrap())}
+                                >
+                                  {s.isVerified ? t('unverify') : t('verify')}
+                                </Button>
+                                <Button
+                                  size="xs"
+                                  variant={s.isFeatured ? 'filled' : 'default'}
+                                  color="gold"
+                                  onClick={() => run(() => setShopFlags({ slug: s.slug, isFeatured: !s.isFeatured }).unwrap())}
+                                >
+                                  {s.isFeatured ? t('unfeature') : t('feature')}
+                                </Button>
                               </Group>
                             </Table.Td>
                           </Table.Tr>
@@ -218,6 +238,22 @@ export default function AdminPage() {
                                     {t('suspend')}
                                   </Button>
                                 )}
+                                <Button
+                                  size="xs"
+                                  variant={b.isVerified ? 'filled' : 'default'}
+                                  color="brand"
+                                  onClick={() => run(() => setBarberFlags({ slug: b.slug, isVerified: !b.isVerified }).unwrap())}
+                                >
+                                  {b.isVerified ? t('unverify') : t('verify')}
+                                </Button>
+                                <Button
+                                  size="xs"
+                                  variant={b.isFeatured ? 'filled' : 'default'}
+                                  color="gold"
+                                  onClick={() => run(() => setBarberFlags({ slug: b.slug, isFeatured: !b.isFeatured }).unwrap())}
+                                >
+                                  {b.isFeatured ? t('unfeature') : t('feature')}
+                                </Button>
                               </Group>
                             </Table.Td>
                           </Table.Tr>

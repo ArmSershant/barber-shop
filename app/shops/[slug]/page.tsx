@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { Anchor, Avatar, Badge, Box, Card, Container, Group, Paper, SimpleGrid, Stack, Text, Title } from '@mantine/core';
-import { IconMapPin, IconUsers, IconBrandInstagram, IconPhone } from '@tabler/icons-react';
+import { IconMapPin, IconUsers, IconBrandInstagram, IconPhone, IconRosetteDiscountCheckFilled } from '@tabler/icons-react';
 import { getShopProfile } from '@/lib/queries/shops';
 import { BarberCard } from '@/components/discover/BarberCard';
 import { PortfolioGrid } from '@/components/profile/PortfolioGrid';
@@ -122,7 +122,12 @@ export default async function ShopProfilePage({ params }: { params: Promise<{ sl
               {shop.name.charAt(0).toUpperCase()}
             </Avatar>
             <Stack gap={2} pb={4}>
-              <Title order={2}>{shop.name}</Title>
+              <Group gap={6} wrap="nowrap">
+                <Title order={2}>{shop.name}</Title>
+                {shop.isVerified && (
+                  <IconRosetteDiscountCheckFilled size={22} color="var(--mantine-color-brand-6)" />
+                )}
+              </Group>
               <Group gap="md">
                 {shop.phone && (
                   <Anchor href={`tel:${shop.phone}`} size="sm" style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
