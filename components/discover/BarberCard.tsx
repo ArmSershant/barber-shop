@@ -12,7 +12,7 @@ export function BarberCard({ barber }: { barber: BarberCardData }) {
   const hasShop = !!barber.shop?.name;
 
   return (
-    <Card withBorder radius="md" padding="lg">
+    <Card withBorder radius="md" padding="lg" className="hoverLift">
       <Group wrap="nowrap">
         <Avatar src={barber.photoUrl ?? undefined} radius="xl" size="lg" color="teal">
           {barber.displayName.charAt(0).toUpperCase()}

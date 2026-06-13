@@ -18,7 +18,7 @@ export function ShopCard({ shop }: { shop: ShopCardData }) {
   const location = [districtName, shop.address].filter(Boolean).join(' · ');
 
   return (
-    <Card withBorder radius="md" padding="lg">
+    <Card withBorder radius="md" padding="lg" className="hoverLift">
       <Group wrap="nowrap">
         <Avatar src={shop.logoUrl ?? undefined} radius="md" size="lg" color="teal">
           {shop.name.charAt(0).toUpperCase()}

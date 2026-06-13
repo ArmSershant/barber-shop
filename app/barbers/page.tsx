@@ -1,6 +1,19 @@
+import type { Metadata } from 'next';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { Container, Group, SimpleGrid, Stack, Text, Title } from '@mantine/core';
 import { IconMoodEmpty } from '@tabler/icons-react';
+
+export const metadata: Metadata = {
+  title: 'Barbers in Yerevan',
+  description:
+    'Browse independent barbers and barbershop barbers across Yerevan. Filter by district and book online in seconds.',
+  alternates: { canonical: '/barbers' },
+  openGraph: {
+    title: 'Barbers in Yerevan — Barber-Shop',
+    description: 'Browse and book barbers across Yerevan.',
+    url: '/barbers',
+  },
+};
 import { EmptyState } from '@/components/EmptyState';
 import { listBarbers } from '@/lib/queries/barbers';
 import { getPreferredDistrict } from '@/lib/queries/districts';

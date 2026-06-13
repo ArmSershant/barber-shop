@@ -33,7 +33,7 @@ export default function HomePage() {
   return (
     <Container size="lg" py={64}>
       <Stack gap={48}>
-        <Stack align="center" gap="lg" ta="center">
+        <Stack align="center" gap="lg" ta="center" className="animate-in">
           <Badge
             size="lg"
             variant="light"
@@ -73,8 +73,15 @@ export default function HomePage() {
         </Stack>
 
         <SimpleGrid cols={{ base: 1, sm: 3 }} spacing="lg">
-          {features.map((f) => (
-            <Card key={f.title} withBorder radius="md" padding="lg">
+          {features.map((f, i) => (
+            <Card
+              key={f.title}
+              withBorder
+              radius="md"
+              padding="lg"
+              className="hoverLift animate-in"
+              style={{ animationDelay: `${0.1 + i * 0.08}s` }}
+            >
               <ThemeIcon size={44} radius="md" variant="light" mb="sm">
                 <f.icon size={24} />
               </ThemeIcon>
@@ -88,7 +95,14 @@ export default function HomePage() {
           ))}
         </SimpleGrid>
 
-        <Card withBorder radius="md" padding="xl" bg="var(--mantine-color-default-hover)">
+        <Card
+          withBorder
+          radius="md"
+          padding="xl"
+          bg="var(--mantine-color-default-hover)"
+          className="animate-in"
+          style={{ animationDelay: '0.35s' }}
+        >
           <Group justify="space-between" wrap="wrap" gap="md">
             <Group gap="md" wrap="nowrap">
               <ThemeIcon size={44} radius="md" variant="filled">

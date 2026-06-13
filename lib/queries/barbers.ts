@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { prisma } from '@/lib/db';
 
 export interface BarberCardData {
@@ -50,7 +51,8 @@ export async function listBarbers(
 }
 
 /** Full public profile for a barber, or null if not found/deleted. */
-export async function getBarberProfile(slug: string) {
+// Wrapped in React cache so generateMetadata + the page share one query per request.
+export const getBarberProfile = cache(async (slug: string) => {
   const barber = await prisma.barber.findUnique({
     where: { slug },
     select: {
@@ -116,6 +118,6 @@ export async function getBarberProfile(slug: string) {
   const { barberServices: _bs, ownedServices: _os, ...rest } = barber;
 
   return { ...rest, services, ratingAvg: Number(barber.ratingAvg) };
-}
+});
 
 export type BarberProfile = NonNullable<Awaited<ReturnType<typeof getBarberProfile>>>;

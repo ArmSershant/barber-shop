@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import type { Route } from 'next';
 import { notFound } from 'next/navigation';
@@ -7,7 +8,40 @@ import { getBarberProfile } from '@/lib/queries/barbers';
 import { getCurrentUser } from '@/lib/auth/session';
 import { BookingWidget } from '@/components/booking/BookingWidget';
 
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://barber-shop.am';
 const DAY_KEYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
+
+const absoluteImage = (url: string | null | undefined) =>
+  url && /^https?:\/\//.test(url) ? url : undefined;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const barber = await getBarberProfile(slug);
+  if (!barber) return { title: 'Barber not found' };
+
+  const where = barber.shop ? `at ${barber.shop.name}` : 'independent barber';
+  const description =
+    barber.bio?.slice(0, 160) ||
+    `Book ${barber.displayName}, ${where} in Yerevan. View services, prices, working hours and reviews, then book online.`;
+  const image = absoluteImage(barber.photoUrl);
+
+  return {
+    title: barber.displayName,
+    description,
+    alternates: { canonical: `/barbers/${slug}` },
+    openGraph: {
+      type: 'profile',
+      title: `${barber.displayName} — Barber in Yerevan`,
+      description,
+      url: `/barbers/${slug}`,
+      images: image ? [image] : undefined,
+    },
+  };
+}
 
 function toHHMM(min: number): string {
   const h = Math.floor(min / 60);
@@ -41,8 +75,47 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
     if (!hoursByDay.has(iv.weekday)) hoursByDay.set(iv.weekday, iv);
   }
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'HairSalon',
+    name: barber.displayName,
+    url: `${siteUrl}/barbers/${barber.slug}`,
+    ...(absoluteImage(barber.photoUrl) ? { image: absoluteImage(barber.photoUrl) } : {}),
+    ...(barber.bio ? { description: barber.bio } : {}),
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: barber.district?.nameEn ?? 'Yerevan',
+      addressRegion: 'Yerevan',
+      addressCountry: 'AM',
+    },
+    areaServed: 'Yerevan',
+    ...(barber.ratingCount > 0
+      ? {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: Number(barber.ratingAvg).toFixed(1),
+            reviewCount: barber.ratingCount,
+          },
+        }
+      : {}),
+    ...(barber.services.length > 0
+      ? {
+          makesOffer: barber.services.map((s) => ({
+            '@type': 'Offer',
+            name: s.name,
+            priceCurrency: 'AMD',
+            price: s.priceAmd,
+          })),
+        }
+      : {}),
+  };
+
   return (
     <Container size="md" py="xl">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Group wrap="nowrap">
         <Avatar src={barber.photoUrl ?? undefined} size="xl" radius="xl" color="teal">
           {barber.displayName.charAt(0).toUpperCase()}

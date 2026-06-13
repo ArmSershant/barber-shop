@@ -15,11 +15,52 @@ import { Providers } from './providers';
 import { SiteHeader } from '@/components/SiteHeader';
 import { theme } from '@/lib/theme';
 
-export const metadata: Metadata = {
-  title: 'Barber-Shop — Book barbers in Yerevan',
-  description:
-    'Discover barber shops and independent barbers in Yerevan and book appointments online.',
-};
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://barber-shop.am';
+const siteName = 'Barber-Shop';
+const siteDescription =
+  'Discover barbershops and independent barbers in Yerevan and book appointments online — anytime, in Armenian, English, or Russian.';
+
+const OG_LOCALE: Record<string, string> = { hy: 'hy_AM', en: 'en_US', ru: 'ru_RU' };
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  return {
+    metadataBase: new URL(siteUrl),
+    title: {
+      default: `${siteName} — Book barbers in Yerevan`,
+      template: `%s — ${siteName}`,
+    },
+    description: siteDescription,
+    applicationName: siteName,
+    keywords: [
+      'barber Yerevan',
+      'barbershop Yerevan',
+      'book barber online',
+      'haircut Yerevan',
+      'վարսավիր Երևան',
+      'барбер Ереван',
+    ],
+    alternates: { canonical: '/' },
+    openGraph: {
+      type: 'website',
+      siteName,
+      title: `${siteName} — Book barbers in Yerevan`,
+      description: siteDescription,
+      url: siteUrl,
+      locale: OG_LOCALE[locale] ?? 'hy_AM',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${siteName} — Book barbers in Yerevan`,
+      description: siteDescription,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true, 'max-image-preview': 'large' },
+    },
+  };
+}
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const locale = await getLocale();

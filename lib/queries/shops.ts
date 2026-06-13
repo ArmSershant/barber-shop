@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { prisma } from '@/lib/db';
 
 export interface ShopCardData {
@@ -53,7 +54,8 @@ export async function listShops(
 }
 
 /** Full public shop profile, or null if not found/deleted. */
-export async function getShopProfile(slug: string) {
+// Wrapped in React cache so generateMetadata + the page share one query per request.
+export const getShopProfile = cache(async (slug: string) => {
   const shop = await prisma.shop.findUnique({
     where: { slug },
     select: {
@@ -92,4 +94,4 @@ export async function getShopProfile(slug: string) {
     ...shop,
     barbers: shop.barbers.map((b) => ({ ...b, ratingAvg: Number(b.ratingAvg) })),
   };
-}
+});

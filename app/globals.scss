@@ -23,3 +23,60 @@ body {
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.5;
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
+// ---- Motion ----
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+// Entrance animation for content blocks. Pair with inline animation-delay for stagger.
+.animate-in {
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+// Gentle lift + shadow on hover, for cards and tappable tiles.
+.hoverLift {
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.hoverLift:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--mantine-shadow-md);
+}
+
+// Respect users who prefer less motion: disable animations + transitions.
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .animate-in {
+    animation: none !important;
+  }
+
+  .hoverLift:hover {
+    transform: none !important;
+  }
+}
