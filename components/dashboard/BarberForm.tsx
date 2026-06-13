@@ -9,6 +9,7 @@ import { createBarberSchema, type CreateBarberInput } from '@/lib/validation/pro
 import { useCreateBarberMutation, useUpdateBarberMutation } from '@/lib/store/api';
 import { apiErrorMessage } from '@/lib/api-error';
 import { DistrictSelectField } from './DistrictSelectField';
+import { ImageUpload } from './ImageUpload';
 
 // Minimal shape the form needs — satisfied by both the RTK `Barber` type and
 // the public barber profile, so it works for self-edit and shop-roster edit.
@@ -18,6 +19,7 @@ export interface EditableBarber {
   bio?: string | null;
   experienceYears?: number | null;
   districtId?: number | null;
+  photoUrl?: string | null;
 }
 
 export function BarberForm({ barber }: { barber: EditableBarber | null }) {
@@ -38,6 +40,7 @@ export function BarberForm({ barber }: { barber: EditableBarber | null }) {
       bio: barber?.bio ?? '',
       experienceYears: barber?.experienceYears ?? undefined,
       districtId: barber?.districtId ?? undefined,
+      photoUrl: barber?.photoUrl ?? undefined,
     },
   });
 
@@ -59,6 +62,13 @@ export function BarberForm({ barber }: { barber: EditableBarber | null }) {
     <Paper withBorder p="lg" radius="md" component="form" onSubmit={onSubmit} noValidate>
       <Stack>
         <Title order={3}>{t('heading')}</Title>
+        <Controller
+          name="photoUrl"
+          control={control}
+          render={({ field }) => (
+            <ImageUpload value={field.value} onChange={field.onChange} label={t('photo')} radius="xl" />
+          )}
+        />
         <TextInput label={t('displayName')} error={errors.displayName?.message} {...register('displayName')} />
         <Textarea label={t('bio')} autosize minRows={2} error={errors.bio?.message} {...register('bio')} />
         <Controller

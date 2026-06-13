@@ -160,8 +160,11 @@
     "loginLink": "Log in",
     "customerOnly": "You're signed in as a customer. Browse barbers to book.",
     "viewProfile": "View public profile",
+    "uploadPhoto": "Upload photo",
+    "changePhoto": "Change photo",
     "shop": {
       "heading": "Your shop",
+      "logo": "Logo",
       "name": "Shop name",
       "description": "Description",
       "address": "Address",
@@ -174,6 +177,7 @@
     },
     "barber": {
       "heading": "Your barber profile",
+      "photo": "Profile photo",
       "displayName": "Display name",
       "bio": "Bio",
       "experienceYears": "Years of experience",

@@ -9,6 +9,7 @@ import { createShopSchema, type CreateShopInput } from '@/lib/validation/provide
 import { useCreateShopMutation, useUpdateShopMutation, type Shop } from '@/lib/store/api';
 import { apiErrorMessage } from '@/lib/api-error';
 import { DistrictSelectField } from './DistrictSelectField';
+import { ImageUpload } from './ImageUpload';
 
 export function ShopForm({ shop }: { shop: Shop | null }) {
   const t = useTranslations('dashboard.shop');
@@ -30,6 +31,7 @@ export function ShopForm({ shop }: { shop: Shop | null }) {
       phone: shop?.phone ?? '',
       instagram: shop?.instagram ?? '',
       districtId: shop?.districtId ?? undefined,
+      logoUrl: shop?.logoUrl ?? undefined,
     },
   });
 
@@ -51,6 +53,13 @@ export function ShopForm({ shop }: { shop: Shop | null }) {
     <Paper withBorder p="lg" radius="md" component="form" onSubmit={onSubmit} noValidate>
       <Stack>
         <Title order={3}>{t('heading')}</Title>
+        <Controller
+          name="logoUrl"
+          control={control}
+          render={({ field }) => (
+            <ImageUpload value={field.value} onChange={field.onChange} label={t('logo')} radius="md" />
+          )}
+        />
         <TextInput label={t('name')} error={errors.name?.message} {...register('name')} />
         <Textarea label={t('description')} autosize minRows={2} error={errors.description?.message} {...register('description')} />
         <Controller
