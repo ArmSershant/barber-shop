@@ -1,6 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
+import type { Route } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -49,7 +50,7 @@ export function SiteHeader() {
     icon,
     label,
   }: {
-    href: string;
+    href: Route;
     icon: ReactNode;
     label: string;
   }) => (
