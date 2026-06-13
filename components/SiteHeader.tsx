@@ -15,7 +15,7 @@ import {
   IconShieldCog,
   IconLogout,
 } from '@tabler/icons-react';
-import { api, useMeQuery, useLogoutMutation } from '@/lib/store/api';
+import { api, useMeQuery, useLogoutMutation, useProviderMeQuery } from '@/lib/store/api';
 import { useAppDispatch } from '@/lib/store/hooks';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { ColorSchemeToggle } from './ColorSchemeToggle';
@@ -33,6 +33,11 @@ export function SiteHeader() {
   const isProvider =
     !!user && (user.roles.includes('shop_owner') || user.roles.includes('barber'));
   const isAdmin = !!user && user.roles.includes('admin');
+  const { data: provider } = useProviderMeQuery(undefined, { skip: !isProvider });
+
+  // Account avatar, falling back to the provider's barber photo / shop logo.
+  const avatarSrc =
+    user?.avatarUrl ?? provider?.barber?.photoUrl ?? provider?.shop?.logoUrl ?? undefined;
 
   const onLogout = async () => {
     closeDrawer();
@@ -108,7 +113,7 @@ export function SiteHeader() {
             <>
               <Anchor component={Link} href="/account" c="inherit" underline="never">
                 <Group gap={6} wrap="nowrap">
-                  <Avatar src={user.avatarUrl ?? undefined} size={28} radius="xl" color="brand">
+                  <Avatar src={avatarSrc} size={28} radius="xl" color="brand">
                     {user.fullName.charAt(0).toUpperCase()}
                   </Avatar>
                   <Text fz="sm" lineClamp={1} maw={130}>
@@ -158,7 +163,7 @@ export function SiteHeader() {
             <>
               <Anchor component={Link} href="/account" c="inherit" underline="never" onClick={closeDrawer}>
                 <Group gap="sm" wrap="nowrap">
-                  <Avatar src={user.avatarUrl ?? undefined} size={36} radius="xl" color="brand">
+                  <Avatar src={avatarSrc} size={36} radius="xl" color="brand">
                     {user.fullName.charAt(0).toUpperCase()}
                   </Avatar>
                   <Text fw={500}>{user.fullName}</Text>
