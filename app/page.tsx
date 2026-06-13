@@ -27,7 +27,8 @@ export default async function HomePage() {
   const t = await getTranslations('home');
   const td = await getTranslations('discover');
   const locale = await getLocale();
-  const districts = await listDistricts();
+  // Don't fail the build if the DB is unreachable at prerender time (e.g. CI).
+  const districts = await listDistricts().catch(() => []);
 
   const features = [
     { icon: IconMapPin, title: t('feat1Title'), desc: t('feat1Desc') },
