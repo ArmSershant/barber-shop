@@ -111,7 +111,7 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
   };
 
   return (
-    <Container size="md" py="xl">
+    <Container size="md" py="xl" className="stagger">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

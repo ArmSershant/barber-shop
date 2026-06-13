@@ -88,7 +88,7 @@ export default async function ShopProfilePage({ params }: { params: Promise<{ sl
   };
 
   return (
-    <Container size="md" py="xl">
+    <Container size="md" py="xl" className="stagger">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

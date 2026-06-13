@@ -43,7 +43,7 @@ export default function DashboardPage() {
 
   return (
     <Container size="sm" py="xl">
-      <Stack>
+      <Stack className="stagger">
         <Group justify="space-between">
           <Title order={2}>{t('title')}</Title>
           {isBarber && provider?.barber && (

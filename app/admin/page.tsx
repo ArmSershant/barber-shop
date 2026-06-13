@@ -85,7 +85,7 @@ export default function AdminPage() {
 
   return (
     <Container size="lg" py="xl">
-      <Stack>
+      <Stack className="stagger">
         <Title order={2}>{t('title')}</Title>
 
         {isLoading || !o ? (

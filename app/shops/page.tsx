@@ -38,7 +38,7 @@ export default async function ShopsPage({
 
   return (
     <Container size="lg" py="xl">
-      <Stack gap="md">
+      <Stack gap="md" className="stagger">
         <Title order={2}>{t('shopsTitle')}</Title>
         <Group align="flex-end" wrap="wrap">
           <div style={{ flex: 1, minWidth: 200 }}>
@@ -55,7 +55,7 @@ export default async function ShopsPage({
         {shops.length === 0 ? (
           <EmptyState icon={<IconBuildingStore size={30} />} title={t('emptyShops')} />
         ) : (
-          <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="md">
+          <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="md" className="stagger">
             {shops.map((shop) => (
               <ShopCard key={shop.id} shop={shop} />
             ))}

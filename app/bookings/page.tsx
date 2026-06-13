@@ -188,7 +188,7 @@ export default function MyBookingsPage() {
 
   return (
     <Container size="sm" py="xl">
-      <Stack>
+      <Stack className="stagger">
         <Title order={2}>{t('title')}</Title>
 
         <Select

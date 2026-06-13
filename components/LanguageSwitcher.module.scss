@@ -2,6 +2,11 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
+  padding: 0.2rem 0.35rem;
+  border-radius: 0.6rem;
+  // Match the light "Log out" button tint so the pill reads consistently
+  // and flags with white stripes (e.g. RU) stay visible on light backgrounds.
+  background: var(--mantine-color-brand-light);
 }
 
 .flagBtn {

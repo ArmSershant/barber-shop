@@ -46,23 +46,37 @@ html {
 }
 
 // Entrance animation for content blocks. Pair with inline animation-delay for stagger.
+// `backwards` (not `both`): holds the hidden state during any delay, but releases
+// transform after finishing so :hover effects (e.g. .hoverLift) still work.
 .animate-in {
-  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
 
 // Page-level entrance, replayed on every route change (see app/template.tsx).
+// Opacity-only so it doesn't fight the per-block .stagger transforms below.
 .page-enter {
-  animation: pageEnter 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: pageEnter 0.3s ease both;
 }
 
 @keyframes pageEnter {
   from {
     opacity: 0;
-    transform: translateY(8px);
   }
   to {
     opacity: 1;
-    transform: none;
+  }
+}
+
+// Staggered reveal: animate the DIRECT children of a container in sequence.
+// Apply to a page's main content wrapper or a card grid — children fade up
+// one after another, no need to tag each element.
+.stagger > * {
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+@for $i from 1 through 12 {
+  .stagger > *:nth-child(#{$i}) {
+    animation-delay: #{0.04 + $i * 0.05}s;
   }
 }
 
@@ -94,7 +108,8 @@ html {
   }
 
   .animate-in,
-  .page-enter {
+  .page-enter,
+  .stagger > * {
     animation: none !important;
   }
 
