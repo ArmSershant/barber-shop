@@ -57,7 +57,8 @@
     "empty": "Нет уведомлений.",
     "newBooking": "Новая запись: {name} — {when}",
     "cancelled": "Запись отменена: {name} — {when}",
-    "reviewReceived": "Новый отзыв: {rating}★ — {name}"
+    "reviewReceived": "Новый отзыв: {rating}★ — {name}",
+    "reviewRequest": "Как прошёл визит к {name}? Оставьте отзыв"
   },
   "providerBookings": {
     "title": "Записи",

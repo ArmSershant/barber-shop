@@ -38,7 +38,9 @@ export function NotificationsBell() {
 
   const openTarget = (n: NotificationItem) => {
     setOpened(false);
-    if (n.type === 'review_received' && n.payload?.barberSlug) {
+    if (n.type === 'review_request') {
+      router.push('/bookings');
+    } else if (n.type === 'review_received' && n.payload?.barberSlug) {
       router.push(`/barbers/${String(n.payload.barberSlug)}` as Route);
     } else {
       router.push('/dashboard/bookings');
@@ -54,6 +56,8 @@ export function NotificationsBell() {
     if (n.type === 'booking_cancelled') return t('cancelled', { name, when });
     if (n.type === 'review_received')
       return t('reviewReceived', { name, rating: String(n.payload?.rating ?? '') });
+    if (n.type === 'review_request')
+      return t('reviewRequest', { name: String(n.payload?.barberName ?? '') });
     return n.type;
   };
 

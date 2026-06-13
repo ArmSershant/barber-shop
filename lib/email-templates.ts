@@ -20,6 +20,14 @@ const COPY: Record<
     cancelTitle: string;
     reminderSubject: string;
     reminderTitle: string;
+    reviewSubject: string;
+    reviewTitle: string;
+    reviewBody: string;
+    reviewCta: string;
+    rebookSubject: string;
+    rebookTitle: string;
+    rebookBody: string;
+    rebookCta: string;
     withLabel: string;
     whenLabel: string;
     cta: string;
@@ -34,6 +42,14 @@ const COPY: Record<
     cancelTitle: 'Ամրագրումը չեղարկվել է',
     reminderSubject: 'Հիշեցում Ձեր ամրագրման մասին',
     reminderTitle: 'Մոտալուտ այց',
+    reviewSubject: 'Ինչպե՞ս անցավ Ձեր այցը',
+    reviewTitle: 'Թողե՛ք կարծիք',
+    reviewBody: 'Շնորհակալություն այցի համար։ Կիսվե՛ք Ձեր կարծիքով՝ օգնելու ուրիշներին։',
+    reviewCta: 'Թողնել կարծիք',
+    rebookSubject: 'Ժամանակն է թարմացնել սանրվածքը',
+    rebookTitle: 'Կարոտե՞լ եք թարմ սանրվածքը',
+    rebookBody: 'Վերջին այցից որոշ ժամանակ է անցել։ Ամրագրե՛ք Ձեր հաջորդ այցը հիմա։',
+    rebookCta: 'Ամրագրել կրկին',
     withLabel: 'Վարսավիր',
     whenLabel: 'Ժամ',
     cta: 'Բացել Barber-Shop',
@@ -47,6 +63,14 @@ const COPY: Record<
     cancelTitle: 'Booking cancelled',
     reminderSubject: 'Reminder about your booking',
     reminderTitle: 'Upcoming appointment',
+    reviewSubject: 'How was your visit?',
+    reviewTitle: 'Leave a review',
+    reviewBody: 'Thanks for your visit! Share how it went to help others choose.',
+    reviewCta: 'Leave a review',
+    rebookSubject: 'Time for a fresh cut',
+    rebookTitle: 'Due for a trim?',
+    rebookBody: "It's been a while since your last visit. Book your next appointment now.",
+    rebookCta: 'Book again',
     withLabel: 'Barber',
     whenLabel: 'When',
     cta: 'Open Barber-Shop',
@@ -60,6 +84,14 @@ const COPY: Record<
     cancelTitle: 'Запись отменена',
     reminderSubject: 'Напоминание о записи',
     reminderTitle: 'Предстоящая запись',
+    reviewSubject: 'Как прошёл ваш визит?',
+    reviewTitle: 'Оставьте отзыв',
+    reviewBody: 'Спасибо за визит! Поделитесь впечатлениями, чтобы помочь другим.',
+    reviewCta: 'Оставить отзыв',
+    rebookSubject: 'Пора освежить стрижку',
+    rebookTitle: 'Пора подстричься?',
+    rebookBody: 'С вашего последнего визита прошло время. Запишитесь снова прямо сейчас.',
+    rebookCta: 'Записаться снова',
     withLabel: 'Барбер',
     whenLabel: 'Когда',
     cta: 'Открыть Barber-Shop',
@@ -114,5 +146,24 @@ export function bookingReminderEmail(locale: string | undefined, d: BookingEmail
   return {
     subject: c.reminderSubject,
     html: layout(c.reminderTitle, detailRows(c, d), c, d.appUrl),
+  };
+}
+
+// `appUrl` here is the target link (e.g. /bookings for review, /barbers/<slug> to rebook).
+export function reviewRequestEmail(locale: string | undefined, d: BookingEmailData) {
+  const c = COPY[pickLocale(locale)];
+  const body = `<p style="margin:0 0 8px">${c.reviewBody}</p>${detailRows(c, d)}`;
+  return {
+    subject: c.reviewSubject,
+    html: layout(c.reviewTitle, body, { ...c, cta: c.reviewCta }, d.appUrl),
+  };
+}
+
+export function rebookingEmail(locale: string | undefined, d: BookingEmailData) {
+  const c = COPY[pickLocale(locale)];
+  const body = `<p style="margin:0 0 8px">${c.rebookBody}</p><p style="margin:4px 0"><strong>${c.withLabel}:</strong> ${d.barberName}</p>`;
+  return {
+    subject: c.rebookSubject,
+    html: layout(c.rebookTitle, body, { ...c, cta: c.rebookCta }, d.appUrl),
   };
 }

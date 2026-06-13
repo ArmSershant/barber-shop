@@ -1,7 +1,10 @@
 import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/db';
 import { sendEmail } from '@/lib/email';
-import { bookingReminderEmail } from '@/lib/email-templates';
+import { bookingReminderEmail, rebookingEmail } from '@/lib/email-templates';
+
+const REBOOK_AFTER_DAYS = 28;
+const REBOOK_WINDOW_DAYS = 45; // don't nudge bookings older than this (avoids backfill spam)
 
 // Sends reminder emails for confirmed bookings starting within the next 24h
 // that haven't been reminded yet. Triggered by Vercel Cron (see vercel.json)
@@ -59,5 +62,62 @@ export async function GET(req: NextRequest) {
     await prisma.booking.update({ where: { id: b.id }, data: { reminderSentAt: now } });
   }
 
-  return Response.json({ ok: true, processed: due.length, emailed: sent });
+  // --- Rebooking nudges: completed visits ~4 weeks ago, not yet nudged ---
+  const rebookFrom = new Date(now.getTime() - REBOOK_WINDOW_DAYS * 24 * 3600_000);
+  const rebookTo = new Date(now.getTime() - REBOOK_AFTER_DAYS * 24 * 3600_000);
+
+  const rebookDue = await prisma.booking.findMany({
+    where: {
+      status: 'completed',
+      rebookNudgeSentAt: null,
+      startsAt: { gte: rebookFrom, lte: rebookTo },
+    },
+    take: 200,
+    select: {
+      id: true,
+      barberId: true,
+      startsAt: true,
+      customerUserId: true,
+      guestName: true,
+      guestEmail: true,
+      customer: { select: { fullName: true, email: true } },
+      barber: { select: { displayName: true, slug: true } },
+    },
+  });
+
+  let rebooked = 0;
+  for (const b of rebookDue) {
+    // Skip if the customer already returned to this barber since (more recent booking).
+    const returned = await prisma.booking.findFirst({
+      where: {
+        barberId: b.barberId,
+        startsAt: { gt: b.startsAt },
+        ...(b.customerUserId
+          ? { customerUserId: b.customerUserId }
+          : b.guestEmail
+            ? { guestEmail: b.guestEmail }
+            : { id: '__none__' }),
+      },
+      select: { id: true },
+    });
+
+    const email = b.customer?.email ?? b.guestEmail ?? null;
+    if (!returned && email) {
+      const { subject, html } = rebookingEmail(undefined, {
+        customerName: b.customer?.fullName ?? b.guestName ?? '',
+        barberName: b.barber.displayName,
+        when: '',
+        appUrl: `${appUrl}/barbers/${b.barber.slug}`,
+      });
+      await sendEmail({ to: email, subject, html });
+      rebooked += 1;
+    }
+    await prisma.booking.update({ where: { id: b.id }, data: { rebookNudgeSentAt: now } });
+  }
+
+  return Response.json({
+    ok: true,
+    reminders: { processed: due.length, emailed: sent },
+    rebooking: { processed: rebookDue.length, emailed: rebooked },
+  });
 }

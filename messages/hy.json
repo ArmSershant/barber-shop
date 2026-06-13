@@ -57,7 +57,8 @@
     "empty": "Ծանուցումներ չկան։",
     "newBooking": "Նոր ամրագրում՝ {name} — {when}",
     "cancelled": "Ամրագրումը չեղարկվել է՝ {name} — {when}",
-    "reviewReceived": "Նոր կարծիք՝ {rating}★ — {name}"
+    "reviewReceived": "Նոր կարծիք՝ {rating}★ — {name}",
+    "reviewRequest": "Ինչպե՞ս անցավ Ձեր այցը {name}-ի մոտ։ Թողե՛ք կարծիք"
   },
   "providerBookings": {
     "title": "Ամրագրումներ",
