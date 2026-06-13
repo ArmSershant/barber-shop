@@ -5,6 +5,7 @@ import { Notifications } from '@mantine/notifications';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import '@mantine/notifications/styles.css';
@@ -42,6 +43,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </ModalsProvider>
         </MantineProvider>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
