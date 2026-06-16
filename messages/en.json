@@ -240,6 +240,7 @@
     "shop": {
       "heading": "Your shop",
       "logo": "Logo",
+      "cover": "Cover image",
       "name": "Shop name",
       "description": "Description",
       "address": "Address",

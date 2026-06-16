@@ -53,6 +53,7 @@ export interface Shop {
   phone?: string | null;
   instagram?: string | null;
   logoUrl?: string | null;
+  coverUrl?: string | null;
   districtId?: number | null;
   status: string;
 }

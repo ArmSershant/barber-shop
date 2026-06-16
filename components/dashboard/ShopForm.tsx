@@ -32,6 +32,7 @@ export function ShopForm({ shop }: { shop: Shop | null }) {
       instagram: shop?.instagram ?? '',
       districtId: shop?.districtId ?? undefined,
       logoUrl: shop?.logoUrl ?? undefined,
+      coverUrl: shop?.coverUrl ?? undefined,
     },
   });
 
@@ -58,6 +59,13 @@ export function ShopForm({ shop }: { shop: Shop | null }) {
           control={control}
           render={({ field }) => (
             <ImageUpload value={field.value} onChange={field.onChange} label={t('logo')} radius="md" />
+          )}
+        />
+        <Controller
+          name="coverUrl"
+          control={control}
+          render={({ field }) => (
+            <ImageUpload value={field.value} onChange={field.onChange} label={t('cover')} radius="md" />
           )}
         />
         <TextInput label={t('name')} error={errors.name?.message} {...register('name')} />

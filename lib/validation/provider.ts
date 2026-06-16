@@ -8,6 +8,7 @@ export const createShopSchema = z.object({
   phone: z.string().trim().max(40).optional(),
   instagram: z.string().trim().max(80).optional(),
   logoUrl: z.string().url().optional(),
+  coverUrl: z.string().url().optional(),
 });
 export const updateShopSchema = createShopSchema.partial();
 

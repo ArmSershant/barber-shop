@@ -103,8 +103,8 @@ export default async function ShopProfilePage({ params }: { params: Promise<{ sl
         <Box
           h={140}
           style={{
-            backgroundImage: absoluteImage(shop.photos[0]?.url)
-              ? `url(${shop.photos[0].url})`
+            backgroundImage: absoluteImage(shop.coverUrl ?? shop.photos[0]?.url)
+              ? `url(${shop.coverUrl ?? shop.photos[0].url})`
               : 'linear-gradient(135deg, var(--mantine-color-brand-7), var(--mantine-color-brand-5))',
             backgroundSize: 'cover',
             backgroundPosition: 'center',

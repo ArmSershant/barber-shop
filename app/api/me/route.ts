@@ -3,6 +3,7 @@ import { prisma } from '@/lib/db';
 import { errorResponse, HttpError, ok } from '@/lib/http';
 import { requireAuth } from '@/lib/auth/rbac';
 import { updateMeSchema } from '@/lib/validation/me';
+import { deleteReplacedBlob } from '@/lib/blob';
 
 export async function GET() {
   try {
@@ -49,7 +50,16 @@ export async function PATCH(req: NextRequest) {
       if (!exists) throw new HttpError(400, 'VALIDATION_ERROR', 'Unknown district.');
     }
 
+    let oldAvatar: string | null = null;
+    if (data.avatarUrl !== undefined) {
+      const current = await prisma.user.findUnique({ where: { id: userId }, select: { avatarUrl: true } });
+      oldAvatar = current?.avatarUrl ?? null;
+    }
+
     await prisma.user.update({ where: { id: userId }, data });
+
+    if (data.avatarUrl !== undefined) await deleteReplacedBlob(oldAvatar, data.avatarUrl);
+
     return ok({ ok: true });
   } catch (err) {
     return errorResponse(err);

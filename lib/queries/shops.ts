@@ -70,6 +70,7 @@ export const getShopProfile = cache(async (slug: string) => {
       name: true,
       description: true,
       logoUrl: true,
+      coverUrl: true,
       address: true,
       phone: true,
       instagram: true,

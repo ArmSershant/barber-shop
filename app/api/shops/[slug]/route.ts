@@ -4,6 +4,7 @@ import { errorResponse, HttpError, ok } from '@/lib/http';
 import { requireRole } from '@/lib/auth/rbac';
 import { assertOwnsShopBySlug } from '@/lib/auth/ownership';
 import { updateShopSchema } from '@/lib/validation/provider';
+import { deleteReplacedBlob } from '@/lib/blob';
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -34,7 +35,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
   try {
     const { userId } = await requireRole('shop_owner', 'admin');
     const { slug } = await params;
-    await assertOwnsShopBySlug(slug, userId);
+    const existing = await assertOwnsShopBySlug(slug, userId);
 
     const data = updateShopSchema.parse(await req.json());
     const shop = await prisma.shop.update({ where: { slug }, data });
@@ -46,6 +47,10 @@ export async function PATCH(req: NextRequest, { params }: Params) {
         data: { districtId: shop.districtId },
       });
     }
+
+    // Clean up replaced images from Blob storage.
+    if (data.logoUrl !== undefined) await deleteReplacedBlob(existing.logoUrl, data.logoUrl);
+    if (data.coverUrl !== undefined) await deleteReplacedBlob(existing.coverUrl, data.coverUrl);
 
     return ok({ shop });
   } catch (err) {

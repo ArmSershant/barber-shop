@@ -5,6 +5,7 @@ import { requireAuth } from '@/lib/auth/rbac';
 import { assertCanEditBarberBySlug } from '@/lib/auth/ownership';
 import { updateBarberSchema } from '@/lib/validation/provider';
 import { getBarberProfile } from '@/lib/queries/barbers';
+import { deleteReplacedBlob } from '@/lib/blob';
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -31,10 +32,15 @@ export async function PATCH(req: NextRequest, { params }: Params) {
   try {
     const { userId } = await requireAuth();
     const { slug } = await params;
-    await assertCanEditBarberBySlug(slug, userId);
+    const existing = await assertCanEditBarberBySlug(slug, userId);
 
     const data = updateBarberSchema.parse(await req.json());
     const barber = await prisma.barber.update({ where: { slug }, data });
+
+    // Clean up replaced images from Blob storage.
+    if (data.photoUrl !== undefined) await deleteReplacedBlob(existing.photoUrl, data.photoUrl);
+    if (data.coverUrl !== undefined) await deleteReplacedBlob(existing.coverUrl, data.coverUrl);
+
     return ok({ barber });
   } catch (err) {
     return errorResponse(err);

@@ -201,6 +201,7 @@ model Shop {
   slug        String         @unique
   description String?
   logoUrl     String?        @map("logo_url")
+  coverUrl    String?        @map("cover_url")
   districtId  Int?           @map("district_id") @db.SmallInt
   address     String?
   lat         Decimal?       @db.Decimal(9, 6)
