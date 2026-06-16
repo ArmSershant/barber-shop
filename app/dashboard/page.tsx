@@ -14,6 +14,7 @@ import { BreaksSection } from '@/components/dashboard/BreaksSection';
 import { ShopRosterSection } from '@/components/dashboard/ShopRosterSection';
 import { ShopDefaultsSection } from '@/components/dashboard/ShopDefaultsSection';
 import { BarberPortfolioSection, ShopPhotosSection } from '@/components/dashboard/GallerySection';
+import { AnalyticsSection } from '@/components/dashboard/AnalyticsSection';
 import { ListSkeleton } from '@/components/ListSkeleton';
 
 export default function DashboardPage() {
@@ -64,6 +65,9 @@ export default function DashboardPage() {
           <ListSkeleton rows={3} />
         ) : (
           <>
+            {((isShopOwner && provider?.shop) || (isBarber && provider?.barber)) && (
+              <AnalyticsSection />
+            )}
             {isShopOwner && <ShopForm shop={provider?.shop ?? null} />}
             {isShopOwner && provider?.shop && <ShopPhotosSection slug={provider.shop.slug} />}
             {isBarber && <BarberForm barber={provider?.barber ?? null} />}

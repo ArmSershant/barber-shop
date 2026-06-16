@@ -141,6 +141,18 @@
     "photos": "Photos",
     "book": "Book appointment"
   },
+  "analytics": {
+    "heading": "Analytics",
+    "revenue": "Total revenue",
+    "revenue30": "Revenue (30d)",
+    "upcoming": "Upcoming",
+    "completed": "Completed",
+    "bookings30": "Bookings (30d)",
+    "repeat": "Repeat clients",
+    "completionRate": "Completion rate",
+    "noShowRate": "No-show rate",
+    "byWeekday": "Bookings by weekday"
+  },
   "gallery": {
     "heading": "Gallery",
     "add": "Add photo",

@@ -75,6 +75,16 @@ export interface ProviderMeResponse {
   barber: Barber | null;
 }
 
+export interface ProviderAnalytics {
+  totals: { all: number; upcoming: number; completed: number; cancelled: number; noShow: number };
+  revenueAmd: number;
+  last30: { bookings: number; revenueAmd: number };
+  completionRate: number;
+  noShowRate: number;
+  repeatCustomers: number;
+  byWeekday: number[];
+}
+
 export interface ShopBarberListItem {
   id: string;
   slug: string;
@@ -536,6 +546,10 @@ export const api = createApi({
       query: () => '/provider/bookings',
       providesTags: ['ProviderBookings'],
     }),
+    getProviderAnalytics: builder.query<ProviderAnalytics, void>({
+      query: () => '/provider/analytics',
+      providesTags: ['ProviderBookings'],
+    }),
     cancelBooking: builder.mutation<{ ok: boolean }, { id: string; reason?: string; token?: string }>({
       query: ({ id, reason, token }) => ({
         url: `/bookings/${id}/cancel`,
@@ -665,6 +679,7 @@ export const {
   useGetNotificationsQuery,
   useReadAllNotificationsMutation,
   useGetProviderBookingsQuery,
+  useGetProviderAnalyticsQuery,
   useCancelBookingMutation,
   useGetMyBookingsQuery,
   useCompleteBookingMutation,
