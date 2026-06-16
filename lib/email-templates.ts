@@ -142,7 +142,7 @@ function layout(title: string, body: string, c: (typeof COPY)['en'], appUrl: str
     <h2 style="margin:0 0 16px">${title}</h2>
     ${body}
     <p style="margin:24px 0 0">
-      <a href="${appUrl}" style="display:inline-block;background:#12b886;color:#fff;text-decoration:none;padding:10px 18px;border-radius:8px">${c.cta}</a>
+      <a href="${appUrl}" target="_blank" rel="noopener noreferrer" style="display:inline-block;background:#12b886;color:#fff;text-decoration:none;padding:10px 18px;border-radius:8px">${c.cta}</a>
     </p>
     <p style="margin:24px 0 0;color:#888;font-size:13px">${c.footer}</p>
   </div>`;
@@ -157,7 +157,7 @@ function detailRows(c: (typeof COPY)['en'], d: BookingEmailData): string {
 export function bookingConfirmationEmail(locale: string | undefined, d: BookingEmailData) {
   const c = COPY[pickLocale(locale)];
   const manage = d.manageUrl
-    ? `<p style="margin:12px 0 0"><a href="${d.manageUrl}" style="color:#12b886">${c.manageLink}</a></p>`
+    ? `<p style="margin:12px 0 0"><a href="${d.manageUrl}" target="_blank" rel="noopener noreferrer" style="color:#12b886">${c.manageLink}</a></p>`
     : '';
   return {
     subject: c.confirmSubject,
