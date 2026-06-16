@@ -245,6 +245,8 @@
     "viewProfile": "View public profile",
     "uploadPhoto": "Upload photo",
     "changePhoto": "Change photo",
+    "verifyToGoLive": "Verify your email to make your listing visible to customers.",
+    "verifyToGoLiveLink": "Go to account",
     "shop": {
       "heading": "Your shop",
       "logo": "Logo",

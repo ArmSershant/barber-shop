@@ -21,8 +21,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let districts: { slug: string }[] = [];
   try {
     [barbers, shops, districts] = await Promise.all([
-      prisma.barber.findMany({ where: { deletedAt: null, status: 'active' }, select: { slug: true } }),
-      prisma.shop.findMany({ where: { deletedAt: null, status: 'active' }, select: { slug: true } }),
+      prisma.barber.findMany({
+        where: {
+          deletedAt: null,
+          status: 'active',
+          OR: [{ user: { emailVerified: true } }, { shop: { owner: { emailVerified: true } } }],
+        },
+        select: { slug: true },
+      }),
+      prisma.shop.findMany({
+        where: { deletedAt: null, status: 'active', owner: { emailVerified: true } },
+        select: { slug: true },
+      }),
       prisma.district.findMany({ select: { slug: true } }),
     ]);
   } catch {

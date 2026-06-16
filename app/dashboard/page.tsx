@@ -61,6 +61,15 @@ export default function DashboardPage() {
           )}
         </Group>
 
+        {(isShopOwner || isBarber) && !user.emailVerified && (
+          <Alert color="yellow">
+            {t('verifyToGoLive')}{' '}
+            <Anchor component={Link} href="/account">
+              {t('verifyToGoLiveLink')}
+            </Anchor>
+          </Alert>
+        )}
+
         {provLoading ? (
           <ListSkeleton rows={3} />
         ) : (

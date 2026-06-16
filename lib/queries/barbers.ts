@@ -25,6 +25,9 @@ export async function listBarbers(
     where: {
       deletedAt: null,
       status: { not: 'suspended' },
+      // Only list barbers whose responsible account has a verified email:
+      // the independent barber's own user, or their shop's owner.
+      OR: [{ user: { emailVerified: true } }, { shop: { owner: { emailVerified: true } } }],
       ...(q ? { displayName: { contains: q, mode: 'insensitive' } } : {}),
       ...(district ? { district: { slug: district } } : {}),
     },

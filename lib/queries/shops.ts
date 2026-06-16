@@ -23,6 +23,8 @@ export async function listShops(
     where: {
       deletedAt: null,
       status: { not: 'suspended' },
+      // Only list shops whose owner has verified their email.
+      owner: { emailVerified: true },
       ...(q ? { name: { contains: q, mode: 'insensitive' } } : {}),
       ...(district ? { district: { slug: district } } : {}),
     },
