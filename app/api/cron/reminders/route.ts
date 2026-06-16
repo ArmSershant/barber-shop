@@ -2,6 +2,8 @@ import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/db';
 import { sendEmail } from '@/lib/email';
 import { bookingReminderEmail, rebookingEmail } from '@/lib/email-templates';
+import { sendSms } from '@/lib/sms';
+import { bookingReminderSms } from '@/lib/sms-templates';
 
 const REBOOK_AFTER_DAYS = 28;
 const REBOOK_WINDOW_DAYS = 45; // don't nudge bookings older than this (avoids backfill spam)
@@ -33,7 +35,8 @@ export async function GET(req: NextRequest) {
       startsAt: true,
       guestName: true,
       guestEmail: true,
-      customer: { select: { fullName: true, email: true } },
+      guestPhone: true,
+      customer: { select: { fullName: true, email: true, phone: true } },
       barber: { select: { displayName: true, timezone: true } },
     },
   });
@@ -58,6 +61,17 @@ export async function GET(req: NextRequest) {
       await sendEmail({ to: email, subject, html });
       sent += 1;
     }
+
+    const phone = b.customer?.phone ?? b.guestPhone ?? null;
+    if (phone) {
+      const when = new Intl.DateTimeFormat('hy', {
+        dateStyle: 'medium',
+        timeStyle: 'short',
+        timeZone: b.barber.timezone,
+      }).format(b.startsAt);
+      void sendSms({ to: phone, body: bookingReminderSms(undefined, { barberName: b.barber.displayName, when }) });
+    }
+
     // Mark as reminded regardless (avoid retry storms; no email = nothing to resend).
     await prisma.booking.update({ where: { id: b.id }, data: { reminderSentAt: now } });
   }

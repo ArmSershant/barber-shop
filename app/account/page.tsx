@@ -135,7 +135,13 @@ export default function AccountPage() {
               value={fullName}
               onChange={(e) => setFullName(e.currentTarget.value)}
             />
-            <TextInput label={t('phone')} value={phone} onChange={(e) => setPhone(e.currentTarget.value)} />
+            <TextInput
+              label={t('phone')}
+              description={t('phoneHint')}
+              placeholder="+374 .. .. .. .."
+              value={phone}
+              onChange={(e) => setPhone(e.currentTarget.value)}
+            />
             <Select
               label={t('district')}
               placeholder={t('district')}

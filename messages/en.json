@@ -172,6 +172,7 @@
     "avatar": "Avatar",
     "fullName": "Full name",
     "phone": "Phone",
+    "phoneHint": "Add your phone so barbers can reach you about your bookings.",
     "district": "Home district",
     "save": "Save",
     "saved": "Profile updated.",

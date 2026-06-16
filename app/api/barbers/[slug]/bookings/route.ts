@@ -11,6 +11,8 @@ import { getAvailableSlots } from '@/lib/queries/availability';
 import { createBookingSchema } from '@/lib/validation/booking';
 import { sendEmail } from '@/lib/email';
 import { bookingConfirmationEmail } from '@/lib/email-templates';
+import { sendSms } from '@/lib/sms';
+import { bookingConfirmationSms } from '@/lib/sms-templates';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -146,11 +148,12 @@ export async function POST(req: NextRequest, { params }: Params) {
       const customerRecord = user
         ? await prisma.user.findUnique({
             where: { id: user.userId },
-            select: { fullName: true, email: true },
+            select: { fullName: true, email: true, phone: true },
           })
         : null;
       const customerName = user ? (customerRecord?.fullName ?? 'Customer') : body.guest!.name;
       const customerEmail = user ? (customerRecord?.email ?? null) : (body.guest!.email ?? null);
+      const customerPhone = user ? (customerRecord?.phone ?? null) : body.guest!.phone;
 
       // Notify the provider in-app (barber's own account, else the shop owner).
       try {
@@ -190,6 +193,20 @@ export async function POST(req: NextRequest, { params }: Params) {
           manageUrl: manageToken ? `${appUrl}/manage?token=${encodeURIComponent(manageToken)}` : undefined,
         });
         void sendEmail({ to: customerEmail, subject, html });
+      }
+
+      // SMS confirmation (best-effort; no-ops until an SMS provider is configured).
+      if (customerPhone) {
+        const locale = (await cookies()).get('NEXT_LOCALE')?.value;
+        const when = new Intl.DateTimeFormat(locale ?? 'hy', {
+          dateStyle: 'medium',
+          timeStyle: 'short',
+          timeZone: barber.timezone,
+        }).format(booking.startsAt);
+        void sendSms({
+          to: customerPhone,
+          body: bookingConfirmationSms(locale, { barberName: barber.displayName, when }),
+        });
       }
 
       return ok({ booking, manageToken }, { status: 201 });
