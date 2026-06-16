@@ -13,6 +13,7 @@ import { sendEmail } from '@/lib/email';
 import { bookingConfirmationEmail } from '@/lib/email-templates';
 import { sendSms } from '@/lib/sms';
 import { bookingConfirmationSms } from '@/lib/sms-templates';
+import { buildIcs } from '@/lib/ics';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -192,7 +193,19 @@ export async function POST(req: NextRequest, { params }: Params) {
           appUrl,
           manageUrl: manageToken ? `${appUrl}/manage?token=${encodeURIComponent(manageToken)}` : undefined,
         });
-        void sendEmail({ to: customerEmail, subject, html });
+        const ics = buildIcs({
+          uid: `${booking.id}@barber-shop.am`,
+          start: booking.startsAt,
+          end: booking.endsAt,
+          summary: `${barber.displayName} — Barber-Shop`,
+          url: `${appUrl}/barbers/${slug}`,
+        });
+        void sendEmail({
+          to: customerEmail,
+          subject,
+          html,
+          attachments: [{ filename: 'booking.ics', content: Buffer.from(ics).toString('base64') }],
+        });
       }
 
       // SMS confirmation (best-effort; no-ops until an SMS provider is configured).
