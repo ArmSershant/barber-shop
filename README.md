@@ -2,9 +2,14 @@
 
 Online booking platform connecting clients in Yerevan with **barber shops** and **independent barbers** — discover providers, see real-time availability, and book appointments.
 
-Working name: **Sapor**. Domain: **barber-shop.am**. Hosted on **Vercel**.
+Domain: **barber-shop.am** (live). Hosted on **Vercel**. Trilingual (Armenian / English / Russian).
 
-> This is the project skeleton. Business logic is built feature-by-feature in the order described in [`docs/03-architecture-and-api.md`](docs/03-architecture-and-api.md) §13.
+> **Status:** MVP complete and deployed; several Phase 1–2 features shipped early
+> (verification + password reset, photo uploads, favorites, provider analytics,
+> verified/featured listings, review & rebooking nudges, SEO + OG image, .ics).
+> The only major area not yet built is **online payments / commission (Phase 3)**.
+> SMS is implemented but disabled (`SMS_ENABLED=false`) until a gateway is chosen.
+> Full breakdown: [`docs/01-product-spec.md`](docs/01-product-spec.md) §10.
 
 ## Stack
 
@@ -86,7 +91,7 @@ app/                 # Next.js App Router (UI + app/api/* route handlers)
 lib/                 # shared server logic (db client, later: auth, services)
 prisma/
   schema.prisma      # source of truth for the database
-  migrations/        # SQL migrations (0001_init creates all tables)
+  migrations/        # SQL migrations 0001–0013 (0001_init creates the core tables)
   seed.sql           # Yerevan districts
 docs/                # product + technical specification (00-03)
 docker-compose.yml   # local Postgres + Redis
@@ -120,8 +125,13 @@ Endpoints:
 | POST | `/api/auth/login` | Email + password |
 | POST | `/api/auth/refresh` | Rotate tokens (uses the refresh cookie) |
 | POST | `/api/auth/logout` | Revoke refresh token, clear cookies |
+| POST | `/api/auth/verify-email` | Confirm email from a verification token |
+| POST | `/api/auth/resend-verification` | Re-send the verification email (auth) |
+| POST | `/api/auth/forgot-password` | Email a password-reset link |
+| POST | `/api/auth/reset-password` | Set a new password from a reset token |
 | GET | `/api/me` | Current user (requires auth) |
-| GET | `/api/provider/ping` | Demo role-guarded route (barber/shop_owner only) |
+| PATCH | `/api/me` | Update profile (name, phone, avatar, district) |
+| POST | `/api/me/password` | Change password (logged in) |
 
 Smoke test (dev server must be running):
 
@@ -151,6 +161,7 @@ See [`docs/03-architecture-and-api.md`](docs/03-architecture-and-api.md) §2 for
 ## Documentation
 
 - [`docs/00-naming.md`](docs/00-naming.md) — name options
-- [`docs/01-product-spec.md`](docs/01-product-spec.md) — features, MVP scope, roadmap, monetization
+- [`docs/01-product-spec.md`](docs/01-product-spec.md) — features, MVP scope, roadmap, monetization, **§10 implementation status**
 - [`docs/02-data-model.md`](docs/02-data-model.md) — schema + ERD
 - [`docs/03-architecture-and-api.md`](docs/03-architecture-and-api.md) — API, RBAC, scheduling, notifications, security
+- [`docs/design-and-growth-suggestions.md`](docs/design-and-growth-suggestions.md) — UX/design + growth playbook

@@ -160,7 +160,62 @@ A realistic solo/2-person build of this MVP is on the order of **8–12 weeks**.
 
 **Recommended sequence:** Free for everyone in MVP → **subscription + featured listings** in Phase 2 → **commission/deposits via online payments** in Phase 3. Keep a generous free tier permanently so supply never churns out.
 
-## 10. Key product risks
+## 10. Implementation status (live)
+
+Last updated: 2026-06. The product is **deployed in production at barber-shop.am** (trilingual hy/en/ru). The MVP is complete and several Phase 1–2 items shipped early. The only major roadmap area not yet built is **online payments / commission billing (Phase 3)**.
+
+### Done ✅
+
+Accounts & auth
+- Email + password register / login / logout, JWT in httpOnly cookies, rotating refresh tokens with reuse detection.
+- Roles: customer / barber / shop_owner / admin.
+- **Email verification** (on signup + resend) and **password reset** (forgot-password flow).
+- Suspended accounts blocked at login and refresh.
+
+Providers (shops & barbers)
+- Shop profile (name, logo, **cover image**, description, address, district, phone, Instagram), default working hours, roster management.
+- Independent + shop barbers; per-barber services with price/duration overrides; service catalog with translated types.
+- Working hours, breaks, time off.
+- **Photo uploads** (logo, barber portrait, barber cover, portfolio + shop gallery) via Vercel Blob, with cleanup of replaced/deleted files.
+- **Provider analytics** dashboard (revenue, completion / no-show rates, repeat clients, bookings-by-weekday).
+- Listing only appears in discovery once the owner's email is verified.
+
+Discovery & profiles
+- Search + district filter; home-district-first sorting; hero search on the home page.
+- **Per-district landing pages** (`/barbers/district/[d]`, `/shops/district/[d]`) + homepage district chips.
+- Barber & shop profiles rebuilt as landing pages: cover hero, at-a-glance bar (rating, district, **open-now**, from-price), portfolio grid, sticky mobile Book bar, per-service Book buttons.
+- **Verified badge** + **featured listings** (featured-first ranking), admin-toggleable.
+
+Booking
+- Single code path (always book a barber); instant auto-confirm; guest booking with a manage-link (no account required).
+- Availability engine (working hours − bookings − breaks − time off − buffers), tz-correct (Asia/Yerevan), no-double-booking GiST constraint.
+- Cancel; provider complete / no-show; reviews after completion with aggregate ratings.
+- **Favorites / saved barbers.**
+
+Notifications & comms
+- In-app notifications (bell) for bookings, cancellations, reviews, review requests.
+- Email (Resend): confirmation (+ **.ics calendar attachment**), cancellation, reminder (daily cron), **review-request** and **rebooking** nudges.
+- **SMS** for confirmation + reminder — built behind `SMS_ENABLED` (off until a gateway is chosen; see notifications/SMS notes).
+
+Admin
+- Approve / suspend shops & barbers, suspend users, verify + feature toggles, moderate (hide) reviews, overview stats. `make:admin` script grants the role.
+
+Platform / polish
+- Trilingual UI (hy default, en, ru) via cookie-based next-intl; localized API errors.
+- Mantine theme with custom brand palette + system/light/dark, condensed display headings, gold accent.
+- Subtle site-wide animations (page transitions, staggered reveals, hover lift) with `prefers-reduced-motion` respected; responsive header with mobile drawer; skeleton loaders.
+- SEO: per-page metadata, Open Graph + Twitter, dynamic OG image, robots, dynamic sitemap, `HairSalon` JSON-LD on profiles.
+- Customer account page (avatar, name, phone, home district, change password).
+
+### Remaining 🔜
+- **Payments / commission (Phase 3):** charge providers per booking and/or paid featured slots; needs a payment-provider decision (local Armenian gateway — Idram/ArCa/Telcell — vs. international). Featured-listing data model + ranking already exist; only billing is missing.
+- **Enable SMS** once a gateway is signed up (flip `SMS_ENABLED`, set creds, adapt `lib/sms.ts`).
+- Optional later: Google sign-in, Telegram notifications, map view, multi-location, native apps.
+
+### Schema migrations
+`0001`–`0013` applied (init → refresh tokens → time-off/breaks → shop defaults → guest bookings → service types → review notification → user district → barber cover → verified/featured → rebook nudge → auth tokens → shop cover).
+
+## 11. Key product risks
 
 - **Cold start / liquidity.** Solve supply first: onboard 20–40 real barbers in a few districts by hand before any client marketing. Auto-accept + reminders make the first bookings feel magical.
 - **No-shows.** The retention killer. Reminders (Phase 1) then deposits (Phase 3).

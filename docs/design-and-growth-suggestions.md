@@ -153,8 +153,8 @@ strengthen the business model and the *perceived* value:
 
 This is the single most important thing separating "prototype" from "real product":
 
-- Implement **photo uploads** (logo, barber portrait, shop cover, portfolio grid) — it's
-  already on the MVP list and the models exist. Until then, profiles look empty.
+- **Photo uploads** (logo, barber portrait, barber + shop cover, portfolio + shop gallery):
+  ✅ **done** via Vercel Blob, with cleanup of replaced/deleted files.
 - Provide **tasteful fallbacks**: a branded gradient + initial (we have initials) is
   fine as a placeholder, but cover images change everything.
 - Consider **seeding demo shops with stock barber photos** so the marketplace never
@@ -171,28 +171,35 @@ This is the single most important thing separating "prototype" from "real produc
 
 ## 9. SEO & performance (we've started this)
 
-- Metadata, OG, sitemap, robots, JSON-LD: done. 
-- **Per-district landing pages** ("Barbers in Kentron") — huge for local search; we
-  already filter by district, so generate indexable pages/params.
-- **Real OG images** per profile (generate from name + photo) for social sharing.
-- **Image optimisation** via `next/image` once uploads exist.
+- Metadata, OG, sitemap, robots, JSON-LD: ✅ done.
+- **Per-district landing pages** ("Barbers in Kentron"): ✅ done + homepage district chips.
+- **OG images**: ✅ dynamic site-level OG/Twitter image; profiles also expose their photo as the OG image.
+- **Image optimisation** via `next/image`: still open — uploads render via Mantine `Image`/`<img>`; switching to `next/image` (with the Blob domain allow-listed) would add resizing.
 - Keep Core Web Vitals green (Speed Insights added).
 
 ---
 
 ## 10. Prioritised next steps (for our stack, highest ROI first)
 
-| # | Change | Why | Effort |
-|---|--------|-----|--------|
-| 1 | **Photo uploads** (cover, portrait, portfolio) | Biggest "real product" upgrade; profiles currently look empty | M |
-| 2 | **Hero search bar** on home (service + district) | Marketplace conversion starts here | S |
-| 3 | **Profile = landing page** (cover, sticky Book, at-a-glance bar, portfolio grid) | This is where bookings happen | M |
-| 4 | **Per-district landing pages** + homepage district chips | Local SEO + intent | S |
-| 5 | **Display font + warm accent** | Instantly reads "barber," not generic | S |
-| 6 | **Skeleton loaders + per-service Book buttons** | Perceived speed + fewer taps | S |
-| 7 | **Featured listings + Verified badge** | First real monetisation lever | M |
-| 8 | **Rebooking & review nudges** | Retention flywheel unique to this vertical | M |
-| 9 | **Provider analytics** | Justifies commission; stickiness | M |
-| 10 | **Seed demo content** before launch | Avoid cold-marketplace problem | S |
+Status as of 2026-06 — almost the entire list shipped.
+
+| # | Change | Why | Effort | Status |
+|---|--------|-----|--------|--------|
+| 1 | **Photo uploads** (cover, portrait, portfolio) | Biggest "real product" upgrade | M | ✅ Done |
+| 2 | **Hero search bar** on home (service + district) | Marketplace conversion starts here | S | ✅ Done |
+| 3 | **Profile = landing page** (cover, sticky Book, at-a-glance bar, portfolio grid) | This is where bookings happen | M | ✅ Done |
+| 4 | **Per-district landing pages** + homepage district chips | Local SEO + intent | S | ✅ Done |
+| 5 | **Display font + warm accent** | Instantly reads "barber," not generic | S | ✅ Done |
+| 6 | **Skeleton loaders + per-service Book buttons** | Perceived speed + fewer taps | S | ✅ Done |
+| 7 | **Featured listings + Verified badge** | First real monetisation lever | M | ✅ Done (billing pending) |
+| 8 | **Rebooking & review nudges** | Retention flywheel unique to this vertical | M | ✅ Done |
+| 9 | **Provider analytics** | Justifies commission; stickiness | M | ✅ Done |
+| 10 | **Seed demo content** before launch | Avoid cold-marketplace problem | S | ⏭️ Skipped (onboard real barbers instead) |
+
+Also shipped beyond this list: favorites, email verification + password reset, .ics
+calendar attachment, dynamic OG image, blob cleanup, gated SMS, customer account page.
+
+**Only major item remaining: online payments / commission (Phase 3)** — the featured/
+verified data model + ranking already exist; only the billing/charging layer is missing.
 
 S = small, M = medium.
