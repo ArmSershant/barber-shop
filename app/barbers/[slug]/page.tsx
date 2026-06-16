@@ -11,6 +11,7 @@ import { getOpenStatus } from '@/lib/open-now';
 import { BookingWidget } from '@/components/booking/BookingWidget';
 import { PortfolioGrid } from '@/components/profile/PortfolioGrid';
 import { StickyBookBar } from '@/components/profile/StickyBookBar';
+import { FavoriteButton } from '@/components/FavoriteButton';
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://barber-shop.am';
 const DAY_KEYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
@@ -155,7 +156,7 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
             >
               {barber.displayName.charAt(0).toUpperCase()}
             </Avatar>
-            <Stack gap={2} pb={4}>
+            <Stack gap={2} pb={4} style={{ flex: 1, minWidth: 0 }}>
               <Group gap={6} wrap="nowrap">
                 <Title order={2}>{barber.displayName}</Title>
                 {barber.isVerified && (
@@ -175,6 +176,7 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
                   : ''}
               </Text>
             </Stack>
+            <FavoriteButton slug={barber.slug} />
           </Group>
 
           <Group gap="xs">

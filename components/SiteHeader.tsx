@@ -14,6 +14,7 @@ import {
   IconCalendarHeart,
   IconShieldCog,
   IconLogout,
+  IconHeart,
 } from '@tabler/icons-react';
 import { api, useMeQuery, useLogoutMutation, useProviderMeQuery } from '@/lib/store/api';
 import { useAppDispatch } from '@/lib/store/hooks';
@@ -82,7 +83,10 @@ export function SiteHeader() {
           <NavLink href="/dashboard/bookings" icon={<IconCalendarEvent size={16} />} label={t('bookings')} />
         </>
       ) : (
-        <NavLink href="/bookings" icon={<IconCalendarHeart size={16} />} label={t('myBookings')} />
+        <>
+          <NavLink href="/bookings" icon={<IconCalendarHeart size={16} />} label={t('myBookings')} />
+          <NavLink href="/favorites" icon={<IconHeart size={16} />} label={t('saved')} />
+        </>
       )}
       {isAdmin && <NavLink href="/admin" icon={<IconShieldCog size={16} />} label={t('admin')} />}
     </>

@@ -8,6 +8,7 @@
     "dashboard": "Dashboard",
     "bookings": "Bookings",
     "myBookings": "My bookings",
+    "saved": "Saved",
     "admin": "Admin",
     "theme": "Theme",
     "themeLight": "Light",
@@ -140,6 +141,12 @@
     "portfolio": "Portfolio",
     "photos": "Photos",
     "book": "Book appointment"
+  },
+  "favorites": {
+    "title": "Saved barbers",
+    "empty": "You haven't saved any barbers yet.",
+    "save": "Save barber",
+    "remove": "Remove from saved"
   },
   "analytics": {
     "heading": "Analytics",

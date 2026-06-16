@@ -348,6 +348,7 @@ export const api = createApi({
     'AdminOverview',
     'Portfolio',
     'ShopPhotos',
+    'Favorites',
   ],
   endpoints: (builder) => ({
     me: builder.query<MeResponse, void>({
@@ -628,6 +629,19 @@ export const api = createApi({
       invalidatesTags: ['Portfolio'],
     }),
 
+    getFavoriteSlugs: builder.query<{ slugs: string[] }, void>({
+      query: () => '/me/favorites',
+      providesTags: ['Favorites'],
+    }),
+    addFavorite: builder.mutation<{ favorited: boolean }, { slug: string }>({
+      query: ({ slug }) => ({ url: `/barbers/${slug}/favorite`, method: 'POST' }),
+      invalidatesTags: ['Favorites'],
+    }),
+    removeFavorite: builder.mutation<{ favorited: boolean }, { slug: string }>({
+      query: ({ slug }) => ({ url: `/barbers/${slug}/favorite`, method: 'DELETE' }),
+      invalidatesTags: ['Favorites'],
+    }),
+
     getShopPhotos: builder.query<{ photos: GalleryImage[] }, string>({
       query: (slug) => `/shops/${slug}/photos`,
       providesTags: ['ShopPhotos'],
@@ -705,4 +719,7 @@ export const {
   useGetShopPhotosQuery,
   useAddShopPhotoMutation,
   useDeleteShopPhotoMutation,
+  useGetFavoriteSlugsQuery,
+  useAddFavoriteMutation,
+  useRemoveFavoriteMutation,
 } = api;
