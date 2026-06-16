@@ -53,13 +53,13 @@ export function AnalyticsSection() {
       <Stack gap={6}>
         {DAY_KEYS.map((key, i) => (
           <Group key={key} gap="sm" wrap="nowrap">
-            <Text size="sm" w={44}>
+            <Text size="sm" w={96} style={{ flexShrink: 0, whiteSpace: 'nowrap' }} truncate>
               {th(`days.${key}`)}
             </Text>
             <Tooltip label={data.byWeekday[i]} withinPortal>
               <Progress value={(data.byWeekday[i] / maxDay) * 100} style={{ flex: 1 }} size="lg" radius="sm" />
             </Tooltip>
-            <Text size="sm" w={28} ta="right" c="dimmed">
+            <Text size="sm" w={24} ta="right" c="dimmed" style={{ flexShrink: 0 }}>
               {data.byWeekday[i]}
             </Text>
           </Group>
