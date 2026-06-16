@@ -22,6 +22,7 @@ import {
   useMeQuery,
   useUpdateMeMutation,
   useChangePasswordMutation,
+  useResendVerificationMutation,
   useGetDistrictsQuery,
 } from '@/lib/store/api';
 import { apiErrorMessage } from '@/lib/api-error';
@@ -35,6 +36,16 @@ export default function AccountPage() {
   const { data: districtsData } = useGetDistrictsQuery();
   const [updateMe, { isLoading: saving }] = useUpdateMeMutation();
   const [changePassword, { isLoading: changing }] = useChangePasswordMutation();
+  const [resendVerification, { isLoading: resending }] = useResendVerificationMutation();
+
+  const resend = async () => {
+    try {
+      await resendVerification().unwrap();
+      notifications.show({ message: t('verifyResent'), color: 'teal' });
+    } catch (e) {
+      notifications.show({ message: apiErrorMessage(e), color: 'red' });
+    }
+  };
 
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
@@ -105,6 +116,15 @@ export default function AccountPage() {
     <Container size="sm" py="xl">
       <Stack className="stagger">
         <Title order={2}>{t('title')}</Title>
+
+        {!user.emailVerified && (
+          <Alert color="yellow">
+            {t('verifyBanner')}{' '}
+            <Anchor component="button" type="button" onClick={resend} disabled={resending}>
+              {t('verifyResend')}
+            </Anchor>
+          </Alert>
+        )}
 
         <Paper withBorder p="lg" radius="md">
           <Stack>

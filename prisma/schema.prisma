@@ -120,8 +120,30 @@ model User {
   notifications Notification[]
   favorites     Favorite[]
   refreshTokens RefreshToken[]
+  authTokens    AuthToken[]
 
   @@map("users")
+}
+
+enum AuthTokenType {
+  email_verify
+  password_reset
+}
+
+// Single-use, hashed tokens for email verification and password reset.
+model AuthToken {
+  id        String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String        @map("user_id") @db.Uuid
+  type      AuthTokenType
+  tokenHash String        @unique @map("token_hash")
+  expiresAt DateTime      @map("expires_at") @db.Timestamptz(6)
+  usedAt    DateTime?     @map("used_at") @db.Timestamptz(6)
+  createdAt DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("auth_tokens")
 }
 
 // Opaque rotating refresh tokens. We store only a SHA-256 hash of the raw token.

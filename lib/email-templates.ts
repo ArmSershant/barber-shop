@@ -28,6 +28,14 @@ const COPY: Record<
     rebookTitle: string;
     rebookBody: string;
     rebookCta: string;
+    verifySubject: string;
+    verifyTitle: string;
+    verifyBody: string;
+    verifyCta: string;
+    resetSubject: string;
+    resetTitle: string;
+    resetBody: string;
+    resetCta: string;
     withLabel: string;
     whenLabel: string;
     cta: string;
@@ -50,6 +58,14 @@ const COPY: Record<
     rebookTitle: 'Կարոտե՞լ եք թարմ սանրվածքը',
     rebookBody: 'Վերջին այցից որոշ ժամանակ է անցել։ Ամրագրե՛ք Ձեր հաջորդ այցը հիմա։',
     rebookCta: 'Ամրագրել կրկին',
+    verifySubject: 'Հաստատե՛ք Ձեր էլ. փոստը',
+    verifyTitle: 'Հաստատե՛ք Ձեր էլ. փոստը',
+    verifyBody: 'Բարի գալուստ Barber-Shop։ Սեղմե՛ք ստորև՝ Ձեր էլ. փոստը հաստատելու համար։',
+    verifyCta: 'Հաստատել էլ. փոստը',
+    resetSubject: 'Վերականգնե՛ք գաղտնաբառը',
+    resetTitle: 'Գաղտնաբառի վերականգնում',
+    resetBody: 'Սեղմե՛ք ստորև՝ նոր գաղտնաբառ սահմանելու համար։ Հղումը գործում է 1 ժամ։ Եթե Դուք չեք խնդրել, անտեսե՛ք այս նամակը։',
+    resetCta: 'Վերականգնել գաղտնաբառը',
     withLabel: 'Վարսավիր',
     whenLabel: 'Ժամ',
     cta: 'Բացել Barber-Shop',
@@ -71,6 +87,14 @@ const COPY: Record<
     rebookTitle: 'Due for a trim?',
     rebookBody: "It's been a while since your last visit. Book your next appointment now.",
     rebookCta: 'Book again',
+    verifySubject: 'Verify your email',
+    verifyTitle: 'Verify your email',
+    verifyBody: 'Welcome to Barber-Shop! Tap below to confirm your email address.',
+    verifyCta: 'Verify email',
+    resetSubject: 'Reset your password',
+    resetTitle: 'Reset your password',
+    resetBody: 'Tap below to set a new password. This link is valid for 1 hour. If you didn’t request this, ignore this email.',
+    resetCta: 'Reset password',
     withLabel: 'Barber',
     whenLabel: 'When',
     cta: 'Open Barber-Shop',
@@ -92,6 +116,14 @@ const COPY: Record<
     rebookTitle: 'Пора подстричься?',
     rebookBody: 'С вашего последнего визита прошло время. Запишитесь снова прямо сейчас.',
     rebookCta: 'Записаться снова',
+    verifySubject: 'Подтвердите вашу почту',
+    verifyTitle: 'Подтвердите вашу почту',
+    verifyBody: 'Добро пожаловать в Barber-Shop! Нажмите ниже, чтобы подтвердить адрес почты.',
+    verifyCta: 'Подтвердить почту',
+    resetSubject: 'Сброс пароля',
+    resetTitle: 'Сброс пароля',
+    resetBody: 'Нажмите ниже, чтобы задать новый пароль. Ссылка действует 1 час. Если вы не запрашивали сброс, проигнорируйте это письмо.',
+    resetCta: 'Сбросить пароль',
     withLabel: 'Барбер',
     whenLabel: 'Когда',
     cta: 'Открыть Barber-Shop',
@@ -165,5 +197,22 @@ export function rebookingEmail(locale: string | undefined, d: BookingEmailData) 
   return {
     subject: c.rebookSubject,
     html: layout(c.rebookTitle, body, { ...c, cta: c.rebookCta }, d.appUrl),
+  };
+}
+
+// `link` is the full verification / reset URL (becomes the button href).
+export function verifyEmailEmail(locale: string | undefined, link: string) {
+  const c = COPY[pickLocale(locale)];
+  return {
+    subject: c.verifySubject,
+    html: layout(c.verifyTitle, `<p style="margin:0">${c.verifyBody}</p>`, { ...c, cta: c.verifyCta }, link),
+  };
+}
+
+export function passwordResetEmail(locale: string | undefined, link: string) {
+  const c = COPY[pickLocale(locale)];
+  return {
+    subject: c.resetSubject,
+    html: layout(c.resetTitle, `<p style="margin:0">${c.resetBody}</p>`, { ...c, cta: c.resetCta }, link),
   };
 }

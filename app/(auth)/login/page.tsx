@@ -73,6 +73,9 @@ export default function LoginPage() {
             error={errors.password?.message}
             {...register('password')}
           />
+          <Anchor component={Link} href="/forgot-password" size="xs" style={{ alignSelf: 'flex-end' }}>
+            {t('forgot')}
+          </Anchor>
           {errors.root && (
             <Text c="red" size="sm">
               {errors.root.message}

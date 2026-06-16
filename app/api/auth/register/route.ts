@@ -5,8 +5,13 @@ import { errorResponse, HttpError, ok } from '@/lib/http';
 import { registerSchema } from '@/lib/validation/auth';
 import { hashPassword } from '@/lib/auth/password';
 import { establishSession } from '@/lib/auth/tokens';
+import { createAuthToken } from '@/lib/auth/verification';
+import { sendEmail } from '@/lib/email';
+import { verifyEmailEmail } from '@/lib/email-templates';
 import { requestMeta } from '@/lib/request';
 import type { Role } from '@/lib/auth/jwt';
+
+const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://barber-shop.am';
 
 export async function POST(req: NextRequest) {
   try {
@@ -31,6 +36,16 @@ export async function POST(req: NextRequest) {
         }
         throw e;
       });
+
+    // Send a verification email (best-effort; account is usable meanwhile).
+    try {
+      const locale = req.cookies.get('NEXT_LOCALE')?.value;
+      const raw = await createAuthToken(user.id, 'email_verify');
+      const { subject, html } = verifyEmailEmail(locale, `${appUrl}/verify-email?token=${raw}`);
+      await sendEmail({ to: user.email, subject, html });
+    } catch (verifyErr) {
+      console.error('Failed to send verification email:', verifyErr);
+    }
 
     const roles: Role[] = [role];
     const res = ok(

@@ -160,7 +160,10 @@
     "currentPassword": "Current password",
     "newPassword": "New password",
     "changePassword": "Change password",
-    "passwordChanged": "Password changed."
+    "passwordChanged": "Password changed.",
+    "verifyBanner": "Your email isn't verified yet.",
+    "verifyResend": "Resend verification",
+    "verifyResent": "Verification email sent."
   },
   "auth": {
     "login": {
@@ -172,7 +175,30 @@
       "submitting": "Logging in…",
       "noAccount": "No account?",
       "signup": "Sign up",
-      "invalid": "Invalid email or password."
+      "invalid": "Invalid email or password.",
+      "forgot": "Forgot password?"
+    },
+    "forgot": {
+      "title": "Reset password",
+      "subtitle": "Enter your email and we'll send you a reset link.",
+      "email": "Email",
+      "submit": "Send reset link",
+      "sent": "If an account exists for that email, a reset link is on its way.",
+      "backToLogin": "Back to log in"
+    },
+    "reset": {
+      "title": "Set a new password",
+      "newPassword": "New password",
+      "submit": "Update password",
+      "invalid": "This reset link is invalid or has expired.",
+      "done": "Password updated. Please log in.",
+      "backToLogin": "Back to log in"
+    },
+    "verify": {
+      "title": "Email verification",
+      "success": "Your email is verified. Thanks!",
+      "error": "This verification link is invalid or has expired.",
+      "home": "Go to home"
     },
     "register": {
       "title": "Create account",

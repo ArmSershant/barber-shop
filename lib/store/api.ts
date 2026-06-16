@@ -466,6 +466,19 @@ export const api = createApi({
     >({
       query: (body) => ({ url: '/me/password', method: 'POST', body }),
     }),
+    verifyEmail: builder.mutation<{ ok: boolean }, { token: string }>({
+      query: (body) => ({ url: '/auth/verify-email', method: 'POST', body }),
+      invalidatesTags: ['Me'],
+    }),
+    resendVerification: builder.mutation<{ ok: boolean }, void>({
+      query: () => ({ url: '/auth/resend-verification', method: 'POST' }),
+    }),
+    forgotPassword: builder.mutation<{ ok: boolean }, { email: string }>({
+      query: (body) => ({ url: '/auth/forgot-password', method: 'POST', body }),
+    }),
+    resetPassword: builder.mutation<{ ok: boolean }, { token: string; newPassword: string }>({
+      query: (body) => ({ url: '/auth/reset-password', method: 'POST', body }),
+    }),
     getBarberAssignments: builder.query<{ assignments: ServiceAssignment[] }, string>({
       query: (slug) => `/barbers/${slug}/services`,
       providesTags: ['Assignments'],
@@ -666,6 +679,10 @@ export const {
   useSetBarberFlagsMutation,
   useSetShopFlagsMutation,
   useChangePasswordMutation,
+  useVerifyEmailMutation,
+  useResendVerificationMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
   useGetBarberPortfolioQuery,
   useAddBarberPortfolioMutation,
   useDeleteBarberPortfolioMutation,
