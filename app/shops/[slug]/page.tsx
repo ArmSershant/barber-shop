@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import NextImage from 'next/image';
 import { notFound } from 'next/navigation';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { Anchor, Avatar, Badge, Box, Card, Container, Group, Paper, SimpleGrid, Stack, Text, Title } from '@mantine/core';
@@ -103,13 +104,20 @@ export default async function ShopProfilePage({ params }: { params: Promise<{ sl
         <Box
           h={140}
           style={{
-            backgroundImage: absoluteImage(shop.coverUrl ?? shop.photos[0]?.url)
-              ? `url(${shop.coverUrl ?? shop.photos[0].url})`
-              : 'linear-gradient(135deg, var(--mantine-color-brand-7), var(--mantine-color-brand-5))',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
+            position: 'relative',
+            background: 'linear-gradient(135deg, var(--mantine-color-brand-7), var(--mantine-color-brand-5))',
           }}
-        />
+        >
+          {absoluteImage(shop.coverUrl ?? shop.photos[0]?.url) && (
+            <NextImage
+              src={(shop.coverUrl ?? shop.photos[0].url)!}
+              alt=""
+              fill
+              sizes="(max-width: 62em) 100vw, 768px"
+              style={{ objectFit: 'cover' }}
+            />
+          )}
+        </Box>
         <Box px="lg" pb="lg">
           <Group wrap="nowrap" align="flex-end" gap="md" mt={-48} mb="md">
             <Avatar

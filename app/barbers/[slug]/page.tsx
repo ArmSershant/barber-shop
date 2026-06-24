@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import NextImage from 'next/image';
 import type { Route } from 'next';
 import { notFound } from 'next/navigation';
 import { getLocale, getTranslations } from 'next-intl/server';
@@ -138,13 +139,20 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
         <Box
           h={120}
           style={{
-            backgroundImage: absoluteImage(barber.coverUrl)
-              ? `url(${barber.coverUrl})`
-              : 'linear-gradient(135deg, var(--mantine-color-brand-7), var(--mantine-color-brand-5))',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
+            position: 'relative',
+            background: 'linear-gradient(135deg, var(--mantine-color-brand-7), var(--mantine-color-brand-5))',
           }}
-        />
+        >
+          {absoluteImage(barber.coverUrl) && (
+            <NextImage
+              src={barber.coverUrl!}
+              alt=""
+              fill
+              sizes="(max-width: 62em) 100vw, 768px"
+              style={{ objectFit: 'cover' }}
+            />
+          )}
+        </Box>
         <Box px="lg" pb="lg">
           <Group wrap="nowrap" align="flex-end" gap="md" mt={-48} mb="md">
             <Avatar
