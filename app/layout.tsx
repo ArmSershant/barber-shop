@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Oswald } from 'next/font/google';
+import { Cormorant_Garamond, Archivo } from 'next/font/google';
 import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
@@ -14,14 +14,23 @@ import './globals.scss';
 import 'flag-icons/css/flag-icons.min.css';
 import { Providers } from './providers';
 import { SiteHeader } from '@/components/SiteHeader';
+import { SiteFooter } from '@/components/SiteFooter';
+import { MobileTabBar } from '@/components/MobileTabBar';
 import { theme } from '@/lib/theme';
 
-// Condensed display face for headings (Latin + Cyrillic). Armenian glyphs are not
-// covered, so they fall back per-character to the system font via the var() stack.
-const displayFont = Oswald({
+// Heritage type system: Cormorant Garamond (display/headings) + Archivo (body/UI).
+// Armenian glyphs aren't covered, so they fall back per-character via the var() stack.
+const displayFont = Cormorant_Garamond({
   subsets: ['latin', 'cyrillic'],
-  weight: ['500', '600', '700'],
+  weight: ['600', '700'],
+  style: ['normal', 'italic'],
   variable: '--font-display',
+  display: 'swap',
+});
+const bodyFont = Archivo({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-body',
   display: 'swap',
 });
 
@@ -77,7 +86,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={displayFont.variable} {...mantineHtmlProps}>
+    <html lang={locale} className={`${displayFont.variable} ${bodyFont.variable}`} {...mantineHtmlProps}>
       <head>
         <ColorSchemeScript defaultColorScheme="auto" />
       </head>
@@ -88,7 +97,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <NextIntlClientProvider locale={locale} messages={messages}>
               <Providers>
                 <SiteHeader />
-                {children}
+                <main className="appMain">{children}</main>
+                <SiteFooter />
+                <MobileTabBar />
               </Providers>
             </NextIntlClientProvider>
           </ModalsProvider>

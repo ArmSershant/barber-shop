@@ -4,14 +4,16 @@ import NextImage from 'next/image';
 import type { Route } from 'next';
 import { notFound } from 'next/navigation';
 import { getLocale, getTranslations } from 'next-intl/server';
-import { Anchor, Avatar, Badge, Box, Button, Card, Container, Group, Paper, Rating, Stack, Text, Title } from '@mantine/core';
-import { IconCalendarPlus, IconStarFilled, IconMapPin, IconClock, IconRosetteDiscountCheckFilled } from '@tabler/icons-react';
+import { Anchor, Avatar, Box, Button, Card, Container, Group, Paper, Rating, Stack, Text, Title } from '@mantine/core';
+import { IconCalendarPlus, IconRosetteDiscountCheckFilled } from '@tabler/icons-react';
 import { getBarberProfile } from '@/lib/queries/barbers';
 import { getCurrentUser } from '@/lib/auth/session';
 import { getOpenStatus } from '@/lib/open-now';
 import { BookingWidget } from '@/components/booking/BookingWidget';
 import { PortfolioGrid } from '@/components/profile/PortfolioGrid';
 import { StickyBookBar } from '@/components/profile/StickyBookBar';
+import { AtAGlance } from '@/components/profile/AtAGlance';
+import { SectionHeader } from '@/components/profile/SectionHeader';
 import { FavoriteButton } from '@/components/FavoriteButton';
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://barber-shop.am';
@@ -138,10 +140,8 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
       <Paper withBorder radius="lg" style={{ overflow: 'hidden' }}>
         <Box
           h={120}
-          style={{
-            position: 'relative',
-            background: 'linear-gradient(135deg, var(--mantine-color-brand-7), var(--mantine-color-brand-5))',
-          }}
+          className={absoluteImage(barber.coverUrl) ? undefined : 'placeholderStripes'}
+          style={{ position: 'relative' }}
         >
           {absoluteImage(barber.coverUrl) && (
             <NextImage
@@ -154,13 +154,13 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
           )}
         </Box>
         <Box px="lg" pb="lg">
-          <Group wrap="nowrap" align="flex-end" gap="md" mt={-48} mb="md">
+          <Group wrap="nowrap" align="flex-end" gap="md" mb="md">
             <Avatar
               src={barber.photoUrl ?? undefined}
               size={96}
               radius="xl"
-              color="teal"
-              style={{ border: '4px solid var(--mantine-color-body)' }}
+              color="gold"
+              style={{ border: '4px solid var(--surf)', marginTop: -48 }}
             >
               {barber.displayName.charAt(0).toUpperCase()}
             </Avatar>
@@ -168,7 +168,7 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
               <Group gap={6} wrap="nowrap">
                 <Title order={2}>{barber.displayName}</Title>
                 {barber.isVerified && (
-                  <IconRosetteDiscountCheckFilled size={22} color="var(--mantine-color-brand-6)" />
+                  <IconRosetteDiscountCheckFilled size={22} color="var(--gold)" />
                 )}
               </Group>
               <Text c="dimmed" size="sm">
@@ -187,42 +187,31 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
             <FavoriteButton slug={barber.slug} />
           </Group>
 
-          <Group gap="xs">
-            {barber.ratingCount > 0 && (
-              <Badge
-                size="lg"
-                radius="sm"
-                color="gold"
-                variant="light"
-                leftSection={<IconStarFilled size={12} />}
-              >
-                {barber.ratingAvg.toFixed(1)} ({barber.ratingCount})
-              </Badge>
-            )}
-            {districtName && (
-              <Badge size="lg" radius="sm" variant="light" color="gray" leftSection={<IconMapPin size={12} />}>
-                {districtName}
-              </Badge>
-            )}
-            <Badge
-              size="lg"
-              radius="sm"
-              variant="light"
-              color={openStatus.open ? 'teal' : 'gray'}
-              leftSection={<IconClock size={12} />}
-            >
-              {openStatus.open
-                ? openStatus.closesAt
-                  ? tp('closesAt', { time: openStatus.closesAt })
-                  : tp('openNow')
-                : tp('closed')}
-            </Badge>
-            {priceFrom != null && (
-              <Badge size="lg" radius="sm" variant="light">
-                {tp('from', { price: priceFrom.toLocaleString() })}
-              </Badge>
-            )}
-          </Group>
+          <AtAGlance
+            cells={[
+              {
+                label: tp('rating'),
+                value: barber.ratingCount > 0 ? `★ ${barber.ratingAvg.toFixed(1)}` : '—',
+              },
+              { label: tp('districtLabel'), value: districtName ?? '—' },
+              {
+                label: tp('statusLabel'),
+                value: (
+                  <span style={{ color: openStatus.open ? '#3f7a47' : 'var(--dim)' }}>
+                    {openStatus.open
+                      ? openStatus.closesAt
+                        ? `● ${tp('closesAt', { time: openStatus.closesAt })}`
+                        : `● ${tp('openNow')}`
+                      : tp('closed')}
+                  </span>
+                ),
+              },
+              {
+                label: tp('priceLabel'),
+                value: priceFrom != null ? `${priceFrom.toLocaleString()} ֏` : '—',
+              },
+            ]}
+          />
         </Box>
       </Paper>
 
@@ -230,16 +219,12 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
 
       {barber.portfolioImages.length > 0 && (
         <>
-          <Title order={3} mt="xl" mb="sm">
-            {tp('portfolio')}
-          </Title>
+          <SectionHeader>{tp('portfolio')}</SectionHeader>
           <PortfolioGrid images={barber.portfolioImages} alt={barber.displayName} />
         </>
       )}
 
-      <Title order={3} mt="xl" mb="sm">
-        {t('servicesHeading')}
-      </Title>
+      <SectionHeader>{t('servicesHeading')}</SectionHeader>
       {barber.services.length === 0 ? (
         <Text c="dimmed" size="sm">
           {t('noServices')}
@@ -275,9 +260,7 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
         </Stack>
       )}
 
-      <Title order={3} mt="xl" mb="sm">
-        {t('hoursHeading')}
-      </Title>
+      <SectionHeader>{t('hoursHeading')}</SectionHeader>
       <Stack gap={4}>
         {DAY_KEYS.map((key, weekday) => {
           const iv = hoursByDay.get(weekday);
@@ -303,9 +286,7 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
         </Text>
       )}
 
-      <Title order={3} mt="xl" mb="sm">
-        {trv('heading')}
-      </Title>
+      <SectionHeader>{trv('heading')}</SectionHeader>
       {barber.reviews.length === 0 ? (
         <Text c="dimmed" size="sm">
           {t('noReviews')}

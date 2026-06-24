@@ -7,7 +7,6 @@ import { useTranslations } from 'next-intl';
 import {
   Alert,
   Anchor,
-  Badge,
   Button,
   Center,
   Container,
@@ -36,6 +35,7 @@ import {
 } from '@/lib/store/api';
 import { apiErrorMessage } from '@/lib/api-error';
 import { ListSkeleton } from '@/components/ListSkeleton';
+import { StatusPill } from '@/components/StatusPill';
 
 const STATUS_KEY: Record<string, string> = {
   confirmed: 'statusConfirmed',
@@ -43,13 +43,6 @@ const STATUS_KEY: Record<string, string> = {
   completed: 'statusCompleted',
   cancelled: 'statusCancelled',
   no_show: 'statusNoShow',
-};
-const STATUS_COLOR: Record<string, string> = {
-  confirmed: 'teal',
-  requested: 'yellow',
-  completed: 'blue',
-  cancelled: 'gray',
-  no_show: 'red',
 };
 
 export default function MyBookingsPage() {
@@ -161,9 +154,7 @@ export default function MyBookingsPage() {
           </Text>
         </div>
         <Stack gap="xs" align="flex-end">
-          <Badge variant="light" color={STATUS_COLOR[b.status] ?? 'gray'}>
-            {t(STATUS_KEY[b.status] ?? 'statusConfirmed')}
-          </Badge>
+          <StatusPill status={b.status} label={t(STATUS_KEY[b.status] ?? 'statusConfirmed')} />
           {cancellable && (
             <Button variant="subtle" color="red" size="xs" onClick={() => onCancel(b)}>
               {t('cancel')}

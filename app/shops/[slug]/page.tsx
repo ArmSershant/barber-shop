@@ -2,11 +2,13 @@ import type { Metadata } from 'next';
 import NextImage from 'next/image';
 import { notFound } from 'next/navigation';
 import { getLocale, getTranslations } from 'next-intl/server';
-import { Anchor, Avatar, Badge, Box, Card, Container, Group, Paper, SimpleGrid, Stack, Text, Title } from '@mantine/core';
-import { IconMapPin, IconUsers, IconBrandInstagram, IconPhone, IconRosetteDiscountCheckFilled } from '@tabler/icons-react';
+import { Anchor, Avatar, Box, Card, Container, Group, Paper, SimpleGrid, Stack, Text, Title } from '@mantine/core';
+import { IconBrandInstagram, IconPhone, IconRosetteDiscountCheckFilled } from '@tabler/icons-react';
 import { getShopProfile } from '@/lib/queries/shops';
 import { BarberCard } from '@/components/discover/BarberCard';
 import { PortfolioGrid } from '@/components/profile/PortfolioGrid';
+import { AtAGlance } from '@/components/profile/AtAGlance';
+import { SectionHeader } from '@/components/profile/SectionHeader';
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://barber-shop.am';
 
@@ -103,10 +105,8 @@ export default async function ShopProfilePage({ params }: { params: Promise<{ sl
       <Paper withBorder radius="lg" style={{ overflow: 'hidden' }}>
         <Box
           h={140}
-          style={{
-            position: 'relative',
-            background: 'linear-gradient(135deg, var(--mantine-color-brand-7), var(--mantine-color-brand-5))',
-          }}
+          className={absoluteImage(shop.coverUrl ?? shop.photos[0]?.url) ? undefined : 'placeholderStripes'}
+          style={{ position: 'relative' }}
         >
           {absoluteImage(shop.coverUrl ?? shop.photos[0]?.url) && (
             <NextImage
@@ -119,13 +119,13 @@ export default async function ShopProfilePage({ params }: { params: Promise<{ sl
           )}
         </Box>
         <Box px="lg" pb="lg">
-          <Group wrap="nowrap" align="flex-end" gap="md" mt={-48} mb="md">
+          <Group wrap="nowrap" align="flex-end" gap="md" mb="md">
             <Avatar
               src={shop.logoUrl ?? undefined}
               size={96}
               radius="md"
-              color="teal"
-              style={{ border: '4px solid var(--mantine-color-body)' }}
+              color="gold"
+              style={{ border: '4px solid var(--surf)', marginTop: -48 }}
             >
               {shop.name.charAt(0).toUpperCase()}
             </Avatar>
@@ -133,7 +133,7 @@ export default async function ShopProfilePage({ params }: { params: Promise<{ sl
               <Group gap={6} wrap="nowrap">
                 <Title order={2}>{shop.name}</Title>
                 {shop.isVerified && (
-                  <IconRosetteDiscountCheckFilled size={22} color="var(--mantine-color-brand-6)" />
+                  <IconRosetteDiscountCheckFilled size={22} color="var(--gold)" />
                 )}
               </Group>
               <Group gap="md">
@@ -156,21 +156,16 @@ export default async function ShopProfilePage({ params }: { params: Promise<{ sl
             </Stack>
           </Group>
 
-          <Group gap="xs">
-            {(districtName || shop.address) && (
-              <Badge size="lg" radius="sm" variant="light" color="gray" leftSection={<IconMapPin size={12} />}>
-                {[districtName, shop.address].filter(Boolean).join(' · ')}
-              </Badge>
-            )}
-            <Badge size="lg" radius="sm" variant="light" leftSection={<IconUsers size={12} />}>
-              {t('barberCount', { count: shop.barbers.length })}
-            </Badge>
-            {priceFrom != null && (
-              <Badge size="lg" radius="sm" variant="light">
-                {tp('from', { price: priceFrom.toLocaleString() })}
-              </Badge>
-            )}
-          </Group>
+          <AtAGlance
+            cells={[
+              { label: tp('districtLabel'), value: districtName ?? shop.address ?? '—' },
+              { label: t('barbersTitle'), value: String(shop.barbers.length) },
+              {
+                label: tp('priceLabel'),
+                value: priceFrom != null ? `${priceFrom.toLocaleString()} ֏` : '—',
+              },
+            ]}
+          />
         </Box>
       </Paper>
 
@@ -178,16 +173,12 @@ export default async function ShopProfilePage({ params }: { params: Promise<{ sl
 
       {shop.photos.length > 0 && (
         <>
-          <Title order={3} mt="xl" mb="sm">
-            {tp('photos')}
-          </Title>
+          <SectionHeader>{tp('photos')}</SectionHeader>
           <PortfolioGrid images={shop.photos} alt={shop.name} />
         </>
       )}
 
-      <Title order={3} mt="xl" mb="sm">
-        {t('barbersTitle')}
-      </Title>
+      <SectionHeader>{t('barbersTitle')}</SectionHeader>
       {shop.barbers.length === 0 ? (
         <Text c="dimmed" size="sm">
           {t('empty')}
@@ -203,9 +194,7 @@ export default async function ShopProfilePage({ params }: { params: Promise<{ sl
         </SimpleGrid>
       )}
 
-      <Title order={3} mt="xl" mb="sm">
-        {t('servicesHeading')}
-      </Title>
+      <SectionHeader>{t('servicesHeading')}</SectionHeader>
       {shop.services.length === 0 ? (
         <Text c="dimmed" size="sm">
           {t('noServices')}

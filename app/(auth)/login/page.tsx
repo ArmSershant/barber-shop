@@ -51,9 +51,9 @@ export default function LoginPage() {
 
       <Paper
         withBorder
-        shadow="sm"
+        className="offsetShadow"
         p="lg"
-        radius="md"
+        radius="xs"
         mt="lg"
         component="form"
         onSubmit={onSubmit}

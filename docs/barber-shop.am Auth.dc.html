@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; }
+  @keyframes pole { from { background-position: 0 0; } to { background-position: -10.6066px -10.6066px; } }
+</style>
+</helmet>
+
+<!-- LOGIN -->
+<div style="position:absolute; left:0; top:-58px; width:420px;" data-drags-parent="1"><div style="font-family:Archivo,sans-serif; font-size:13px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:#3a3a3a;">Log in</div></div>
+<div style="position:absolute; left:0; top:0; width:420px;">
+  <div style="--bg:#efe6d4; --surf:#fbf6ea; --surf2:#f3ead7; --ink:#352a1f; --dim:#8a7558; --gold:#a8812f; --ox:#7c3328; --line:#dac9a9; --stripe:#fff7ea; background:var(--bg); border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,.08); overflow:hidden; font-family:Archivo,sans-serif; color:var(--ink); padding:40px 36px;">
+    <div style="display:flex; flex-direction:column; align-items:center; text-align:center; margin-bottom:26px;">
+      <div style="width:16px; height:40px; border-radius:8px; border:1px solid var(--gold); background:repeating-linear-gradient(135deg,var(--ox) 0 5px,var(--stripe) 5px 10px,var(--gold) 10px 15px); background-size:21.2132px 21.2132px; animation:pole 1.4s linear infinite; margin-bottom:16px;"></div>
+      <h1 style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:34px; margin:0;">Log in</h1>
+      <div style="color:var(--dim); font-size:14px; margin-top:4px;">Welcome back.</div>
+    </div>
+    <div style="border:1px solid var(--line); background:var(--surf); box-shadow:6px 6px 0 var(--line); padding:26px;">
+      <div style="text-transform:uppercase; letter-spacing:.1em; font-size:10px; color:var(--dim); margin-bottom:5px;">Email</div>
+      <div style="border:1px solid var(--line); background:var(--bg); padding:11px 14px; font-size:14px; margin-bottom:16px; color:var(--dim);">you@example.com</div>
+      <div style="display:flex; justify-content:space-between; align-items:baseline;"><span style="text-transform:uppercase; letter-spacing:.1em; font-size:10px; color:var(--dim); margin-bottom:5px;">Password</span><span style="font-size:11px; color:var(--ox);">Forgot password?</span></div>
+      <div style="border:1px solid var(--line); background:var(--bg); padding:11px 14px; font-size:14px; margin-bottom:20px; color:var(--dim);">••••••••</div>
+      <div style="background:var(--ink); color:var(--surf); text-align:center; padding:13px; font-size:14px; letter-spacing:.04em;">Log in</div>
+    </div>
+    <div style="text-align:center; font-size:14px; color:var(--dim); margin-top:20px;">No account? <span style="color:var(--ox); font-weight:600;">Sign up</span></div>
+  </div>
+</div>
+
+<!-- REGISTER -->
+<div style="position:absolute; left:460px; top:-58px; width:440px;" data-drags-parent="1"><div style="font-family:Archivo,sans-serif; font-size:13px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:#3a3a3a;">Create account</div></div>
+<div style="position:absolute; left:460px; top:0; width:440px;">
+  <div style="--bg:#efe6d4; --surf:#fbf6ea; --surf2:#f3ead7; --ink:#352a1f; --dim:#8a7558; --gold:#a8812f; --ox:#7c3328; --line:#dac9a9; --stripe:#fff7ea; background:var(--bg); border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,.08); overflow:hidden; font-family:Archivo,sans-serif; color:var(--ink); padding:40px 36px;">
+    <div style="display:flex; flex-direction:column; align-items:center; text-align:center; margin-bottom:24px;">
+      <div style="width:16px; height:40px; border-radius:8px; border:1px solid var(--gold); background:repeating-linear-gradient(135deg,var(--ox) 0 5px,var(--stripe) 5px 10px,var(--gold) 10px 15px); background-size:21.2132px 21.2132px; animation:pole 1.4s linear infinite; margin-bottom:16px;"></div>
+      <h1 style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:34px; margin:0;">Create account</h1>
+      <div style="color:var(--dim); font-size:14px; margin-top:4px;">Book barbers in Yerevan.</div>
+    </div>
+    <div style="border:1px solid var(--line); background:var(--surf); box-shadow:6px 6px 0 var(--line); padding:26px;">
+      <div style="text-transform:uppercase; letter-spacing:.1em; font-size:10px; color:var(--dim); margin-bottom:5px;">Full name</div>
+      <div style="border:1px solid var(--line); background:var(--bg); padding:11px 14px; font-size:14px; margin-bottom:14px; color:var(--dim);">John Davtyan</div>
+      <div style="text-transform:uppercase; letter-spacing:.1em; font-size:10px; color:var(--dim); margin-bottom:5px;">Email</div>
+      <div style="border:1px solid var(--line); background:var(--bg); padding:11px 14px; font-size:14px; margin-bottom:14px; color:var(--dim);">you@example.com</div>
+      <div style="text-transform:uppercase; letter-spacing:.1em; font-size:10px; color:var(--dim); margin-bottom:5px;">Password</div>
+      <div style="border:1px solid var(--line); background:var(--bg); padding:11px 14px; font-size:14px; margin-bottom:16px; color:var(--dim);">••••••••</div>
+      <div style="text-transform:uppercase; letter-spacing:.1em; font-size:10px; color:var(--dim); margin-bottom:8px;">I am a</div>
+      <div style="display:flex; gap:8px; margin-bottom:20px;">
+        <span style="flex:1; text-align:center; border:1px solid var(--ink); background:var(--ink); color:var(--surf); padding:9px; font-size:12px;">Customer</span>
+        <span style="flex:1; text-align:center; border:1px solid var(--line); padding:9px; font-size:12px; color:var(--dim);">Barber</span>
+        <span style="flex:1; text-align:center; border:1px solid var(--line); padding:9px; font-size:12px; color:var(--dim);">Shop owner</span>
+      </div>
+      <div style="background:var(--ink); color:var(--surf); text-align:center; padding:13px; font-size:14px; letter-spacing:.04em;">Create account</div>
+    </div>
+    <div style="text-align:center; font-size:14px; color:var(--dim); margin-top:20px;">Already have an account? <span style="color:var(--ox); font-weight:600;">Log in</span></div>
+  </div>
+</div>
+
+<!-- FORGOT -->
+<div style="position:absolute; left:940px; top:-58px; width:420px;" data-drags-parent="1"><div style="font-family:Archivo,sans-serif; font-size:13px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:#3a3a3a;">Forgot password</div></div>
+<div style="position:absolute; left:940px; top:0; width:420px;">
+  <div style="--bg:#efe6d4; --surf:#fbf6ea; --surf2:#f3ead7; --ink:#352a1f; --dim:#8a7558; --gold:#a8812f; --ox:#7c3328; --line:#dac9a9; --stripe:#fff7ea; background:var(--bg); border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,.08); overflow:hidden; font-family:Archivo,sans-serif; color:var(--ink); padding:40px 36px;">
+    <div style="display:flex; flex-direction:column; align-items:center; text-align:center; margin-bottom:24px;">
+      <div style="width:16px; height:40px; border-radius:8px; border:1px solid var(--gold); background:repeating-linear-gradient(135deg,var(--ox) 0 5px,var(--stripe) 5px 10px,var(--gold) 10px 15px); background-size:21.2132px 21.2132px; animation:pole 1.4s linear infinite; margin-bottom:16px;"></div>
+      <h1 style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:34px; margin:0;">Reset password</h1>
+      <div style="color:var(--dim); font-size:14px; margin-top:6px; line-height:1.5;">Enter your email and we'll send you a reset link.</div>
+    </div>
+    <div style="border:1px solid var(--line); background:var(--surf); box-shadow:6px 6px 0 var(--line); padding:26px;">
+      <div style="text-transform:uppercase; letter-spacing:.1em; font-size:10px; color:var(--dim); margin-bottom:5px;">Email</div>
+      <div style="border:1px solid var(--line); background:var(--bg); padding:11px 14px; font-size:14px; margin-bottom:20px; color:var(--dim);">you@example.com</div>
+      <div style="background:var(--ink); color:var(--surf); text-align:center; padding:13px; font-size:14px; letter-spacing:.04em;">Send reset link</div>
+      <div style="margin-top:16px; padding:12px; background:var(--surf2); border:1px solid var(--line); font-family:'Cormorant Garamond',serif; font-style:italic; font-size:14px; text-align:center; color:var(--dim);">If an account exists for that email, a reset link is on its way.</div>
+    </div>
+    <div style="text-align:center; font-size:14px; color:var(--ox); margin-top:20px;">← Back to log in</div>
+  </div>
+</div>
+
+<!-- RESET -->
+<div style="position:absolute; left:1380px; top:-58px; width:420px;" data-drags-parent="1"><div style="font-family:Archivo,sans-serif; font-size:13px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:#3a3a3a;">Set new password</div></div>
+<div style="position:absolute; left:1380px; top:0; width:420px;">
+  <div style="--bg:#efe6d4; --surf:#fbf6ea; --surf2:#f3ead7; --ink:#352a1f; --dim:#8a7558; --gold:#a8812f; --ox:#7c3328; --line:#dac9a9; --stripe:#fff7ea; background:var(--bg); border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,.08); overflow:hidden; font-family:Archivo,sans-serif; color:var(--ink); padding:40px 36px;">
+    <div style="display:flex; flex-direction:column; align-items:center; text-align:center; margin-bottom:24px;">
+      <div style="width:16px; height:40px; border-radius:8px; border:1px solid var(--gold); background:repeating-linear-gradient(135deg,var(--ox) 0 5px,var(--stripe) 5px 10px,var(--gold) 10px 15px); background-size:21.2132px 21.2132px; animation:pole 1.4s linear infinite; margin-bottom:16px;"></div>
+      <h1 style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:34px; margin:0;">Set a new password</h1>
+    </div>
+    <div style="border:1px solid var(--line); background:var(--surf); box-shadow:6px 6px 0 var(--line); padding:26px;">
+      <div style="text-transform:uppercase; letter-spacing:.1em; font-size:10px; color:var(--dim); margin-bottom:5px;">New password</div>
+      <div style="border:1px solid var(--line); background:var(--bg); padding:11px 14px; font-size:14px; margin-bottom:20px; color:var(--dim);">••••••••</div>
+      <div style="background:var(--ink); color:var(--surf); text-align:center; padding:13px; font-size:14px; letter-spacing:.04em;">Update password</div>
+    </div>
+    <div style="text-align:center; font-size:14px; color:var(--ox); margin-top:20px;">← Back to log in</div>
+  </div>
+</div>
+
+<!-- VERIFY -->
+<div style="position:absolute; left:1820px; top:-58px; width:420px;" data-drags-parent="1"><div style="font-family:Archivo,sans-serif; font-size:13px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:#3a3a3a;">Email verification</div></div>
+<div style="position:absolute; left:1820px; top:0; width:420px;">
+  <div style="--bg:#efe6d4; --surf:#fbf6ea; --surf2:#f3ead7; --ink:#352a1f; --dim:#8a7558; --gold:#a8812f; --ox:#7c3328; --line:#dac9a9; --stripe:#fff7ea; background:var(--bg); border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,.08); overflow:hidden; font-family:Archivo,sans-serif; color:var(--ink); padding:40px 36px;">
+    <div style="display:flex; flex-direction:column; align-items:center; text-align:center; margin-bottom:24px;">
+      <div style="width:16px; height:40px; border-radius:8px; border:1px solid var(--gold); background:repeating-linear-gradient(135deg,var(--ox) 0 5px,var(--stripe) 5px 10px,var(--gold) 10px 15px); background-size:21.2132px 21.2132px; animation:pole 1.4s linear infinite; margin-bottom:16px;"></div>
+      <h1 style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:34px; margin:0;">Email verification</h1>
+    </div>
+    <div style="border:1px solid var(--line); background:var(--surf); box-shadow:6px 6px 0 var(--line); padding:36px 26px; text-align:center;">
+      <div style="width:56px; height:56px; border-radius:50%; border:2px solid #3f7a47; color:#3f7a47; display:flex; align-items:center; justify-content:center; font-size:28px; margin:0 auto 16px;">✓</div>
+      <div style="font-family:'Cormorant Garamond',serif; font-size:21px; margin-bottom:18px;">Your email is verified. Thanks!</div>
+      <div style="background:var(--ink); color:var(--surf); text-align:center; padding:12px; font-size:14px;">Go to home</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

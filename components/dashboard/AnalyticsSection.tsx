@@ -8,11 +8,11 @@ const DAY_KEYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <Paper withBorder p="md" radius="md">
-      <Text fz={26} fw={700}>
+    <Paper withBorder p="md" radius="xs">
+      <Text fz={30} fw={700} ff="var(--font-display), Georgia, serif">
         {value}
       </Text>
-      <Text c="dimmed" size="sm">
+      <Text c="dimmed" size="xs" tt="uppercase" style={{ letterSpacing: '0.06em' }}>
         {label}
       </Text>
     </Paper>

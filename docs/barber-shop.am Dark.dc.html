@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; }
+  @keyframes pole { from { background-position: 0 0; } to { background-position: -10.6066px -10.6066px; } }
+  @keyframes shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+</style>
+</helmet>
+
+<!-- ===== DARK · BARBERS LISTING ===== -->
+<div style="position:absolute; left:0; top:-58px; width:1100px;" data-drags-parent="1"><div style="font-family:Archivo,sans-serif; font-size:13px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:#7a7a7a;">Dark · Barbers listing</div></div>
+<div style="position:absolute; left:0; top:0; width:1100px;">
+  <div style="--bg:#181410; --surf:#221c15; --surf2:#2a2218; --ink:#efe4d0; --dim:#a3937a; --gold:#cda24e; --gold2:#e0bd72; --ox:#c0533f; --line:#39301f; --stripe:#efe4d0; background:var(--bg); color:var(--ink); border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,.08); overflow:hidden; font-family:Archivo,sans-serif;">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:18px 40px; border-bottom:1px solid var(--line); background:var(--surf);">
+      <div style="width:13px; height:32px; border-radius:7px; border:1px solid var(--gold); background:repeating-linear-gradient(135deg,var(--ox) 0 5px,var(--stripe) 5px 10px,var(--gold) 10px 15px); background-size:21.2132px 21.2132px; animation:pole 1.4s linear infinite; box-shadow:0 0 10px rgba(205,162,78,.4);"></div>
+      <div style="display:flex; align-items:center; gap:24px; font-size:14px; font-weight:500;"><span>Barbers</span><span style="color:var(--dim);">Shops</span><span style="color:var(--dim);">For barbers</span><span>Log in</span><span style="background:var(--gold); color:var(--bg); padding:9px 18px; font-size:13px; font-weight:600;">Sign up</span></div>
+    </div>
+    <div style="padding:32px 40px 0;">
+      <div style="display:flex; align-items:baseline; gap:12px;"><h1 style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:42px; margin:0;">Barbers</h1><span style="color:var(--dim); font-size:15px;">48 in Yerevan</span></div>
+      <div style="display:flex; gap:10px; margin-top:20px; align-items:center;">
+        <div style="flex:1; display:flex; align-items:center; gap:10px; border:1px solid var(--gold); background:var(--surf); padding:11px 16px;"><span style="color:var(--dim);">⌕</span><span style="color:var(--dim); font-size:14px;">Search barbers…</span></div>
+        <div style="border:1px solid var(--line); background:var(--surf); padding:11px 16px; font-size:14px;">District ▾</div>
+        <div style="border:1px solid var(--line); background:var(--surf); padding:11px 16px; font-size:14px;"><span style="color:var(--gold);">★</span> 4+</div>
+        <div style="border:1px solid var(--line); background:var(--surf); padding:11px 16px; font-size:14px;">Top rated ▾</div>
+      </div>
+    </div>
+    <div style="padding:24px 40px 40px;">
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:22px;">
+        <div style="border:1px solid var(--gold); background:var(--surf);"><div style="height:130px; background-color:var(--surf2); background-image:repeating-linear-gradient(135deg,rgba(205,162,78,.08) 0 10px,transparent 10px 20px); position:relative;"><span style="position:absolute; top:10px; left:10px; background:var(--gold); color:var(--bg); text-transform:uppercase; letter-spacing:.1em; font-size:9px; padding:3px 8px; font-weight:600;">★ Featured</span></div><div style="padding:16px; margin-top:-28px;"><div style="width:54px; height:54px; border-radius:50%; border:3px solid var(--surf); background-color:var(--surf2); background-image:repeating-linear-gradient(135deg,rgba(205,162,78,.12) 0 6px,transparent 6px 12px);"></div><div style="display:flex; align-items:center; gap:5px; margin-top:10px;"><span style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:20px;">Narek Avagyan</span><span style="color:var(--gold);">✦</span></div><div style="color:var(--dim); font-size:12px;">Old Town Cuts · Kentron</div><div style="display:flex; justify-content:space-between; margin-top:12px; padding-top:11px; border-top:1px solid var(--line); font-size:13px;"><span><span style="color:var(--gold);">★</span> 4.9 <span style="color:var(--dim);">(128)</span></span><span style="font-weight:600;">from 6,000 ֏</span></div></div></div>
+        <div style="border:1px solid var(--line); background:var(--surf);"><div style="height:130px; background-color:var(--surf2); background-image:repeating-linear-gradient(135deg,rgba(205,162,78,.08) 0 10px,transparent 10px 20px);"></div><div style="padding:16px; margin-top:-28px;"><div style="width:54px; height:54px; border-radius:50%; border:3px solid var(--surf); background-color:var(--surf2); background-image:repeating-linear-gradient(135deg,rgba(205,162,78,.12) 0 6px,transparent 6px 12px);"></div><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:20px; margin-top:10px;">Davit Sargsyan</div><div style="color:var(--dim); font-size:12px;">Independent · Arabkir</div><div style="display:flex; justify-content:space-between; margin-top:12px; padding-top:11px; border-top:1px solid var(--line); font-size:13px;"><span><span style="color:var(--gold);">★</span> 4.7 <span style="color:var(--dim);">(64)</span></span><span style="font-weight:600;">from 5,000 ֏</span></div></div></div>
+        <div style="border:1px solid var(--line); background:var(--surf);"><div style="height:130px; background-color:var(--surf2); background-image:repeating-linear-gradient(135deg,rgba(205,162,78,.08) 0 10px,transparent 10px 20px);"></div><div style="padding:16px; margin-top:-28px;"><div style="width:54px; height:54px; border-radius:50%; border:3px solid var(--surf); background-color:var(--surf2); background-image:repeating-linear-gradient(135deg,rgba(205,162,78,.12) 0 6px,transparent 6px 12px);"></div><div style="display:flex; align-items:center; gap:5px; margin-top:10px;"><span style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:20px;">Tigran H.</span><span style="color:var(--gold);">✦</span></div><div style="color:var(--dim); font-size:12px;">The Gentlemen's Lounge</div><div style="display:flex; justify-content:space-between; margin-top:12px; padding-top:11px; border-top:1px solid var(--line); font-size:13px;"><span><span style="color:var(--gold);">★</span> 5.0 <span style="color:var(--dim);">(212)</span></span><span style="font-weight:600;">from 7,000 ֏</span></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DARK · SHOP PROFILE ===== -->
+<div style="position:absolute; left:1180px; top:-58px; width:1100px;" data-drags-parent="1"><div style="font-family:Archivo,sans-serif; font-size:13px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:#7a7a7a;">Dark · Shop profile</div></div>
+<div style="position:absolute; left:1180px; top:0; width:1100px;">
+  <div style="--bg:#181410; --surf:#221c15; --surf2:#2a2218; --ink:#efe4d0; --dim:#a3937a; --gold:#cda24e; --gold2:#e0bd72; --ox:#c0533f; --line:#39301f; --stripe:#efe4d0; background:var(--bg); color:var(--ink); border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,.08); overflow:hidden; font-family:Archivo,sans-serif;">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:18px 40px; border-bottom:1px solid var(--line); background:var(--surf);">
+      <div style="width:13px; height:32px; border-radius:7px; border:1px solid var(--gold); background:repeating-linear-gradient(135deg,var(--ox) 0 5px,var(--stripe) 5px 10px,var(--gold) 10px 15px); background-size:21.2132px 21.2132px; animation:pole 1.4s linear infinite; box-shadow:0 0 10px rgba(205,162,78,.4);"></div>
+      <div style="display:flex; align-items:center; gap:24px; font-size:14px; font-weight:500;"><span style="color:var(--dim);">Barbers</span><span>Shops</span><span>Log in</span><span style="background:var(--gold); color:var(--bg); padding:9px 18px; font-size:13px; font-weight:600;">Sign up</span></div>
+    </div>
+    <div style="height:240px; background-color:var(--surf2); background-image:repeating-linear-gradient(135deg,rgba(205,162,78,.08) 0 12px,transparent 12px 24px); display:flex; align-items:center; justify-content:center; color:var(--dim); font-family:ui-monospace,monospace; font-size:11px; letter-spacing:.14em; position:relative;">SHOP GALLERY<div style="position:absolute; inset:0; background:linear-gradient(to top,rgba(24,20,16,.7),transparent 55%);"></div></div>
+    <div style="padding:0 48px; margin-top:-50px; position:relative;">
+      <div style="display:flex; align-items:flex-end; gap:22px;">
+        <div style="width:104px; height:104px; border-radius:8px; border:4px solid var(--bg); background-color:var(--surf2); background-image:repeating-linear-gradient(135deg,rgba(205,162,78,.14) 0 7px,transparent 7px 14px);"></div>
+        <div style="flex:1; padding-bottom:8px;"><div style="display:flex; align-items:center; gap:10px;"><h1 style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:44px; margin:0;">Old Town Cuts</h1><span style="text-transform:uppercase; letter-spacing:.12em; font-size:10px; color:var(--gold2); border:1px solid var(--gold); padding:3px 9px;">Verified</span></div><div style="color:var(--dim); font-size:15px; margin-top:4px;">Pushkin St 24, Kentron · @oldtowncuts</div></div>
+      </div>
+      <div style="display:flex; margin-top:22px; border:1px solid var(--line); background:var(--surf);">
+        <div style="flex:1; padding:15px 20px; border-right:1px solid var(--line);"><div style="text-transform:uppercase; letter-spacing:.14em; font-size:10px; color:var(--dim);">Rating</div><div style="font-family:'Cormorant Garamond',serif; font-size:21px; margin-top:2px;"><span style="color:var(--gold);">★</span> 4.9</div></div>
+        <div style="flex:1; padding:15px 20px; border-right:1px solid var(--line);"><div style="text-transform:uppercase; letter-spacing:.14em; font-size:10px; color:var(--dim);">Barbers</div><div style="font-family:'Cormorant Garamond',serif; font-size:21px; margin-top:2px;">6</div></div>
+        <div style="flex:1; padding:15px 20px; border-right:1px solid var(--line);"><div style="text-transform:uppercase; letter-spacing:.14em; font-size:10px; color:var(--dim);">Status</div><div style="font-family:'Cormorant Garamond',serif; font-size:21px; margin-top:2px; color:#6fbf78;">● Open</div></div>
+        <div style="flex:1; padding:15px 20px;"><div style="text-transform:uppercase; letter-spacing:.14em; font-size:10px; color:var(--dim);">From</div><div style="font-family:'Cormorant Garamond',serif; font-size:21px; margin-top:2px;">5,000 ֏</div></div>
+      </div>
+    </div>
+    <div style="padding:32px 48px 44px;">
+      <p style="font-family:'Cormorant Garamond',serif; font-size:20px; line-height:1.6; margin:0 0 28px;">A heritage barbershop in the heart of Kentron since 2019. Six master barbers, hot-towel shaves, and a proper espresso while you wait.</p>
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;"><span style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:24px;">Our barbers</span><span style="flex:1; height:1px; background:var(--line);"></span></div>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px;">
+        <div style="border:1px solid var(--line); background:var(--surf); padding:14px; display:flex; align-items:center; gap:12px;"><div style="width:48px; height:48px; border-radius:50%; background-color:var(--surf2); background-image:repeating-linear-gradient(135deg,rgba(205,162,78,.12) 0 6px,transparent 6px 12px);"></div><div style="flex:1;"><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:17px;">Narek A.</div><div style="color:var(--dim); font-size:12px;"><span style="color:var(--gold);">★</span> 4.9</div></div><span style="border:1px solid var(--gold); color:var(--gold2); padding:6px 12px; font-size:11px;">Book</span></div>
+        <div style="border:1px solid var(--line); background:var(--surf); padding:14px; display:flex; align-items:center; gap:12px;"><div style="width:48px; height:48px; border-radius:50%; background-color:var(--surf2); background-image:repeating-linear-gradient(135deg,rgba(205,162,78,.12) 0 6px,transparent 6px 12px);"></div><div style="flex:1;"><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:17px;">Gor M.</div><div style="color:var(--dim); font-size:12px;"><span style="color:var(--gold);">★</span> 4.9</div></div><span style="border:1px solid var(--gold); color:var(--gold2); padding:6px 12px; font-size:11px;">Book</span></div>
+        <div style="border:1px solid var(--line); background:var(--surf); padding:14px; display:flex; align-items:center; gap:12px;"><div style="width:48px; height:48px; border-radius:50%; background-color:var(--surf2); background-image:repeating-linear-gradient(135deg,rgba(205,162,78,.12) 0 6px,transparent 6px 12px);"></div><div style="flex:1;"><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:17px;">Sergey V.</div><div style="color:var(--dim); font-size:12px;"><span style="color:var(--gold);">★</span> 4.7</div></div><span style="border:1px solid var(--gold); color:var(--gold2); padding:6px 12px; font-size:11px;">Book</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DARK · MY BOOKINGS / ACCOUNT / FAVORITES ===== -->
+<div style="position:absolute; left:0; top:1080px; width:760px;" data-drags-parent="1"><div style="font-family:Archivo,sans-serif; font-size:13px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:#7a7a7a;">Dark · My bookings</div></div>
+<div style="position:absolute; left:0; top:1138px; width:760px;">
+  <div style="--bg:#181410; --surf:#221c15; --surf2:#2a2218; --ink:#efe4d0; --dim:#a3937a; --gold:#cda24e; --gold2:#e0bd72; --ox:#c0533f; --line:#39301f; --stripe:#efe4d0; background:var(--bg); color:var(--ink); border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,.08); overflow:hidden; font-family:Archivo,sans-serif;">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 36px; border-bottom:1px solid var(--line); background:var(--surf);">
+      <div style="width:13px; height:32px; border-radius:7px; border:1px solid var(--gold); background:repeating-linear-gradient(135deg,var(--ox) 0 5px,var(--stripe) 5px 10px,var(--gold) 10px 15px); background-size:21.2132px 21.2132px; animation:pole 1.4s linear infinite; box-shadow:0 0 10px rgba(205,162,78,.4);"></div>
+      <div style="display:flex; align-items:center; gap:8px;"><div style="width:28px; height:28px; border-radius:50%; background:var(--gold); color:var(--bg); display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond',serif; font-weight:700; font-size:14px;">J</div><span style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:16px;">Hi, John</span></div>
+    </div>
+    <div style="padding:30px 36px;">
+      <h1 style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:38px; margin:0 0 16px;">My bookings</h1>
+      <div style="display:flex; gap:24px; border-bottom:1px solid var(--line); margin-bottom:20px;"><span style="padding-bottom:12px; border-bottom:2px solid var(--gold); color:var(--gold2); font-weight:600; font-size:15px;">Upcoming</span><span style="padding-bottom:12px; color:var(--dim); font-size:15px;">Past</span></div>
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        <div style="border:1px solid var(--line); background:var(--surf); padding:18px 20px; display:flex; align-items:center; gap:16px;"><div style="text-align:center; border-right:1px solid var(--line); padding-right:16px;"><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:26px; line-height:1;">25</div><div style="text-transform:uppercase; font-size:10px; letter-spacing:.1em; color:var(--dim);">Jun</div></div><div style="flex:1;"><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:19px;">Narek Avagyan</div><div style="color:var(--dim); font-size:13px;">Men's haircut · 11:30 · 6,000 ֏</div></div><span style="text-transform:uppercase; letter-spacing:.1em; font-size:10px; color:#6fbf78; border:1px solid #6fbf78; padding:4px 10px;">Confirmed</span><span style="border:1px solid var(--ox); color:var(--ox); padding:8px 14px; font-size:12px;">Cancel</span></div>
+        <div style="border:1px solid var(--line); background:var(--surf); padding:18px 20px; display:flex; align-items:center; gap:16px;"><div style="text-align:center; border-right:1px solid var(--line); padding-right:16px;"><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:26px; line-height:1;">02</div><div style="text-transform:uppercase; font-size:10px; letter-spacing:.1em; color:var(--dim);">Jul</div></div><div style="flex:1;"><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:19px;">Gor Manukyan</div><div style="color:var(--dim); font-size:13px;">Haircut + beard · 16:00 · 9,000 ֏</div></div><span style="text-transform:uppercase; letter-spacing:.1em; font-size:10px; color:var(--gold2); border:1px solid var(--gold); padding:4px 10px;">Pending</span><span style="border:1px solid var(--ox); color:var(--ox); padding:8px 14px; font-size:12px;">Cancel</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="position:absolute; left:800px; top:1080px; width:760px;" data-drags-parent="1"><div style="font-family:Archivo,sans-serif; font-size:13px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:#7a7a7a;">Dark · Account</div></div>
+<div style="position:absolute; left:800px; top:1138px; width:760px;">
+  <div style="--bg:#181410; --surf:#221c15; --surf2:#2a2218; --ink:#efe4d0; --dim:#a3937a; --gold:#cda24e; --gold2:#e0bd72; --ox:#c0533f; --line:#39301f; --stripe:#efe4d0; background:var(--bg); color:var(--ink); border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,.08); overflow:hidden; font-family:Archivo,sans-serif;">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 36px; border-bottom:1px solid var(--line); background:var(--surf);">
+      <div style="width:13px; height:32px; border-radius:7px; border:1px solid var(--gold); background:repeating-linear-gradient(135deg,var(--ox) 0 5px,var(--stripe) 5px 10px,var(--gold) 10px 15px); background-size:21.2132px 21.2132px; animation:pole 1.4s linear infinite; box-shadow:0 0 10px rgba(205,162,78,.4);"></div>
+      <div style="display:flex; align-items:center; gap:8px;"><div style="width:28px; height:28px; border-radius:50%; background:var(--gold); color:var(--bg); display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond',serif; font-weight:700; font-size:14px;">J</div><span style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:16px;">Hi, John</span></div>
+    </div>
+    <div style="padding:30px 36px;">
+      <h1 style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:38px; margin:0 0 22px;">Account</h1>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:22px;">
+        <div style="border:1px solid var(--line); background:var(--surf); padding:22px;">
+          <div style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:21px; margin-bottom:16px;">Profile</div>
+          <div style="display:flex; align-items:center; gap:14px; margin-bottom:16px;"><div style="width:56px; height:56px; border-radius:50%; background:var(--gold); color:var(--bg); display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond',serif; font-weight:700; font-size:24px;">J</div><span style="border:1px solid var(--gold); color:var(--gold2); padding:8px 14px; font-size:12px;">Change avatar</span></div>
+          <div style="text-transform:uppercase; letter-spacing:.1em; font-size:10px; color:var(--dim); margin-bottom:5px;">Full name</div>
+          <div style="border:1px solid var(--line); background:var(--bg); padding:11px 14px; font-size:14px; margin-bottom:12px;">John Davtyan</div>
+          <div style="text-transform:uppercase; letter-spacing:.1em; font-size:10px; color:var(--dim); margin-bottom:5px;">Phone</div>
+          <div style="border:1px solid var(--line); background:var(--bg); padding:11px 14px; font-size:14px; margin-bottom:16px;">+374 91 234567</div>
+          <span style="display:inline-block; background:var(--gold); color:var(--bg); padding:11px 22px; font-size:13px; font-weight:600;">Save</span>
+        </div>
+        <div style="border:1px solid var(--line); background:var(--surf); padding:22px; align-self:start;">
+          <div style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:21px; margin-bottom:16px;">Change password</div>
+          <div style="text-transform:uppercase; letter-spacing:.1em; font-size:10px; color:var(--dim); margin-bottom:5px;">Current password</div>
+          <div style="border:1px solid var(--line); background:var(--bg); padding:11px 14px; font-size:14px; margin-bottom:12px; color:var(--dim);">••••••••</div>
+          <div style="text-transform:uppercase; letter-spacing:.1em; font-size:10px; color:var(--dim); margin-bottom:5px;">New password</div>
+          <div style="border:1px solid var(--line); background:var(--bg); padding:11px 14px; font-size:14px; margin-bottom:16px; color:var(--dim);">••••••••</div>
+          <span style="display:inline-block; background:var(--gold); color:var(--bg); padding:11px 22px; font-size:13px; font-weight:600;">Change password</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="position:absolute; left:1600px; top:1080px; width:760px;" data-drags-parent="1"><div style="font-family:Archivo,sans-serif; font-size:13px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:#7a7a7a;">Dark · Favorites</div></div>
+<div style="position:absolute; left:1600px; top:1138px; width:760px;">
+  <div style="--bg:#181410; --surf:#221c15; --surf2:#2a2218; --ink:#efe4d0; --dim:#a3937a; --gold:#cda24e; --gold2:#e0bd72; --ox:#c0533f; --line:#39301f; --stripe:#efe4d0; background:var(--bg); color:var(--ink); border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,.08); overflow:hidden; font-family:Archivo,sans-serif;">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 36px; border-bottom:1px solid var(--line); background:var(--surf);">
+      <div style="width:13px; height:32px; border-radius:7px; border:1px solid var(--gold); background:repeating-linear-gradient(135deg,var(--ox) 0 5px,var(--stripe) 5px 10px,var(--gold) 10px 15px); background-size:21.2132px 21.2132px; animation:pole 1.4s linear infinite; box-shadow:0 0 10px rgba(205,162,78,.4);"></div>
+      <div style="display:flex; align-items:center; gap:16px; font-size:14px;"><span style="color:var(--dim);">Barbers</span><span style="border-bottom:2px solid var(--gold); padding-bottom:2px;">Saved</span><div style="width:28px; height:28px; border-radius:50%; background:var(--gold); color:var(--bg); display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond',serif; font-weight:700; font-size:14px;">J</div></div>
+    </div>
+    <div style="padding:30px 36px;">
+      <h1 style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:38px; margin:0 0 20px;">Saved barbers</h1>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:18px;">
+        <div style="border:1px solid var(--line); background:var(--surf);"><div style="height:120px; background-color:var(--surf2); background-image:repeating-linear-gradient(135deg,rgba(205,162,78,.08) 0 10px,transparent 10px 20px); position:relative;"><span style="position:absolute; top:10px; right:10px; width:30px; height:30px; border-radius:50%; background:var(--bg); border:1px solid var(--ox); color:var(--ox); display:flex; align-items:center; justify-content:center; font-size:14px;">♥</span></div><div style="padding:14px; margin-top:-26px;"><div style="width:48px; height:48px; border-radius:50%; border:3px solid var(--surf); background-color:var(--surf2); background-image:repeating-linear-gradient(135deg,rgba(205,162,78,.12) 0 6px,transparent 6px 12px);"></div><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:17px; margin-top:8px;">Narek A. <span style="color:var(--gold); font-size:11px;">✦</span></div><div style="color:var(--dim); font-size:11px;">Kentron</div><div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;"><span style="font-size:12px;"><span style="color:var(--gold);">★</span> 4.9</span><span style="background:var(--gold); color:var(--bg); padding:6px 12px; font-size:11px; font-weight:600;">Book</span></div></div></div>
+        <div style="border:1px solid var(--line); background:var(--surf);"><div style="height:120px; background-color:var(--surf2); background-image:repeating-linear-gradient(135deg,rgba(205,162,78,.08) 0 10px,transparent 10px 20px); position:relative;"><span style="position:absolute; top:10px; right:10px; width:30px; height:30px; border-radius:50%; background:var(--bg); border:1px solid var(--ox); color:var(--ox); display:flex; align-items:center; justify-content:center; font-size:14px;">♥</span></div><div style="padding:14px; margin-top:-26px;"><div style="width:48px; height:48px; border-radius:50%; border:3px solid var(--surf); background-color:var(--surf2); background-image:repeating-linear-gradient(135deg,rgba(205,162,78,.12) 0 6px,transparent 6px 12px);"></div><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:17px; margin-top:8px;">Aram K.</div><div style="color:var(--dim); font-size:11px;">Kentron</div><div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;"><span style="font-size:12px;"><span style="color:var(--gold);">★</span> 4.8</span><span style="background:var(--gold); color:var(--bg); padding:6px 12px; font-size:11px; font-weight:600;">Book</span></div></div></div>
+        <div style="border:1px solid var(--line); background:var(--surf);"><div style="height:120px; background-color:var(--surf2); background-image:repeating-linear-gradient(135deg,rgba(205,162,78,.08) 0 10px,transparent 10px 20px); position:relative;"><span style="position:absolute; top:10px; right:10px; width:30px; height:30px; border-radius:50%; background:var(--bg); border:1px solid var(--ox); color:var(--ox); display:flex; align-items:center; justify-content:center; font-size:14px;">♥</span></div><div style="padding:14px; margin-top:-26px;"><div style="width:48px; height:48px; border-radius:50%; border:3px solid var(--surf); background-color:var(--surf2); background-image:repeating-linear-gradient(135deg,rgba(205,162,78,.12) 0 6px,transparent 6px 12px);"></div><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:17px; margin-top:8px;">Tigran H.</div><div style="color:var(--dim); font-size:11px;">Arabkir</div><div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;"><span style="font-size:12px;"><span style="color:var(--gold);">★</span> 5.0</span><span style="background:var(--gold); color:var(--bg); padding:6px 12px; font-size:11px; font-weight:600;">Book</span></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DARK · PROVIDER DASHBOARD + ADMIN ===== -->
+<div style="position:absolute; left:0; top:1700px; width:1100px;" data-drags-parent="1"><div style="font-family:Archivo,sans-serif; font-size:13px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:#7a7a7a;">Dark · Provider dashboard</div></div>
+<div style="position:absolute; left:0; top:1758px; width:1100px;">
+  <div style="--bg:#181410; --surf:#221c15; --surf2:#2a2218; --ink:#efe4d0; --dim:#a3937a; --gold:#cda24e; --gold2:#e0bd72; --ox:#c0533f; --line:#39301f; --stripe:#efe4d0; background:var(--bg); color:var(--ink); border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,.08); overflow:hidden; font-family:Archivo,sans-serif;">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 40px; border-bottom:1px solid var(--line); background:var(--surf);">
+      <div style="width:13px; height:32px; border-radius:7px; border:1px solid var(--gold); background:repeating-linear-gradient(135deg,var(--ox) 0 5px,var(--stripe) 5px 10px,var(--gold) 10px 15px); background-size:21.2132px 21.2132px; animation:pole 1.4s linear infinite; box-shadow:0 0 10px rgba(205,162,78,.4);"></div>
+      <div style="display:flex; align-items:center; gap:20px; font-size:14px; font-weight:500;"><span style="border-bottom:2px solid var(--gold); padding-bottom:2px; color:var(--gold2);">Dashboard</span><span style="color:var(--dim);">Bookings</span><div style="display:flex; align-items:center; gap:9px; padding-left:16px; border-left:1px solid var(--line);"><div style="width:30px; height:30px; border-radius:50%; border:1px solid var(--gold); background-color:var(--surf2); background-image:repeating-linear-gradient(135deg,rgba(205,162,78,.12) 0 5px,transparent 5px 10px);"></div><div style="line-height:1.15;"><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:15px;">Old Town Cuts</div><div style="font-size:10px; color:var(--dim); text-transform:uppercase; letter-spacing:.1em;">Owner</div></div></div></div>
+    </div>
+    <div style="padding:30px 40px;">
+      <h1 style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:38px; margin:0 0 22px;">Dashboard</h1>
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:26px;">
+        <div style="border:1px solid var(--line); background:var(--surf); padding:18px;"><div style="text-transform:uppercase; letter-spacing:.12em; font-size:10px; color:var(--dim);">Upcoming</div><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:32px; margin-top:4px;">14</div></div>
+        <div style="border:1px solid var(--line); background:var(--surf); padding:18px;"><div style="text-transform:uppercase; letter-spacing:.12em; font-size:10px; color:var(--dim);">Revenue (30d)</div><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:32px; margin-top:4px;">412k</div></div>
+        <div style="border:1px solid var(--line); background:var(--surf); padding:18px;"><div style="text-transform:uppercase; letter-spacing:.12em; font-size:10px; color:var(--dim);">Completion</div><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:32px; margin-top:4px; color:#6fbf78;">94%</div></div>
+        <div style="border:1px solid var(--line); background:var(--surf); padding:18px;"><div style="text-transform:uppercase; letter-spacing:.12em; font-size:10px; color:var(--dim);">No-show</div><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:32px; margin-top:4px; color:var(--ox);">6%</div></div>
+      </div>
+      <div style="display:grid; grid-template-columns:1.5fr 1fr; gap:22px;">
+        <div>
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;"><span style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:22px;">Today's agenda</span><span style="flex:1; height:1px; background:var(--line);"></span></div>
+          <div style="border:1px solid var(--line); background:var(--surf);">
+            <div style="display:flex; gap:16px; padding:14px 18px; border-bottom:1px solid var(--line);"><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:17px; color:var(--gold2); width:52px;">10:00</div><div style="flex:1;"><div style="font-weight:600; font-size:14px;">Aram K.</div><div style="color:var(--dim); font-size:12px;">Men's haircut · 45 min</div></div></div>
+            <div style="display:flex; gap:16px; padding:14px 18px; border-bottom:1px solid var(--line);"><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:17px; color:var(--gold2); width:52px;">11:30</div><div style="flex:1;"><div style="font-weight:600; font-size:14px;">John D.</div><div style="color:var(--dim); font-size:12px;">Haircut + beard · 60 min</div></div></div>
+            <div style="display:flex; gap:16px; padding:14px 18px;"><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:17px; color:var(--gold2); width:52px;">14:00</div><div style="flex:1;"><div style="font-weight:600; font-size:14px;">Sergey M.</div><div style="color:var(--dim); font-size:12px;">Razor shave · 30 min</div></div></div>
+          </div>
+        </div>
+        <div>
+          <div style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:22px; margin-bottom:14px;">Pending requests</div>
+          <div style="border:1px solid var(--gold); background:var(--surf); padding:18px;"><div style="font-weight:600; font-size:14px;">Davit S.</div><div style="color:var(--dim); font-size:12px; margin-bottom:14px;">Haircut · Fri 27 Jun · 16:00</div><div style="display:flex; gap:8px;"><span style="flex:1; text-align:center; background:var(--gold); color:var(--bg); padding:9px; font-size:12px; font-weight:600;">Accept</span><span style="flex:1; text-align:center; border:1px solid var(--ox); color:var(--ox); padding:9px; font-size:12px;">Reject</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="position:absolute; left:1180px; top:1700px; width:1200px;" data-drags-parent="1"><div style="font-family:Archivo,sans-serif; font-size:13px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:#7a7a7a;">Dark · Admin</div></div>
+<div style="position:absolute; left:1180px; top:1758px; width:1200px;">
+  <div style="--bg:#181410; --surf:#221c15; --surf2:#2a2218; --ink:#efe4d0; --dim:#a3937a; --gold:#cda24e; --gold2:#e0bd72; --ox:#c0533f; --line:#39301f; --stripe:#efe4d0; background:var(--bg); color:var(--ink); border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,.08); overflow:hidden; font-family:Archivo,sans-serif;">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 40px; border-bottom:1px solid var(--line); background:#100c08;">
+      <div style="display:flex; align-items:center; gap:12px;"><div style="width:13px; height:32px; border-radius:7px; border:1px solid var(--gold); background:repeating-linear-gradient(135deg,var(--ox) 0 5px,var(--stripe) 5px 10px,var(--gold) 10px 15px); background-size:21.2132px 21.2132px; animation:pole 1.4s linear infinite; box-shadow:0 0 10px rgba(205,162,78,.4);"></div><span style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:22px;">Admin</span></div>
+      <div style="display:flex; align-items:center; gap:10px; font-size:13px;"><div style="width:28px; height:28px; border-radius:50%; background:var(--gold); color:var(--bg); display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond',serif; font-weight:700; font-size:14px;">A</div><span style="color:var(--dim);">admin@barber-shop.am</span></div>
+    </div>
+    <div style="padding:28px 40px;">
+      <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin-bottom:24px;">
+        <div style="border:1px solid var(--line); background:var(--surf); padding:16px;"><div style="text-transform:uppercase; letter-spacing:.12em; font-size:10px; color:var(--dim);">Users</div><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:28px; margin-top:4px;">2,140</div></div>
+        <div style="border:1px solid var(--line); background:var(--surf); padding:16px;"><div style="text-transform:uppercase; letter-spacing:.12em; font-size:10px; color:var(--dim);">Shops</div><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:28px; margin-top:4px;">12</div></div>
+        <div style="border:1px solid var(--line); background:var(--surf); padding:16px;"><div style="text-transform:uppercase; letter-spacing:.12em; font-size:10px; color:var(--dim);">Barbers</div><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:28px; margin-top:4px;">48</div></div>
+        <div style="border:1px solid var(--line); background:var(--surf); padding:16px;"><div style="text-transform:uppercase; letter-spacing:.12em; font-size:10px; color:var(--dim);">Bookings</div><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:28px; margin-top:4px;">8,902</div></div>
+        <div style="border:1px solid var(--line); background:var(--surf); padding:16px;"><div style="text-transform:uppercase; letter-spacing:.12em; font-size:10px; color:var(--dim);">Reviews</div><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:28px; margin-top:4px;">1,455</div></div>
+      </div>
+      <div style="display:flex; gap:26px; border-bottom:1px solid var(--line); margin-bottom:18px;"><span style="padding-bottom:12px; color:var(--dim); font-size:14px;">Overview</span><span style="padding-bottom:12px; border-bottom:2px solid var(--gold); color:var(--gold2); font-weight:600; font-size:14px;">Providers</span><span style="padding-bottom:12px; color:var(--dim); font-size:14px;">Users</span><span style="padding-bottom:12px; color:var(--dim); font-size:14px;">Reviews</span></div>
+      <div style="border:1px solid var(--line); background:var(--surf);">
+        <div style="display:grid; grid-template-columns:2fr 1.4fr 1fr 1fr 1.6fr; padding:12px 18px; border-bottom:1px solid var(--line); background:var(--surf2); text-transform:uppercase; letter-spacing:.1em; font-size:10px; color:var(--dim);"><span>Name</span><span>Owner</span><span>District</span><span>Status</span><span style="text-align:right;">Actions</span></div>
+        <div style="display:grid; grid-template-columns:2fr 1.4fr 1fr 1fr 1.6fr; padding:14px 18px; border-bottom:1px solid var(--line); align-items:center; font-size:13px;"><span style="display:flex; align-items:center; gap:8px;"><div style="width:30px; height:30px; border-radius:50%; background-color:var(--surf2); background-image:repeating-linear-gradient(135deg,rgba(205,162,78,.12) 0 5px,transparent 5px 10px);"></div>Fade House</span><span style="color:var(--dim);">Hayk P.</span><span style="color:var(--dim);">Nor Nork</span><span><span style="text-transform:uppercase; letter-spacing:.08em; font-size:9px; color:var(--gold2); border:1px solid var(--gold); padding:3px 8px;">Pending</span></span><span style="display:flex; gap:6px; justify-content:flex-end; font-size:11px;"><span style="background:var(--gold); color:var(--bg); padding:5px 11px; font-weight:600;">Approve</span><span style="border:1px solid var(--line); padding:5px 11px;">Verify</span><span style="border:1px solid var(--ox); color:var(--ox); padding:5px 11px;">Suspend</span></span></div>
+        <div style="display:grid; grid-template-columns:2fr 1.4fr 1fr 1fr 1.6fr; padding:14px 18px; align-items:center; font-size:13px;"><span style="display:flex; align-items:center; gap:8px;"><div style="width:30px; height:30px; border-radius:50%; border:1px solid var(--gold); background-color:var(--surf2); background-image:repeating-linear-gradient(135deg,rgba(205,162,78,.12) 0 5px,transparent 5px 10px);"></div>Old Town Cuts <span style="color:var(--gold); font-size:11px;">✦</span></span><span style="color:var(--dim);">Davit S.</span><span style="color:var(--dim);">Kentron</span><span><span style="text-transform:uppercase; letter-spacing:.08em; font-size:9px; color:#6fbf78; border:1px solid #6fbf78; padding:3px 8px;">Active</span></span><span style="display:flex; gap:6px; justify-content:flex-end; font-size:11px;"><span style="background:var(--gold); color:var(--bg); padding:5px 11px; font-weight:600;">Feature</span><span style="border:1px solid var(--line); padding:5px 11px;">Unverify</span><span style="border:1px solid var(--ox); color:var(--ox); padding:5px 11px;">Suspend</span></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DARK · AUTH + STATES ===== -->
+<div style="position:absolute; left:0; top:2620px; width:600px;" data-drags-parent="1"><div style="font-family:Archivo,sans-serif; font-size:13px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:#7a7a7a;">Dark · Auth &amp; states</div></div>
+
+<div style="position:absolute; left:0; top:2678px; width:420px;">
+  <div style="--bg:#181410; --surf:#221c15; --surf2:#2a2218; --ink:#efe4d0; --dim:#a3937a; --gold:#cda24e; --gold2:#e0bd72; --ox:#c0533f; --line:#39301f; --stripe:#efe4d0; background:var(--bg); border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,.08); font-family:Archivo,sans-serif; color:var(--ink); padding:40px 36px;">
+    <div style="display:flex; flex-direction:column; align-items:center; text-align:center; margin-bottom:24px;">
+      <div style="width:16px; height:40px; border-radius:8px; border:1px solid var(--gold); background:repeating-linear-gradient(135deg,var(--ox) 0 5px,var(--stripe) 5px 10px,var(--gold) 10px 15px); background-size:21.2132px 21.2132px; animation:pole 1.4s linear infinite; box-shadow:0 0 10px rgba(205,162,78,.4); margin-bottom:16px;"></div>
+      <h1 style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:34px; margin:0;">Log in</h1>
+      <div style="color:var(--dim); font-size:14px; margin-top:4px;">Welcome back.</div>
+    </div>
+    <div style="border:1px solid var(--gold); background:var(--surf); padding:26px;">
+      <div style="text-transform:uppercase; letter-spacing:.1em; font-size:10px; color:var(--dim); margin-bottom:5px;">Email</div>
+      <div style="border:1px solid var(--line); background:var(--bg); padding:11px 14px; font-size:14px; margin-bottom:16px; color:var(--dim);">you@example.com</div>
+      <div style="display:flex; justify-content:space-between;"><span style="text-transform:uppercase; letter-spacing:.1em; font-size:10px; color:var(--dim); margin-bottom:5px;">Password</span><span style="font-size:11px; color:var(--gold2);">Forgot?</span></div>
+      <div style="border:1px solid var(--line); background:var(--bg); padding:11px 14px; font-size:14px; margin-bottom:20px; color:var(--dim);">••••••••</div>
+      <div style="background:var(--gold); color:var(--bg); text-align:center; padding:13px; font-size:14px; font-weight:600;">Log in</div>
+    </div>
+    <div style="text-align:center; font-size:14px; color:var(--dim); margin-top:20px;">No account? <span style="color:var(--gold2); font-weight:600;">Sign up</span></div>
+  </div>
+</div>
+
+<!-- empty state dark -->
+<div style="position:absolute; left:460px; top:2678px; width:320px;">
+  <div style="--bg:#181410; --surf:#221c15; --surf2:#2a2218; --ink:#efe4d0; --dim:#a3937a; --gold:#cda24e; --ox:#c0533f; --line:#39301f; --stripe:#efe4d0; background:var(--bg); color:var(--ink); border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,.08); font-family:Archivo,sans-serif; padding:44px 28px; text-align:center;">
+    <div style="width:14px; height:36px; border-radius:7px; border:1px solid var(--gold); background:repeating-linear-gradient(135deg,var(--ox) 0 5px,var(--stripe) 5px 10px,var(--gold) 10px 15px); background-size:21.2132px 21.2132px; animation:pole 1.4s linear infinite; margin:0 auto 18px; opacity:.6;"></div>
+    <div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:24px;">No bookings yet</div>
+    <div style="color:var(--dim); font-size:13px; margin-top:6px; line-height:1.5;">Find a barber and book your first cut.</div>
+    <div style="display:inline-block; background:var(--gold); color:var(--bg); padding:11px 22px; font-size:13px; font-weight:600; margin-top:18px;">Browse barbers</div>
+  </div>
+</div>
+
+<!-- 404 dark -->
+<div style="position:absolute; left:820px; top:2678px; width:380px;">
+  <div style="--bg:#181410; --surf:#221c15; --surf2:#2a2218; --ink:#efe4d0; --dim:#a3937a; --gold:#cda24e; --ox:#c0533f; --line:#39301f; --stripe:#efe4d0; background:var(--bg); color:var(--ink); border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,.08); font-family:Archivo,sans-serif; padding:52px 36px; text-align:center;">
+    <div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:80px; line-height:.9; color:var(--ox);">404</div>
+    <div style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:22px; margin-top:8px;">This chair's empty</div>
+    <div style="color:var(--dim); font-size:13px; margin-top:8px; line-height:1.5;">The page you're looking for doesn't exist or has moved.</div>
+    <div style="display:inline-block; background:var(--gold); color:var(--bg); padding:11px 24px; font-size:13px; font-weight:600; margin-top:20px;">Back to home</div>
+  </div>
+</div>
+
+<!-- review modal dark -->
+<div style="position:absolute; left:1240px; top:2678px; width:480px;">
+  <div style="--bg:#181410; --surf:#221c15; --surf2:#2a2218; --ink:#efe4d0; --dim:#a3937a; --gold:#cda24e; --ox:#c0533f; --line:#39301f; --stripe:#efe4d0; background:rgba(0,0,0,.6); border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,.08); padding:34px; font-family:Archivo,sans-serif;">
+    <div style="background:var(--bg); border:1px solid var(--gold); box-shadow:8px 8px 0 rgba(0,0,0,.5); color:var(--ink);">
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:18px 22px; border-bottom:1px solid var(--line);"><span style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:24px;">Rate your visit</span><span style="color:var(--dim); font-size:18px;">✕</span></div>
+      <div style="padding:22px;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:18px;"><div style="width:42px; height:42px; border-radius:50%; background-color:var(--surf2); background-image:repeating-linear-gradient(135deg,rgba(205,162,78,.12) 0 5px,transparent 5px 10px);"></div><div><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:17px;">Narek Avagyan</div><div style="color:var(--dim); font-size:12px;">Men's haircut · 28 May</div></div></div>
+        <div style="font-size:30px; color:var(--gold); letter-spacing:6px; margin-bottom:16px;">★★★★<span style="color:var(--line);">★</span></div>
+        <div style="border:1px solid var(--line); background:var(--surf); padding:12px 14px; font-size:13px; color:var(--dim); height:54px; line-height:1.5;">Tell others about your experience…</div>
+        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:18px;"><span style="border:1px solid var(--line); color:var(--dim); padding:10px 18px; font-size:13px;">Cancel</span><span style="background:var(--gold); color:var(--bg); padding:10px 20px; font-size:13px; font-weight:600;">Submit review</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- notifications dark -->
+<div style="position:absolute; left:0; top:3120px; width:400px;">
+  <div style="--bg:#181410; --surf:#221c15; --surf2:#2a2218; --ink:#efe4d0; --dim:#a3937a; --gold:#cda24e; --gold2:#e0bd72; --ox:#c0533f; --line:#39301f; --stripe:#efe4d0; background:var(--bg); color:var(--ink); border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,.08); overflow:hidden; font-family:Archivo,sans-serif;">
+    <div style="display:flex; align-items:center; justify-content:flex-end; gap:16px; padding:14px 22px; border-bottom:1px solid var(--line); background:var(--surf);"><span style="color:var(--dim); font-size:14px;">Saved</span><span style="position:relative; font-size:18px;">⌖<span style="position:absolute; top:-3px; right:-5px; width:8px; height:8px; border-radius:50%; background:var(--ox);"></span></span><div style="width:28px; height:28px; border-radius:50%; background:var(--gold); color:var(--bg); display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond',serif; font-weight:700; font-size:14px;">J</div></div>
+    <div style="padding:14px;">
+      <div style="border:1px solid var(--gold); background:var(--surf);">
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:13px 16px; border-bottom:1px solid var(--line);"><span style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:18px;">Notifications</span><span style="font-size:11px; color:var(--gold2);">Mark all read</span></div>
+        <div style="display:flex; gap:11px; padding:13px 16px; border-bottom:1px solid var(--line); background:var(--surf2);"><span style="width:7px; height:7px; border-radius:50%; background:var(--ox); margin-top:6px;"></span><div><div style="font-size:13px;">New booking: <b>John D.</b> — Wed 25 Jun, 11:30</div><div style="color:var(--dim); font-size:11px; margin-top:2px;">2h ago</div></div></div>
+        <div style="display:flex; gap:11px; padding:13px 16px;"><span style="width:7px; height:7px; border-radius:50%; background:var(--gold); margin-top:6px;"></span><div><div style="font-size:13px;">New review: <b>5★</b> — Aram K.</div><div style="color:var(--dim); font-size:11px; margin-top:2px;">Yesterday</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- cancel dialog dark -->
+<div style="position:absolute; left:440px; top:3120px; width:420px;">
+  <div style="--bg:#181410; --surf:#221c15; --surf2:#2a2218; --ink:#efe4d0; --dim:#a3937a; --gold:#cda24e; --ox:#c0533f; --line:#39301f; --stripe:#efe4d0; background:rgba(0,0,0,.6); border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,.08); padding:30px; font-family:Archivo,sans-serif;">
+    <div style="background:var(--bg); border:1px solid var(--ox); box-shadow:8px 8px 0 rgba(0,0,0,.5); color:var(--ink); padding:26px; text-align:center;">
+      <div style="width:48px; height:48px; border-radius:50%; border:2px solid var(--ox); color:var(--ox); display:flex; align-items:center; justify-content:center; font-size:24px; margin:0 auto 14px;">!</div>
+      <div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:24px;">Cancel this booking?</div>
+      <div style="color:var(--dim); font-size:13px; margin-top:6px; line-height:1.5;">Your appointment with Narek on Wed 25 Jun at 11:30 will be released.</div>
+      <div style="display:flex; gap:10px; margin-top:20px;"><span style="flex:1; text-align:center; border:1px solid var(--line); color:var(--dim); padding:11px; font-size:13px;">Keep it</span><span style="flex:1; text-align:center; background:var(--ox); color:#fff; padding:11px; font-size:13px;">Cancel booking</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- onboarding choice dark -->
+<div style="position:absolute; left:900px; top:3120px; width:520px;">
+  <div style="--bg:#181410; --surf:#221c15; --surf2:#2a2218; --ink:#efe4d0; --dim:#a3937a; --gold:#cda24e; --ox:#c0533f; --line:#39301f; --stripe:#efe4d0; background:var(--bg); color:var(--ink); border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,.08); overflow:hidden; font-family:Archivo,sans-serif;">
+    <div style="display:flex; align-items:center; padding:14px 28px; border-bottom:1px solid var(--line); background:var(--surf);"><div style="width:13px; height:32px; border-radius:7px; border:1px solid var(--gold); background:repeating-linear-gradient(135deg,var(--ox) 0 5px,var(--stripe) 5px 10px,var(--gold) 10px 15px); background-size:21.2132px 21.2132px; animation:pole 1.4s linear infinite; box-shadow:0 0 10px rgba(205,162,78,.4);"></div></div>
+    <div style="padding:36px; text-align:center;">
+      <h1 style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:30px; margin:0;">Welcome — let's set you up</h1>
+      <p style="color:var(--dim); font-size:13px; margin:8px 0 24px;">Create a provider profile to start taking bookings. Free to join.</p>
+      <div style="display:flex; gap:16px;">
+        <div style="flex:1; border:1px solid var(--gold); background:var(--surf); padding:22px 16px;"><div style="font-size:28px; color:var(--gold); margin-bottom:8px;">🏠</div><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:19px;">A barber shop</div><div style="color:var(--dim); font-size:12px; margin:6px 0 14px; line-height:1.5;">Manage a roster &amp; shared calendar.</div><div style="background:var(--gold); color:var(--bg); padding:10px; font-size:13px; font-weight:600;">Create shop</div></div>
+        <div style="flex:1; border:1px solid var(--line); background:var(--surf); padding:22px 16px;"><div style="font-size:28px; color:var(--gold); margin-bottom:8px;">✂</div><div style="font-family:'Cormorant Garamond',serif; font-weight:700; font-size:19px;">Independent</div><div style="color:var(--dim); font-size:12px; margin:6px 0 14px; line-height:1.5;">Personal profile &amp; calendar.</div><div style="border:1px solid var(--gold); color:var(--gold2); padding:10px; font-size:13px;">Create profile</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

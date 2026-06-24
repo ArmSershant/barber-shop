@@ -1,9 +1,40 @@
-:root {
-  // Legacy vars still referenced by a few custom styles.
-  --bg: #0f0f10;
-  --fg: #f5f5f5;
-  --muted: #9a9a9f;
-  --accent: #21aea9;
+// ---- "Bone & Tobacco" heritage tokens ----
+:root[data-mantine-color-scheme='light'] {
+  --bg: #efe6d4; // page background (warm bone)
+  --surf: #fbf6ea; // card / header surface
+  --surf2: #f3ead7; // recessed surface, placeholders
+  --ink: #352a1f; // primary text + primary button (espresso)
+  --dim: #8a7558; // secondary text
+  --gold: #a8812f; // accent
+  --gold2: #8a6a26; // accent text on light
+  --ox: #7c3328; // oxblood: destructive + final Book CTA
+  --line: #dac9a9; // hairline borders + offset-shadow color
+  --stripe: #fff7ea; // barber-pole cream stripe
+  --offset-shadow: 6px 6px 0 var(--line);
+  --cta-head-bg: var(--ink); // booking widget / panel header bar
+  --cta-head-fg: var(--stripe);
+
+  --mantine-color-body: var(--bg);
+  --mantine-color-text: var(--ink);
+}
+
+:root[data-mantine-color-scheme='dark'] {
+  --bg: #181410;
+  --surf: #221c15;
+  --surf2: #2a2218;
+  --ink: #efe4d0;
+  --dim: #a3937a;
+  --gold: #cda24e;
+  --gold2: #e0bd72;
+  --ox: #c0533f;
+  --line: #39301f;
+  --stripe: #efe4d0;
+  --offset-shadow: none; // dark mode uses the gold border instead
+  --cta-head-bg: var(--gold);
+  --cta-head-fg: #221c15;
+
+  --mantine-color-body: var(--bg);
+  --mantine-color-text: var(--ink);
 }
 
 * {
@@ -17,20 +48,75 @@ body {
 }
 
 body {
-  // Defer to Mantine's scheme-aware colors so light/dark/system all work.
   background: var(--mantine-color-body);
   color: var(--mantine-color-text);
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  line-height: 1.5;
+  font-family: var(--font-body), system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.55;
+  // Sticky footer: header + main + footer fill at least the viewport.
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+// Page content grows to push the footer to the bottom on short pages.
+.appMain {
+  flex: 1 0 auto;
 }
 
 html {
   scroll-behavior: smooth;
 }
 
-// Soft off-white page in light mode so white cards/surfaces gain definition.
-:root[data-mantine-color-scheme='light'] {
-  --mantine-color-body: #f6f8f9;
+// ---- Heritage utilities ----
+// Hard offset block shadow (light only; resolves to `none` in dark via the token).
+.offsetShadow {
+  box-shadow: var(--offset-shadow);
+}
+
+// Section header: italic Cormorant label + a hairline rule filling the rest.
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.75rem 0 0.75rem;
+}
+.sectionHeader > span:first-child {
+  font-family: var(--font-display), Georgia, serif;
+  font-style: italic;
+  font-size: 1.4rem;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.sectionHeader::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+// Diagonal striped placeholder — marks where real photography goes.
+.placeholderStripes {
+  background-color: var(--surf2);
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent 0 11px,
+    color-mix(in srgb, var(--line) 60%, transparent) 11px 12px
+  );
+}
+
+// Skeleton shimmer (states reference).
+@keyframes shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+.shimmer {
+  background: linear-gradient(90deg, var(--surf2) 25%, var(--line) 37%, var(--surf2) 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
 }
 
 // ---- Motion ----

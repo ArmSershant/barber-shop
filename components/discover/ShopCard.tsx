@@ -25,10 +25,10 @@ export function ShopCard({ shop }: { shop: ShopCardData }) {
   return (
     <Card
       withBorder
-      radius="md"
+      radius="xs"
       padding="lg"
-      className="hoverLift"
-      style={shop.isFeatured ? { borderColor: 'var(--mantine-color-gold-5)' } : undefined}
+      className={`hoverLift${shop.isFeatured ? ' offsetShadow' : ''}`}
+      style={shop.isFeatured ? { borderColor: 'var(--gold)' } : undefined}
     >
       {shop.isFeatured && (
         <Badge size="xs" color="gold" variant="light" mb="xs">
@@ -36,18 +36,18 @@ export function ShopCard({ shop }: { shop: ShopCardData }) {
         </Badge>
       )}
       <Group wrap="nowrap">
-        <Avatar src={shop.logoUrl ?? undefined} radius="md" size="lg" color="teal">
+        <Avatar src={shop.logoUrl ?? undefined} radius="md" size="lg" color="gold">
           {shop.name.charAt(0).toUpperCase()}
         </Avatar>
         <Stack gap={2} style={{ flex: 1, minWidth: 0 }}>
           <Group gap={4} wrap="nowrap">
-            <Text fw={600} truncate>
+            <Text fw={700} truncate ff="var(--font-display), Georgia, serif" fz="1.2rem">
               {shop.name}
             </Text>
             {shop.isVerified && (
               <IconRosetteDiscountCheckFilled
                 size={16}
-                color="var(--mantine-color-brand-6)"
+                color="var(--gold)"
                 aria-label={t('verified')}
               />
             )}

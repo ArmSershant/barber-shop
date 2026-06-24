@@ -37,9 +37,9 @@ export function HeroSearch() {
       component="form"
       onSubmit={submit}
       withBorder
-      radius="lg"
+      radius="xs"
       p="xs"
-      shadow="sm"
+      className="offsetShadow"
       maw={620}
       w="100%"
     >

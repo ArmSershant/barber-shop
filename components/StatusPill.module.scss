@@ -1,0 +1,29 @@
+.pill {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border: 1px solid;
+  border-radius: 2px;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.green {
+  color: #3f7a47;
+  border-color: #3f7a47;
+}
+.gold {
+  color: var(--gold2);
+  border-color: var(--gold);
+}
+.ox {
+  color: var(--ox);
+  border-color: var(--ox);
+}
+.dim {
+  color: var(--dim);
+  border-color: var(--line);
+}

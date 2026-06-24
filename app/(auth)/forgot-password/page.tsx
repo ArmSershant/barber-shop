@@ -37,7 +37,7 @@ export default function ForgotPasswordPage() {
           {t('sent')}
         </Alert>
       ) : (
-        <Paper withBorder shadow="sm" p="lg" radius="md" mt="lg" component="form" onSubmit={onSubmit} noValidate>
+        <Paper withBorder className="offsetShadow" p="lg" radius="xs" mt="lg" component="form" onSubmit={onSubmit} noValidate>
           <Stack>
             <TextInput
               label={t('email')}

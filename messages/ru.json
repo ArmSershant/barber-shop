@@ -9,7 +9,14 @@
     "bookings": "Записи",
     "myBookings": "Мои записи",
     "saved": "Сохранённые",
+    "barbers": "Барберы",
+    "shops": "Барбершопы",
+    "forBarbers": "Для барберов",
+    "owner": "Владелец",
     "admin": "Админ",
+    "home": "Главная",
+    "search": "Поиск",
+    "account": "Аккаунт",
     "theme": "Тема",
     "themeLight": "Светлая",
     "themeDark": "Тёмная",
@@ -129,6 +136,7 @@
     "providerTitle": "Вы барбер или владелец салона?",
     "providerLead": "Добавьте свой бизнес и принимайте записи онлайн — бесплатно.",
     "providerCta": "Начать",
+    "providerCtaDashboard": "В панель управления",
     "searchButton": "Найти",
     "browseByDistrict": "Поиск по районам"
   },
@@ -140,7 +148,11 @@
     "from": "от {price} ֏",
     "portfolio": "Работы",
     "photos": "Фотографии",
-    "book": "Записаться"
+    "book": "Записаться",
+    "rating": "Рейтинг",
+    "districtLabel": "Район",
+    "statusLabel": "Статус",
+    "priceLabel": "от"
   },
   "favorites": {
     "title": "Сохранённые барберы",
@@ -403,7 +415,8 @@
     "guestManageNote": "Сохраните эту ссылку для управления записью.",
     "bookAnother": "Записаться ещё раз",
     "ownProfile": "Это ваш собственный профиль — запись отключена.",
-    "manageLink": "Управлять записью"
+    "manageLink": "Управлять записью",
+    "reassure": "Без аккаунта · бесплатная отмена"
   },
   "manage": {
     "title": "Ваша запись",

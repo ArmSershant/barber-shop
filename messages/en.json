@@ -9,7 +9,14 @@
     "bookings": "Bookings",
     "myBookings": "My bookings",
     "saved": "Saved",
+    "barbers": "Barbers",
+    "shops": "Shops",
+    "forBarbers": "For barbers",
+    "owner": "Owner",
     "admin": "Admin",
+    "home": "Home",
+    "search": "Search",
+    "account": "Account",
     "theme": "Theme",
     "themeLight": "Light",
     "themeDark": "Dark",
@@ -129,6 +136,7 @@
     "providerTitle": "Are you a barber or shop owner?",
     "providerLead": "List your business and take bookings online — free to join.",
     "providerCta": "Get started",
+    "providerCtaDashboard": "Go to dashboard",
     "searchButton": "Search",
     "browseByDistrict": "Browse by district"
   },
@@ -140,7 +148,11 @@
     "from": "from {price} ֏",
     "portfolio": "Portfolio",
     "photos": "Photos",
-    "book": "Book appointment"
+    "book": "Book appointment",
+    "rating": "Rating",
+    "districtLabel": "District",
+    "statusLabel": "Status",
+    "priceLabel": "From"
   },
   "favorites": {
     "title": "Saved barbers",
@@ -403,7 +415,8 @@
     "guestManageNote": "Save this link to manage your booking.",
     "bookAnother": "Book another",
     "ownProfile": "This is your own profile — booking is disabled.",
-    "manageLink": "Manage your booking"
+    "manageLink": "Manage your booking",
+    "reassure": "No account needed · free cancellation"
   },
   "manage": {
     "title": "Your booking",

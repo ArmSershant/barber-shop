@@ -1,9 +1,22 @@
 .header {
-  border-bottom: 1px solid var(--mantine-color-default-border);
+  border-bottom: 1px solid var(--line);
   position: sticky;
   top: 0;
   z-index: 100;
-  background: var(--mantine-color-body);
+  background: var(--surf);
+}
+
+// Admin keeps the theme-matching surface, distinguished only by a gold
+// accent border + gold wordmark (no color inversion).
+.adminHeader {
+  border-bottom-color: var(--gold);
+}
+.adminMark {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--gold);
+  margin-left: 0.5rem;
 }
 
 .inner {
@@ -22,9 +35,12 @@
   white-space: nowrap;
 }
 
-.brand :global(svg) {
-  color: var(--mantine-primary-color-filled);
-  display: block;
+// "Hi, {name}" greeting — italic Cormorant per the heritage spec.
+.greet {
+  font-family: var(--font-display), Georgia, serif;
+  font-style: italic;
+  font-size: 1.05rem;
+  line-height: 1.1;
 }
 
 .centerNav {

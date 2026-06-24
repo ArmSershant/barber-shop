@@ -21,6 +21,7 @@ import {
 } from '@tabler/icons-react';
 import { HeroSearch } from '@/components/HeroSearch';
 import { DistrictChips } from '@/components/DistrictChips';
+import { ProviderCtaButton } from '@/components/ProviderCtaButton';
 import { listDistricts } from '@/lib/queries/districts';
 
 export default async function HomePage() {
@@ -42,9 +43,10 @@ export default async function HomePage() {
         <Stack align="center" gap="lg" ta="center" className="animate-in">
           <Badge
             size="lg"
-            variant="light"
+            variant="outline"
+            color="gold"
             leftSection={<IconMapPin size={14} />}
-            radius="sm"
+            radius="xs"
           >
             {t('heroBadge')}
           </Badge>
@@ -85,15 +87,15 @@ export default async function HomePage() {
             <Card
               key={f.title}
               withBorder
-              radius="md"
+              radius="xs"
               padding="lg"
-              className="hoverLift animate-in"
+              className="hoverLift offsetShadow animate-in"
               style={{ animationDelay: `${0.1 + i * 0.08}s` }}
             >
-              <ThemeIcon size={44} radius="md" variant="light" mb="sm">
+              <ThemeIcon size={44} radius="xs" variant="outline" color="gold" mb="sm">
                 <f.icon size={24} />
               </ThemeIcon>
-              <Text fw={600} mb={4}>
+              <Text fw={600} mb={4} ff="var(--font-display), Georgia, serif" fz="lg">
                 {f.title}
               </Text>
               <Text size="sm" c="dimmed">
@@ -114,32 +116,26 @@ export default async function HomePage() {
 
         <Card
           withBorder
-          radius="md"
+          radius="xs"
           padding="xl"
-          bg="var(--mantine-color-default-hover)"
-          className="animate-in"
-          style={{ animationDelay: '0.35s' }}
+          className="offsetShadow animate-in"
+          style={{ animationDelay: '0.35s', background: 'var(--surf2)' }}
         >
           <Group justify="space-between" wrap="wrap" gap="md">
             <Group gap="md" wrap="nowrap">
-              <ThemeIcon size={44} radius="md" variant="filled">
+              <ThemeIcon size={44} radius="xs" variant="filled" color="espresso">
                 <IconBuildingStore size={24} />
               </ThemeIcon>
               <div>
-                <Text fw={600}>{t('providerTitle')}</Text>
+                <Text fw={600} ff="var(--font-display), Georgia, serif" fz="xl">
+                  {t('providerTitle')}
+                </Text>
                 <Text size="sm" c="dimmed">
                   {t('providerLead')}
                 </Text>
               </div>
             </Group>
-            <Button
-              component={Link}
-              href="/register"
-              variant="default"
-              rightSection={<IconArrowRight size={18} />}
-            >
-              {t('providerCta')}
-            </Button>
+            <ProviderCtaButton />
           </Group>
         </Card>
       </Stack>

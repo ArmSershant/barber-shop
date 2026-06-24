@@ -1,0 +1,43 @@
+// Animated barber pole — warm tricolor (oxblood · cream · gold), seamless loop.
+.pole {
+  display: inline-block;
+  width: 13px;
+  height: 32px;
+  border-radius: 7px;
+  border: 1px solid var(--gold);
+  background: repeating-linear-gradient(
+    135deg,
+    var(--ox) 0 5px,
+    var(--stripe) 5px 10px,
+    var(--gold) 10px 15px
+  );
+  background-size: 21.2132px 21.2132px; // one full stripe period (15px ÷ cos45°)
+  animation: pole 1.4s linear infinite;
+}
+
+.large {
+  width: 16px;
+  height: 40px;
+  border-radius: 8px;
+}
+
+// Travels exactly one period on each axis (15px ÷ √2) → no visible seam.
+@keyframes pole {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -10.6066px -10.6066px;
+  }
+}
+
+// Dark mode: give the pole a soft gold glow.
+:global([data-mantine-color-scheme='dark']) .pole {
+  box-shadow: 0 0 10px rgba(205, 162, 78, 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pole {
+    animation: none;
+  }
+}

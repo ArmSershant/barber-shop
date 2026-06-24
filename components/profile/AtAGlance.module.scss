@@ -1,0 +1,53 @@
+.bar {
+  display: flex;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: var(--surf);
+  overflow: hidden;
+}
+
+.cell {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0.6rem 0.85rem;
+  text-align: center;
+}
+
+.cell + .cell {
+  border-left: 1px solid var(--line);
+}
+
+.label {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 2px;
+}
+
+.value {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.3rem;
+  line-height: 1.1;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// Stack to 2×2 on narrow screens.
+@media (max-width: 36em) {
+  .bar {
+    flex-wrap: wrap;
+  }
+  .cell {
+    flex-basis: 50%;
+  }
+  .cell:nth-child(3),
+  .cell:nth-child(4) {
+    border-top: 1px solid var(--line);
+  }
+  .cell:nth-child(3) {
+    border-left: none;
+  }
+}

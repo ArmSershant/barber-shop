@@ -33,12 +33,7 @@ import {
 } from '@/lib/store/api';
 import { apiErrorMessage } from '@/lib/api-error';
 import { ListSkeleton } from '@/components/ListSkeleton';
-
-const STATUS_COLOR: Record<string, string> = {
-  active: 'teal',
-  pending: 'yellow',
-  suspended: 'red',
-};
+import { StatusPill } from '@/components/StatusPill';
 
 export default function AdminPage() {
   const t = useTranslations('admin');
@@ -83,9 +78,7 @@ export default function AdminPage() {
 
   const o = data;
   const statusBadge = (status: string) => (
-    <Badge variant="light" color={STATUS_COLOR[status] ?? 'gray'}>
-      {t(`status_${status}`)}
-    </Badge>
+    <StatusPill status={status} label={t(`status_${status}`)} />
   );
 
   return (
@@ -107,11 +100,11 @@ export default function AdminPage() {
             <Tabs.Panel value="overview" pt="md">
               <SimpleGrid cols={{ base: 2, sm: 5 }}>
                 {(['users', 'shops', 'barbers', 'bookings', 'reviews'] as const).map((k) => (
-                  <Paper key={k} withBorder p="md" radius="md">
-                    <Text fz={28} fw={700}>
+                  <Paper key={k} withBorder p="md" radius="xs" className="offsetShadow">
+                    <Text fz={34} fw={700} ff="var(--font-display), Georgia, serif" lh={1.1}>
                       {o.stats[k].toLocaleString()}
                     </Text>
-                    <Text c="dimmed" size="sm">
+                    <Text c="dimmed" size="sm" tt="uppercase" style={{ letterSpacing: '0.05em' }}>
                       {t(`stat_${k}`)}
                     </Text>
                   </Paper>

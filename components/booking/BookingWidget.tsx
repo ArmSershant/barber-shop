@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import {
   Alert,
   Anchor,
+  Box,
   Button,
   Checkbox,
   Group,
@@ -16,6 +17,12 @@ import {
   TextInput,
   Title,
 } from '@mantine/core';
+
+const headerBar = {
+  background: 'var(--cta-head-bg)',
+  color: 'var(--cta-head-fg)',
+  padding: '0.7rem 1.25rem',
+} as const;
 import { DatePickerInput } from '@mantine/dates';
 import {
   useMeQuery,
@@ -133,11 +140,13 @@ export function BookingWidget({
   const canBook = Boolean(slot) && (!isGuest || (name.trim() && phone.trim()));
 
   return (
-    <Paper withBorder p="lg" radius="md">
-      <Title order={3} mb="md">
-        {t('heading')}
-      </Title>
-      <Stack>
+    <Paper withBorder p={0} radius="xs" className="offsetShadow" style={{ overflow: 'hidden' }}>
+      <Box style={headerBar}>
+        <Title order={3} c="inherit" style={{ fontSize: '1.45rem', margin: 0 }}>
+          {t('heading')}
+        </Title>
+      </Box>
+      <Stack p="lg">
         {services.length > 0 && (
           <Checkbox.Group label={t('selectServices')} value={serviceIds} onChange={(v) => { setServiceIds(v); setSlot(null); }}>
             <Stack gap="xs" mt="xs">
@@ -208,14 +217,19 @@ export function BookingWidget({
         )}
 
         {serviceIds.length > 0 && (
-          <Group justify="space-between" mt="xs">
-            <Text fw={600}>
-              {t('total')}: {total.price.toLocaleString()} ֏ · {total.duration} min
+          <Stack gap={6} mt="xs">
+            <Group justify="space-between" align="center">
+              <Text fw={700} ff="var(--font-display), Georgia, serif" fz="1.35rem">
+                {t('total')}: {total.price.toLocaleString()} ֏ · {total.duration} min
+              </Text>
+              <Button color="ox" size="md" onClick={onBook} loading={booking} disabled={!canBook}>
+                {t('book')}
+              </Button>
+            </Group>
+            <Text size="xs" c="dimmed" ta="right">
+              {t('reassure')}
             </Text>
-            <Button onClick={onBook} loading={booking} disabled={!canBook}>
-              {t('book')}
-            </Button>
-          </Group>
+          </Stack>
         )}
       </Stack>
     </Paper>

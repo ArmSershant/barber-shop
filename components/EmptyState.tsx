@@ -16,10 +16,10 @@ export function EmptyState({
   return (
     <Center py={56}>
       <Stack align="center" gap="xs" ta="center" maw={360}>
-        <ThemeIcon size={56} radius="xl" variant="light" color="gray">
+        <ThemeIcon size={56} radius="xs" variant="outline" color="gold">
           {icon}
         </ThemeIcon>
-        <Text fw={600} fz="lg">
+        <Text fw={600} fz="xl" ff="var(--font-display), Georgia, serif">
           {title}
         </Text>
         {description && (

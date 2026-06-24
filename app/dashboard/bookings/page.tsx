@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { Anchor, Badge, Button, Center, Container, Group, Loader, Paper, Stack, Text, Title } from '@mantine/core';
+import { Anchor, Button, Center, Container, Group, Loader, Paper, Stack, Text, Title } from '@mantine/core';
+import { StatusPill } from '@/components/StatusPill';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import {
@@ -100,9 +101,10 @@ export default function ProviderBookingsPage() {
                   )}
                 </div>
                 <Stack gap="xs" align="flex-end">
-                  <Badge variant="light" color={b.status === 'confirmed' ? 'teal' : 'yellow'}>
-                    {b.status === 'confirmed' ? t('statusConfirmed') : t('statusRequested')}
-                  </Badge>
+                  <StatusPill
+                    status={b.status}
+                    label={b.status === 'confirmed' ? t('statusConfirmed') : t('statusRequested')}
+                  />
                   {new Date(b.startsAt).getTime() <= Date.now() && (
                     <Group gap="xs">
                       <Button size="xs" color="teal" variant="light" onClick={() => onComplete(b.id)}>
