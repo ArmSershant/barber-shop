@@ -465,6 +465,10 @@
     "hoursHeading": "Рабочие часы",
     "closed": "Закрыто",
     "book": "Записаться",
-    "bookingSoon": "Запись скоро"
+    "bookingSoon": "Запись скоро",
+    "sortLabel": "Сортировка",
+    "sortTop": "По рейтингу",
+    "sortNew": "Новые",
+    "inYerevan": "{count} в Ереване"
   }
 }

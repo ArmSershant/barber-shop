@@ -6,21 +6,74 @@ export interface BarberCardData {
   slug: string;
   displayName: string;
   photoUrl: string | null;
+  coverUrl: string | null;
   experienceYears: number | null;
   ratingAvg: number;
   ratingCount: number;
   isVerified: boolean;
   isFeatured: boolean;
+  minPrice: number | null;
   shop: { slug: string; name: string } | null;
   district: { id: number; nameEn: string; nameHy: string; slug: string } | null;
 }
 
+export type BarberSort = 'top' | 'new';
+
+/** Shared Prisma selection for barber discovery cards (list + favorites). */
+export const barberCardSelect = {
+  id: true,
+  slug: true,
+  displayName: true,
+  photoUrl: true,
+  coverUrl: true,
+  experienceYears: true,
+  ratingAvg: true,
+  ratingCount: true,
+  isVerified: true,
+  isFeatured: true,
+  shop: { select: { slug: true, name: true } },
+  district: { select: { id: true, nameEn: true, nameHy: true, slug: true } },
+  // For the "from X ֏" minimum price: own catalog for independents, assigned
+  // shop services (with per-barber overrides) for shop barbers.
+  ownedServices: { where: { isActive: true }, select: { priceAmd: true } },
+  barberServices: {
+    where: { service: { isActive: true } },
+    select: { priceAmdOverride: true, service: { select: { priceAmd: true } } },
+  },
+} as const;
+
+type BarberCardRow = {
+  ratingAvg: unknown;
+  shop: { slug: string; name: string } | null;
+  ownedServices: { priceAmd: number }[];
+  barberServices: { priceAmdOverride: number | null; service: { priceAmd: number } }[];
+} & Omit<BarberCardData, 'ratingAvg' | 'minPrice' | 'shop'>;
+
+/** Maps a raw barber row (selected via barberCardSelect) into a discovery card. */
+export function mapBarberCard(b: BarberCardRow): BarberCardData {
+  const prices = b.shop
+    ? b.barberServices.map((bs) => bs.priceAmdOverride ?? bs.service.priceAmd)
+    : b.ownedServices.map((s) => s.priceAmd);
+  const { ownedServices: _o, barberServices: _bs, ...rest } = b;
+
+  return {
+    ...rest,
+    shop: b.shop,
+    ratingAvg: Number(b.ratingAvg),
+    minPrice: prices.length ? Math.min(...prices) : null,
+  };
+}
+
 /** Public list of barbers for discovery. Hides suspended/deleted. */
 export async function listBarbers(
-  params: { q?: string; district?: string; preferredDistrictId?: number } = {},
+  params: { q?: string; district?: string; preferredDistrictId?: number; sort?: BarberSort } = {},
 ): Promise<BarberCardData[]> {
   const q = params.q?.trim();
   const district = params.district?.trim();
+  const orderBy =
+    params.sort === 'new'
+      ? [{ isFeatured: 'desc' as const }, { createdAt: 'desc' as const }]
+      : [{ isFeatured: 'desc' as const }, { ratingAvg: 'desc' as const }, { createdAt: 'desc' as const }];
   const barbers = await prisma.barber.findMany({
     where: {
       deletedAt: null,
@@ -31,23 +84,11 @@ export async function listBarbers(
       ...(q ? { displayName: { contains: q, mode: 'insensitive' } } : {}),
       ...(district ? { district: { slug: district } } : {}),
     },
-    orderBy: [{ isFeatured: 'desc' }, { ratingAvg: 'desc' }, { createdAt: 'desc' }],
+    orderBy,
     take: 60,
-    select: {
-      id: true,
-      slug: true,
-      displayName: true,
-      photoUrl: true,
-      experienceYears: true,
-      ratingAvg: true,
-      ratingCount: true,
-      isVerified: true,
-      isFeatured: true,
-      shop: { select: { slug: true, name: true } },
-      district: { select: { id: true, nameEn: true, nameHy: true, slug: true } },
-    },
+    select: barberCardSelect,
   });
-  const mapped = barbers.map((b) => ({ ...b, ratingAvg: Number(b.ratingAvg) }));
+  const mapped = barbers.map(mapBarberCard);
 
   // Customer's home district first (stable sort keeps rating order within).
   const pref = params.preferredDistrictId;

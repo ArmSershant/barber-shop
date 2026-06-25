@@ -15,27 +15,30 @@ export const metadata: Metadata = {
   },
 };
 import { EmptyState } from '@/components/EmptyState';
-import { listBarbers } from '@/lib/queries/barbers';
+import { listBarbers, type BarberSort } from '@/lib/queries/barbers';
 import { getPreferredDistrict } from '@/lib/queries/districts';
 import { getCurrentUser } from '@/lib/auth/session';
 import { BarberCard } from '@/components/discover/BarberCard';
 import { BarberSearch } from '@/components/discover/BarberSearch';
-import { DistrictFilter } from '@/components/discover/DistrictFilter';
+import { DistrictFilterChips } from '@/components/discover/DistrictFilterChips';
+import { SortSelect } from '@/components/discover/SortSelect';
 
 export default async function BarbersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; district?: string }>;
+  searchParams: Promise<{ q?: string; district?: string; sort?: string }>;
 }) {
-  const { q, district } = await searchParams;
+  const { q, district, sort } = await searchParams;
   const t = await getTranslations('discover');
   const locale = await getLocale();
+  const sortValue: BarberSort = sort === 'new' ? 'new' : 'top';
 
   const viewer = await getCurrentUser();
   const pref = viewer ? await getPreferredDistrict(viewer.userId) : null;
   const barbers = await listBarbers({
     q,
     district,
+    sort: sortValue,
     preferredDistrictId: district ? undefined : pref?.id,
   });
   const showHint = pref && !district && barbers.length > 0;
@@ -43,13 +46,24 @@ export default async function BarbersPage({
   return (
     <Container size="lg" py="xl">
       <Stack gap="md" className="stagger">
-        <Title order={2}>{t('barbersTitle')}</Title>
-        <Group align="flex-end" wrap="wrap">
+        <Group align="baseline" gap="sm" wrap="wrap">
+          <Title order={2} ff="var(--font-display), Georgia, serif">
+            {t('barbersTitle')}
+          </Title>
+          <Text c="dimmed" fz="sm">
+            {t('inYerevan', { count: barbers.length })}
+          </Text>
+        </Group>
+
+        <Group align="flex-end" wrap="wrap" gap="sm">
           <div style={{ flex: 1, minWidth: 200 }}>
             <BarberSearch initialQuery={q ?? ''} />
           </div>
-          <DistrictFilter basePath="/barbers" q={q ?? ''} value={district ?? ''} />
+          <SortSelect />
         </Group>
+
+        <DistrictFilterChips basePath="/barbers" />
+
         {showHint && (
           <Text size="sm" c="dimmed">
             {t('showingFirst', { district: locale === 'hy' ? pref!.nameHy : pref!.nameEn })}

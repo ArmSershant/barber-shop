@@ -6,11 +6,14 @@ export interface ShopCardData {
   slug: string;
   name: string;
   logoUrl: string | null;
+  coverUrl: string | null;
   address: string | null;
   isVerified: boolean;
   isFeatured: boolean;
   district: { id: number; nameEn: string; nameHy: string; slug: string } | null;
   barberCount: number;
+  ratingAvg: number;
+  ratingCount: number;
 }
 
 /** Public list of shops for discovery. Hides suspended/deleted. */
@@ -35,24 +38,43 @@ export async function listShops(
       slug: true,
       name: true,
       logoUrl: true,
+      coverUrl: true,
       address: true,
       isVerified: true,
       isFeatured: true,
       district: { select: { id: true, nameEn: true, nameHy: true, slug: true } },
       _count: { select: { barbers: { where: { deletedAt: null } } } },
+      // Shop rating is derived from its barbers' aggregate review scores.
+      barbers: {
+        where: { deletedAt: null },
+        select: { ratingAvg: true, ratingCount: true },
+      },
     },
   });
-  const mapped = shops.map((s) => ({
-    id: s.id,
-    slug: s.slug,
-    name: s.name,
-    logoUrl: s.logoUrl,
-    address: s.address,
-    isVerified: s.isVerified,
-    isFeatured: s.isFeatured,
-    district: s.district,
-    barberCount: s._count.barbers,
-  }));
+  const mapped = shops.map((s) => {
+    // Weighted average across the shop's rated barbers (by review count).
+    const rated = s.barbers.filter((b) => b.ratingCount > 0);
+    const ratingCount = rated.reduce((sum, b) => sum + b.ratingCount, 0);
+    const ratingAvg =
+      ratingCount > 0
+        ? rated.reduce((sum, b) => sum + Number(b.ratingAvg) * b.ratingCount, 0) / ratingCount
+        : 0;
+
+    return {
+      id: s.id,
+      slug: s.slug,
+      name: s.name,
+      logoUrl: s.logoUrl,
+      coverUrl: s.coverUrl,
+      address: s.address,
+      isVerified: s.isVerified,
+      isFeatured: s.isFeatured,
+      district: s.district,
+      barberCount: s._count.barbers,
+      ratingAvg,
+      ratingCount,
+    };
+  });
 
   const pref = params.preferredDistrictId;
   if (pref && !district) {

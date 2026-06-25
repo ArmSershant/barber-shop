@@ -465,6 +465,10 @@
     "hoursHeading": "Working hours",
     "closed": "Closed",
     "book": "Book",
-    "bookingSoon": "Booking coming soon"
+    "bookingSoon": "Booking coming soon",
+    "sortLabel": "Sort",
+    "sortTop": "Top rated",
+    "sortNew": "Newest",
+    "inYerevan": "{count} in Yerevan"
   }
 }

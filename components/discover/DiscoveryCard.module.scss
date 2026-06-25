@@ -1,0 +1,63 @@
+// Shared styles for the discovery cards (barber = cover-on-top, shop = thumb-left).
+
+.card {
+  display: block;
+  overflow: hidden;
+  color: inherit;
+  text-decoration: none;
+}
+
+.featured {
+  border-color: var(--gold);
+}
+
+// Barber card cover photo area.
+.cover {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: var(--surf2);
+  overflow: hidden;
+}
+
+// Gold "Featured" tag overlaid on the cover.
+.featuredTag {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #221c15;
+  background: var(--gold);
+  border-radius: 2px;
+}
+
+// Shop card: horizontal — striped photo thumbnail on the left.
+.shopCard {
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  color: inherit;
+  text-decoration: none;
+}
+
+.shopThumb {
+  position: relative;
+  flex-shrink: 0;
+  width: 104px;
+  background: var(--surf2);
+  overflow: hidden;
+}
+
+@media (max-width: 30em) {
+  .shopThumb {
+    width: 76px;
+  }
+}

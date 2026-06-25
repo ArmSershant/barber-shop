@@ -465,6 +465,10 @@
     "hoursHeading": "Աշխատանքային ժամեր",
     "closed": "Փակ",
     "book": "Ամրագրել",
-    "bookingSoon": "Ամրագրումը շուտով"
+    "bookingSoon": "Ամրագրումը շուտով",
+    "sortLabel": "Դասավորել",
+    "sortTop": "Ըստ վարկանիշի",
+    "sortNew": "Նորագույն",
+    "inYerevan": "{count}-ը Երևանում"
   }
 }

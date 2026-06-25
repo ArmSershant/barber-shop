@@ -39,7 +39,14 @@ export default async function ShopsPage({
   return (
     <Container size="lg" py="xl">
       <Stack gap="md" className="stagger">
-        <Title order={2}>{t('shopsTitle')}</Title>
+        <Group align="baseline" gap="sm" wrap="wrap">
+          <Title order={2} ff="var(--font-display), Georgia, serif">
+            {t('shopsTitle')}
+          </Title>
+          <Text c="dimmed" fz="sm">
+            {t('inYerevan', { count: shops.length })}
+          </Text>
+        </Group>
         <Group align="flex-end" wrap="wrap">
           <div style={{ flex: 1, minWidth: 200 }}>
             <ShopSearch initialQuery={q ?? ''} />
@@ -55,7 +62,7 @@ export default async function ShopsPage({
         {shops.length === 0 ? (
           <EmptyState icon={<IconBuildingStore size={30} />} title={t('emptyShops')} />
         ) : (
-          <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="md" className="stagger">
+          <SimpleGrid cols={{ base: 1, md: 2 }} spacing="md" className="stagger">
             {shops.map((shop) => (
               <ShopCard key={shop.id} shop={shop} />
             ))}
