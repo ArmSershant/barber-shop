@@ -28,21 +28,23 @@ export function BookingRow({
       p="md"
       style={highlight ? { borderColor: 'var(--gold)' } : undefined}
     >
-      <Group wrap="nowrap" gap="md" align="center">
-        <div className={styles.dateBlock}>
-          <span className={styles.day}>{day}</span>
-          <span className={styles.sub}>
-            {month} · {time}
-          </span>
-        </div>
-        <div className={styles.body}>
-          <Text fw={600} truncate>
-            {title}
-          </Text>
-          <Text size="sm" c="dimmed" truncate>
-            {subtitle}
-          </Text>
-        </div>
+      <Group wrap="wrap" gap="sm" align="center">
+        <Group wrap="nowrap" gap="md" align="center" className={styles.main}>
+          <div className={styles.dateBlock}>
+            <span className={styles.day}>{day}</span>
+            <span className={styles.sub}>
+              {month} · {time}
+            </span>
+          </div>
+          <div className={styles.body}>
+            <Text fw={600} truncate>
+              {title}
+            </Text>
+            <Text size="sm" c="dimmed" truncate>
+              {subtitle}
+            </Text>
+          </div>
+        </Group>
         {right && <div className={styles.actions}>{right}</div>}
       </Group>
     </Paper>

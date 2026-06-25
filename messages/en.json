@@ -494,5 +494,15 @@
     "heading": "This chair's empty",
     "body": "The page you're looking for doesn't exist or has moved.",
     "home": "Back to home"
+  },
+  "onboarding": {
+    "title": "Welcome — let's set you up",
+    "subtitle": "Create a provider profile to start taking bookings. Free to join.",
+    "shopTitle": "A barber shop",
+    "shopDesc": "Manage a roster of barbers and a shared calendar.",
+    "shopCta": "Create shop",
+    "barberTitle": "Independent barber",
+    "barberDesc": "A personal profile, portfolio and your own calendar.",
+    "barberCta": "Create profile"
   }
 }

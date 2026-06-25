@@ -24,6 +24,7 @@ import {
   type ProviderBooking,
 } from '@/lib/store/api';
 import { AnalyticsSection } from '@/components/dashboard/AnalyticsSection';
+import { ProviderOnboarding } from '@/components/dashboard/ProviderOnboarding';
 import { BookingRow } from '@/components/dashboard/BookingRow';
 import { SectionHeader } from '@/components/profile/SectionHeader';
 import { StatusPill } from '@/components/StatusPill';
@@ -141,6 +142,8 @@ export default function DashboardPage() {
           <Text c="dimmed">{t('customerOnly')}</Text>
         ) : provLoading ? (
           <ListSkeleton rows={3} />
+        ) : !provider?.shop && !provider?.barber ? (
+          <ProviderOnboarding isShopOwner={isShopOwner} isBarber={isBarber} />
         ) : (
           <>
             {((isShopOwner && provider?.shop) || (isBarber && provider?.barber)) && <AnalyticsSection />}
