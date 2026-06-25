@@ -1,0 +1,82 @@
+// Hero eyebrow — faint uppercase letterspaced label above the title.
+.eyebrow {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.heroTitle {
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  line-height: 1.05;
+}
+
+// Second line of the hero title — italic gold Cormorant.
+.heroTitleEm {
+  display: block;
+  font-style: italic;
+  color: var(--gold2, var(--gold));
+}
+
+// Hero stat strip: big Cormorant numbers + uppercase labels, hairline dividers.
+.stats {
+  margin-top: 0.5rem;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 0 1.5rem;
+  border-left: 1px solid var(--line);
+
+  &:first-child {
+    border-left: none;
+  }
+}
+
+.statValue {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+// "How it works" steps — large roman numeral + heading + copy.
+.stepNumeral {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 2.6rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--gold2, var(--gold));
+}
+
+// Provider CTA — full-width dark espresso band with bone text + gold button.
+// Fixed colors (not --ink/--stripe, which flip with the theme) so the band
+// stays dark espresso in both light and dark modes.
+.providerBand {
+  background: #352a1f;
+  border: 1px solid var(--line);
+  color: #efe4d0;
+}
+
+.providerBand :global(.mantine-Text-root) {
+  color: #efe4d0;
+}
+
+// View-all link in section headers.
+.viewAll {
+  white-space: nowrap;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+}

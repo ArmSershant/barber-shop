@@ -72,8 +72,10 @@ export function ShopCard({ shop }: { shop: ShopCardData }) {
           component={Link}
           href={`/shops/${shop.slug}` as Route}
           size="xs"
+          px="md"
           variant="light"
           rightSection={<IconArrowRight size={14} />}
+          styles={{ root: { flexShrink: 0 }, section: { marginInlineStart: 8 } }}
         >
           {t('view')}
         </Button>

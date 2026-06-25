@@ -83,8 +83,10 @@ export function BarberCard({ barber }: { barber: BarberCardData }) {
           component={Link}
           href={`/barbers/${barber.slug}` as Route}
           size="xs"
+          px="md"
           variant="light"
           leftSection={<IconCalendarPlus size={14} />}
+          styles={{ root: { flexShrink: 0 }, section: { marginInlineEnd: 8 } }}
         >
           {t('book')}
         </Button>

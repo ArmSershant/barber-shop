@@ -18,7 +18,8 @@ export function ProviderCtaButton() {
     <Button
       component={Link}
       href={isProvider ? '/dashboard' : '/register'}
-      variant="default"
+      variant="filled"
+      color="gold"
       rightSection={<IconArrowRight size={18} />}
     >
       {isProvider ? t('providerCtaDashboard') : t('providerCta')}

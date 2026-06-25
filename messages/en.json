@@ -125,7 +125,7 @@
     "subtitle": "Book barbers in Yerevan.",
     "note": "Platform skeleton — under construction.",
     "heroBadge": "Yerevan",
-    "heroTitle": "Find your barber, book in seconds",
+    "heroTitle": "Find your barber,",
     "heroLead": "Discover barbershops and independent barbers across Yerevan and book your appointment online — anytime.",
     "feat1Title": "Browse nearby",
     "feat1Desc": "Find barbers and shops by district, with the closest to you shown first.",
@@ -138,7 +138,15 @@
     "providerCta": "Get started",
     "providerCtaDashboard": "Go to dashboard",
     "searchButton": "Search",
-    "browseByDistrict": "Browse by district"
+    "browseByDistrict": "Browse by district",
+    "heroEyebrow": "Est. 2026 · Yerevan",
+    "statBarbers": "Barbers",
+    "statShops": "Shops",
+    "statDistricts": "Districts",
+    "topRated": "Top-rated barbers",
+    "viewAll": "View all",
+    "howItWorks": "How it works",
+    "heroTitleEm": "book in seconds"
   },
   "profile": {
     "openNow": "Open now",
