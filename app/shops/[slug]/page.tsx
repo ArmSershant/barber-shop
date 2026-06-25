@@ -188,7 +188,13 @@ export default async function ShopProfilePage({ params }: { params: Promise<{ sl
           {shop.barbers.map((b) => (
             <BarberCard
               key={b.id}
-              barber={{ ...b, shop: { slug: shop.slug, name: shop.name }, district: shop.district }}
+              barber={{
+                ...b,
+                coverUrl: null,
+                minPrice: null,
+                shop: { slug: shop.slug, name: shop.name },
+                district: shop.district,
+              }}
             />
           ))}
         </SimpleGrid>

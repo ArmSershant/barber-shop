@@ -79,7 +79,13 @@
     "complete": "Completed",
     "noShow": "No-show",
     "completedMsg": "Marked as completed.",
-    "noShowMsg": "Marked as no-show."
+    "noShowMsg": "Marked as no-show.",
+    "allBarbers": "All barbers",
+    "rangeWeek": "This week",
+    "rangeAll": "All time",
+    "statusCompleted": "Completed",
+    "statusCancelled": "Cancelled",
+    "statusNoShow": "No-show"
   },
   "myBookings": {
     "title": "My bookings",
@@ -292,7 +298,13 @@
       "save": "Save changes",
       "created": "Profile created.",
       "saved": "Profile updated."
-    }
+    },
+    "editProfile": "Edit profile",
+    "todaysAgenda": "Today's agenda",
+    "upcoming": "Upcoming",
+    "noToday": "Nothing scheduled today.",
+    "noUpcoming": "No upcoming bookings.",
+    "viewAllBookings": "All bookings"
   },
   "services": {
     "heading": "Services",

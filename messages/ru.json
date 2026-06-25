@@ -79,7 +79,13 @@
     "complete": "Выполнена",
     "noShow": "Не пришёл",
     "completedMsg": "Отмечена как выполненная.",
-    "noShowMsg": "Отмечена как неявка."
+    "noShowMsg": "Отмечена как неявка.",
+    "allBarbers": "Все барберы",
+    "rangeWeek": "Эта неделя",
+    "rangeAll": "Всё время",
+    "statusCompleted": "Выполнена",
+    "statusCancelled": "Отменена",
+    "statusNoShow": "Неявка"
   },
   "myBookings": {
     "title": "Мои записи",
@@ -292,7 +298,13 @@
       "save": "Сохранить изменения",
       "created": "Профиль создан.",
       "saved": "Профиль обновлён."
-    }
+    },
+    "editProfile": "Редактировать профиль",
+    "todaysAgenda": "Расписание на сегодня",
+    "upcoming": "Предстоящие",
+    "noToday": "На сегодня записей нет.",
+    "noUpcoming": "Предстоящих записей нет.",
+    "viewAllBookings": "Все записи"
   },
   "services": {
     "heading": "Услуги",

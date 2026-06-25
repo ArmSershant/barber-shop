@@ -1,0 +1,46 @@
+// Left date block — divided from the body by a hairline rule.
+.dateBlock {
+  flex-shrink: 0;
+  width: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-right: 1rem;
+  border-right: 1px solid var(--line);
+}
+
+.day {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.sub {
+  margin-top: 2px;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--dim);
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+}
+
+.actions {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+// On narrow screens let the actions wrap under the body.
+@media (max-width: 36em) {
+  .actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+}
