@@ -80,5 +80,16 @@ export const theme = createTheme({
   components: {
     Card: { defaultProps: { shadow: 'none' } },
     Button: { defaultProps: { radius: 'xs' } },
+    // Heritage form labels: small uppercase letterspaced, per the design.
+    InputWrapper: {
+      styles: {
+        label: {
+          textTransform: 'uppercase' as const,
+          letterSpacing: '0.06em',
+          fontSize: '0.7rem',
+          fontWeight: 600,
+        },
+      },
+    },
   },
 });

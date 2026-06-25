@@ -4,10 +4,11 @@ import { Suspense, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Alert, Anchor, Button, Container, Paper, PasswordInput, Stack, Text, Title } from '@mantine/core';
+import { Alert, Anchor, Button, Container, Paper, PasswordInput, Stack, Text } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useResetPasswordMutation } from '@/lib/store/api';
 import { apiErrorMessage } from '@/lib/api-error';
+import { AuthHeader } from '@/components/auth/AuthHeader';
 
 function ResetPasswordForm() {
   const t = useTranslations('auth.reset');
@@ -28,35 +29,32 @@ function ResetPasswordForm() {
   };
 
   return (
-    <Container size={420} py={60}>
-      <Title order={2} ta="center">
-        {t('title')}
-      </Title>
-
-      {!token ? (
-        <Alert color="red" mt="lg">
-          {t('invalid')}
-        </Alert>
-      ) : (
-        <Paper withBorder className="offsetShadow" p="lg" radius="xs" mt="lg" component="form" onSubmit={onSubmit} noValidate>
-          <Stack>
-            <PasswordInput
-              label={t('newPassword')}
-              autoComplete="new-password"
-              value={password}
-              onChange={(e) => setPassword(e.currentTarget.value)}
-              required
-            />
-            <Button type="submit" loading={isLoading} disabled={password.length < 8} fullWidth>
-              {t('submit')}
-            </Button>
-          </Stack>
-        </Paper>
-      )}
+    <Container size={440} py={60}>
+      <Paper withBorder className="offsetShadow" p="xl" radius="xs">
+        <AuthHeader title={t('title')} />
+        {!token ? (
+          <Alert color="red">{t('invalid')}</Alert>
+        ) : (
+          <form onSubmit={onSubmit} noValidate>
+            <Stack>
+              <PasswordInput
+                label={t('newPassword')}
+                autoComplete="new-password"
+                value={password}
+                onChange={(e) => setPassword(e.currentTarget.value)}
+                required
+              />
+              <Button type="submit" loading={isLoading} disabled={password.length < 8} fullWidth>
+                {t('submit')}
+              </Button>
+            </Stack>
+          </form>
+        )}
+      </Paper>
 
       <Text c="dimmed" size="sm" ta="center" mt="md">
         <Anchor component={Link} href="/login">
-          {t('backToLogin')}
+          ← {t('backToLogin')}
         </Anchor>
       </Text>
     </Container>

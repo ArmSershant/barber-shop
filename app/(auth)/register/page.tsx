@@ -9,17 +9,18 @@ import {
   Anchor,
   Button,
   Container,
+  Input,
   Paper,
   PasswordInput,
-  Select,
+  SegmentedControl,
   Stack,
   Text,
   TextInput,
-  Title,
 } from '@mantine/core';
 import { registerSchema, type RegisterInput } from '@/lib/validation/auth';
 import { useRegisterMutation } from '@/lib/store/api';
 import { apiErrorMessage } from '@/lib/api-error';
+import { AuthHeader } from '@/components/auth/AuthHeader';
 
 export default function RegisterPage() {
   const t = useTranslations('auth.register');
@@ -52,24 +53,17 @@ export default function RegisterPage() {
   });
 
   return (
-    <Container size={420} py={60}>
-      <Title order={2} ta="center">
-        {t('title')}
-      </Title>
-      <Text c="dimmed" size="sm" ta="center" mt={4}>
-        {t('subtitle')}
-      </Text>
-
+    <Container size={440} py={60}>
       <Paper
         withBorder
         className="offsetShadow"
-        p="lg"
+        p="xl"
         radius="xs"
-        mt="lg"
         component="form"
         onSubmit={onSubmit}
         noValidate
       >
+        <AuthHeader title={t('title')} subtitle={t('subtitle')} />
         <Stack>
           <TextInput
             label={t('fullName')}
@@ -94,14 +88,17 @@ export default function RegisterPage() {
             name="role"
             control={control}
             render={({ field }) => (
-              <Select
-                label={t('roleLabel')}
-                data={roleOptions}
-                value={field.value}
-                onChange={(value) => field.onChange(value ?? 'customer')}
-                allowDeselect={false}
-                error={errors.role?.message}
-              />
+              <Input.Wrapper label={t('roleLabel')} error={errors.role?.message}>
+                <SegmentedControl
+                  fullWidth
+                  color="espresso"
+                  radius="xs"
+                  mt={4}
+                  data={roleOptions}
+                  value={field.value}
+                  onChange={(value) => field.onChange(value)}
+                />
+              </Input.Wrapper>
             )}
           />
           {errors.root && (

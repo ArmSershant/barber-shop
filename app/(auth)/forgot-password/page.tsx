@@ -3,8 +3,9 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { Alert, Anchor, Button, Container, Paper, Stack, Text, TextInput, Title } from '@mantine/core';
+import { Anchor, Button, Container, Paper, Stack, Text, TextInput } from '@mantine/core';
 import { useForgotPasswordMutation } from '@/lib/store/api';
+import { AuthHeader } from '@/components/auth/AuthHeader';
 
 export default function ForgotPasswordPage() {
   const t = useTranslations('auth.forgot');
@@ -24,39 +25,35 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <Container size={420} py={60}>
-      <Title order={2} ta="center">
-        {t('title')}
-      </Title>
-      <Text c="dimmed" size="sm" ta="center" mt={4}>
-        {t('subtitle')}
-      </Text>
-
-      {sent ? (
-        <Alert color="teal" mt="lg">
-          {t('sent')}
-        </Alert>
-      ) : (
-        <Paper withBorder className="offsetShadow" p="lg" radius="xs" mt="lg" component="form" onSubmit={onSubmit} noValidate>
-          <Stack>
-            <TextInput
-              label={t('email')}
-              type="email"
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.currentTarget.value)}
-              required
-            />
-            <Button type="submit" loading={isLoading} fullWidth>
-              {t('submit')}
-            </Button>
-          </Stack>
-        </Paper>
-      )}
+    <Container size={440} py={60}>
+      <Paper withBorder className="offsetShadow" p="xl" radius="xs">
+        <AuthHeader title={t('title')} subtitle={t('subtitle')} />
+        {sent ? (
+          <Text size="sm" c="dimmed" fs="italic" ta="center">
+            {t('sent')}
+          </Text>
+        ) : (
+          <form onSubmit={onSubmit} noValidate>
+            <Stack>
+              <TextInput
+                label={t('email')}
+                type="email"
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.currentTarget.value)}
+                required
+              />
+              <Button type="submit" loading={isLoading} fullWidth>
+                {t('submit')}
+              </Button>
+            </Stack>
+          </form>
+        )}
+      </Paper>
 
       <Text c="dimmed" size="sm" ta="center" mt="md">
         <Anchor component={Link} href="/login">
-          {t('backToLogin')}
+          ← {t('backToLogin')}
         </Anchor>
       </Text>
     </Container>

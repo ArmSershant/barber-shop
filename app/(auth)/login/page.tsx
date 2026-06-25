@@ -14,11 +14,11 @@ import {
   Stack,
   Text,
   TextInput,
-  Title,
 } from '@mantine/core';
 import { loginSchema, type LoginInput } from '@/lib/validation/auth';
 import { useLoginMutation } from '@/lib/store/api';
 import { apiErrorMessage } from '@/lib/api-error';
+import { AuthHeader } from '@/components/auth/AuthHeader';
 
 export default function LoginPage() {
   const t = useTranslations('auth.login');
@@ -41,24 +41,17 @@ export default function LoginPage() {
   });
 
   return (
-    <Container size={420} py={60}>
-      <Title order={2} ta="center">
-        {t('title')}
-      </Title>
-      <Text c="dimmed" size="sm" ta="center" mt={4}>
-        {t('subtitle')}
-      </Text>
-
+    <Container size={440} py={60}>
       <Paper
         withBorder
         className="offsetShadow"
-        p="lg"
+        p="xl"
         radius="xs"
-        mt="lg"
         component="form"
         onSubmit={onSubmit}
         noValidate
       >
+        <AuthHeader title={t('title')} subtitle={t('subtitle')} />
         <Stack>
           <TextInput
             label={t('email')}
