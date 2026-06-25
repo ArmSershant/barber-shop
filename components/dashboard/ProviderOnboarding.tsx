@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { Button, Card, Group, SimpleGrid, Stack, Text, ThemeIcon, Title } from '@mantine/core';
+import { Button, Card, SimpleGrid, Stack, Text, ThemeIcon, Title } from '@mantine/core';
 import { IconBuildingStore, IconScissors } from '@tabler/icons-react';
 
 /** Shown on the dashboard when a provider hasn't created their shop/barber
