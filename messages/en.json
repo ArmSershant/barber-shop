@@ -489,5 +489,10 @@
     "sortTop": "Top rated",
     "sortNew": "Newest",
     "inYerevan": "{count} in Yerevan"
+  },
+  "notFound": {
+    "heading": "This chair's empty",
+    "body": "The page you're looking for doesn't exist or has moved.",
+    "home": "Back to home"
   }
 }

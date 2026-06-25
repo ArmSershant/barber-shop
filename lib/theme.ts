@@ -80,6 +80,7 @@ export const theme = createTheme({
   components: {
     Card: { defaultProps: { shadow: 'none' } },
     Button: { defaultProps: { radius: 'xs' } },
+    Modal: { defaultProps: { radius: 'xs', centered: true } },
     // Heritage form labels: small uppercase letterspaced, per the design.
     InputWrapper: {
       styles: {
