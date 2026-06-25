@@ -90,7 +90,10 @@
     "rangeAll": "All time",
     "statusCompleted": "Completed",
     "statusCancelled": "Cancelled",
-    "statusNoShow": "No-show"
+    "statusNoShow": "No-show",
+    "accept": "Accept",
+    "reject": "Reject",
+    "acceptedMsg": "Booking confirmed."
   },
   "myBookings": {
     "title": "My bookings",
@@ -311,7 +314,9 @@
     "upcoming": "Upcoming",
     "noToday": "Nothing scheduled today.",
     "noUpcoming": "No upcoming bookings.",
-    "viewAllBookings": "All bookings"
+    "viewAllBookings": "All bookings",
+    "requiresApproval": "Require approval for bookings",
+    "requiresApprovalHint": "New bookings stay pending until you accept them."
   },
   "services": {
     "heading": "Services",
@@ -443,7 +448,10 @@
     "bookAnother": "Book another",
     "ownProfile": "This is your own profile — booking is disabled.",
     "manageLink": "Manage your booking",
-    "reassure": "No account needed · free cancellation"
+    "reassure": "No account needed · free cancellation",
+    "requestedTitle": "Request sent",
+    "requestedBody": "{when} — pending the barber's confirmation. We'll email you once it's confirmed.",
+    "addCalendar": "Add to calendar"
   },
   "manage": {
     "title": "Your booking",

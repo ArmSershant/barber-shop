@@ -25,6 +25,7 @@ import {
   useCancelBookingMutation,
   useCompleteBookingMutation,
   useNoShowBookingMutation,
+  useAcceptBookingMutation,
   type ProviderBooking,
 } from '@/lib/store/api';
 import { apiErrorMessage } from '@/lib/api-error';
@@ -40,6 +41,7 @@ export default function ProviderBookingsPage() {
   const [cancelBooking] = useCancelBookingMutation();
   const [completeBooking] = useCompleteBookingMutation();
   const [noShowBooking] = useNoShowBookingMutation();
+  const [acceptBooking] = useAcceptBookingMutation();
   const bookings = data?.bookings ?? [];
 
   const [barber, setBarber] = useState<string>('all');
@@ -86,6 +88,15 @@ export default function ProviderBookingsPage() {
     }
   };
 
+  const onAccept = async (id: string) => {
+    try {
+      await acceptBooking(id).unwrap();
+      notifications.show({ message: t('acceptedMsg'), color: 'teal' });
+    } catch (e) {
+      notifications.show({ message: apiErrorMessage(e), color: 'red' });
+    }
+  };
+
   const onCancel = (b: ProviderBooking) => {
     modals.openConfirmModal({
       title: t('cancel'),
@@ -106,24 +117,35 @@ export default function ProviderBookingsPage() {
 
   const rowActions = (b: ProviderBooking) => {
     const started = new Date(b.startsAt).getTime() <= Date.now();
-    const active = b.status === 'confirmed' || b.status === 'requested';
     return (
       <Group gap="xs" wrap="nowrap" align="center">
         <StatusPill status={b.status} label={statusLabel(b.status)} />
-        {active && started && (
+        {b.status === 'requested' && (
           <>
-            <Button size="xs" variant="default" onClick={() => onComplete(b.id)}>
-              {t('complete')}
+            <Button size="xs" color="espresso" onClick={() => onAccept(b.id)}>
+              {t('accept')}
             </Button>
-            <Button size="xs" variant="default" onClick={() => onNoShow(b.id)}>
-              {t('noShow')}
+            <Button size="xs" variant="outline" color="ox" onClick={() => onCancel(b)}>
+              {t('reject')}
             </Button>
           </>
         )}
-        {active && (
-          <Button size="xs" variant="subtle" color="ox" onClick={() => onCancel(b)}>
-            {t('cancel')}
-          </Button>
+        {b.status === 'confirmed' && (
+          <>
+            {started && (
+              <>
+                <Button size="xs" variant="default" onClick={() => onComplete(b.id)}>
+                  {t('complete')}
+                </Button>
+                <Button size="xs" variant="default" onClick={() => onNoShow(b.id)}>
+                  {t('noShow')}
+                </Button>
+              </>
+            )}
+            <Button size="xs" variant="subtle" color="ox" onClick={() => onCancel(b)}>
+              {t('cancel')}
+            </Button>
+          </>
         )}
       </Group>
     );

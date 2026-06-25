@@ -9,6 +9,7 @@ export const createShopSchema = z.object({
   instagram: z.string().trim().max(80).optional(),
   logoUrl: z.string().url().optional(),
   coverUrl: z.string().url().optional(),
+  requiresApproval: z.boolean().optional(),
 });
 export const updateShopSchema = createShopSchema.partial();
 
@@ -19,6 +20,7 @@ export const createBarberSchema = z.object({
   districtId: z.number().int().positive().optional(),
   photoUrl: z.string().url().optional(),
   coverUrl: z.string().url().optional(),
+  requiresApproval: z.boolean().optional(),
 });
 export const updateBarberSchema = createBarberSchema.partial();
 

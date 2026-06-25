@@ -17,7 +17,8 @@ import {
   ThemeIcon,
   Title,
 } from '@mantine/core';
-import { IconCheck } from '@tabler/icons-react';
+import { IconCheck, IconCalendarPlus } from '@tabler/icons-react';
+import { buildIcs } from '@/lib/ics';
 
 const headerBar = {
   background: 'var(--cta-head-bg)',
@@ -60,7 +61,9 @@ export function BookingWidget({
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [confirmed, setConfirmed] = useState<{ when: string; manageToken: string | null } | null>(null);
+  const [confirmed, setConfirmed] = useState<
+    { when: string; manageToken: string | null; pending: boolean; start: string; end: string } | null
+  >(null);
 
   const dateStr = date ? dayjs(date).format('YYYY-MM-DD') : '';
   const ready = serviceIds.length > 0 && Boolean(dateStr);
@@ -96,11 +99,30 @@ export function BookingWidget({
       setConfirmed({
         when: new Date(res.booking.startsAt).toLocaleString(),
         manageToken: res.manageToken,
+        pending: res.booking.status === 'requested',
+        start: res.booking.startsAt,
+        end: res.booking.endsAt,
       });
       setSlot(null);
     } catch (e) {
       setError(apiErrorMessage(e));
     }
+  };
+
+  const downloadIcs = () => {
+    if (!confirmed) return;
+    const ics = buildIcs({
+      uid: `${confirmed.start}@barber-shop.am`,
+      start: new Date(confirmed.start),
+      end: new Date(confirmed.end),
+      summary: t('heading'),
+    });
+    const url = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'booking.ics';
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   const reset = () => {
@@ -121,9 +143,11 @@ export function BookingWidget({
             <IconCheck size={30} />
           </ThemeIcon>
           <Title order={3} ff="var(--font-display), Georgia, serif">
-            {t('confirmedTitle')}
+            {t(confirmed.pending ? 'requestedTitle' : 'confirmedTitle')}
           </Title>
-          <Text c="dimmed">{t('confirmedBody', { when: confirmed.when })}</Text>
+          <Text c="dimmed">
+            {t(confirmed.pending ? 'requestedBody' : 'confirmedBody', { when: confirmed.when })}
+          </Text>
           {confirmed.manageToken && (
             <>
               <Text size="sm" c="dimmed">
@@ -134,7 +158,18 @@ export function BookingWidget({
               </Anchor>
             </>
           )}
-          <Button variant="default" onClick={reset} mt="sm">
+          {!confirmed.pending && (
+            <Button
+              variant="outline"
+              color="gold"
+              leftSection={<IconCalendarPlus size={16} />}
+              onClick={downloadIcs}
+              mt="sm"
+            >
+              {t('addCalendar')}
+            </Button>
+          )}
+          <Button variant="default" onClick={reset} mt="xs">
             {t('bookAnother')}
           </Button>
         </Stack>

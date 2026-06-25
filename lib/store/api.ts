@@ -55,6 +55,7 @@ export interface Shop {
   logoUrl?: string | null;
   coverUrl?: string | null;
   districtId?: number | null;
+  requiresApproval?: boolean;
   status: string;
 }
 
@@ -68,6 +69,7 @@ export interface Barber {
   coverUrl?: string | null;
   districtId?: number | null;
   shopId?: string | null;
+  requiresApproval?: boolean;
   status: string;
 }
 
@@ -582,6 +584,10 @@ export const api = createApi({
       query: (id) => ({ url: `/bookings/${id}/no-show`, method: 'POST' }),
       invalidatesTags: ['ProviderBookings'],
     }),
+    acceptBooking: builder.mutation<{ ok: boolean }, string>({
+      query: (id) => ({ url: `/bookings/${id}/accept`, method: 'POST' }),
+      invalidatesTags: ['ProviderBookings'],
+    }),
     createReview: builder.mutation<{ ok: boolean }, { id: string; rating: number; comment?: string }>({
       query: ({ id, ...body }) => ({ url: `/bookings/${id}/review`, method: 'POST', body }),
       invalidatesTags: ['MyBookings'],
@@ -708,6 +714,7 @@ export const {
   useCancelBookingMutation,
   useGetMyBookingsQuery,
   useCompleteBookingMutation,
+  useAcceptBookingMutation,
   useNoShowBookingMutation,
   useCreateReviewMutation,
   useGetManagedBookingQuery,

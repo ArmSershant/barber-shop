@@ -16,6 +16,9 @@ const COPY: Record<
   {
     confirmSubject: string;
     confirmTitle: string;
+    requestedSubject: string;
+    requestedTitle: string;
+    requestedBody: string;
     cancelSubject: string;
     cancelTitle: string;
     reminderSubject: string;
@@ -46,6 +49,9 @@ const COPY: Record<
   hy: {
     confirmSubject: 'Ձեր ամրագրումը հաստատված է',
     confirmTitle: 'Ամրագրումը հաստատված է',
+    requestedSubject: 'Ձեր հայտն ստացված է',
+    requestedTitle: 'Ամրագրման հայտ ուղարկված է',
+    requestedBody: 'Վարսավիրը շուտով կհաստատի Ձեր ամրագրումը։ Կստանաք հաստատման նամակ։',
     cancelSubject: 'Ձեր ամրագրումը չեղարկվել է',
     cancelTitle: 'Ամրագրումը չեղարկվել է',
     reminderSubject: 'Հիշեցում Ձեր ամրագրման մասին',
@@ -75,6 +81,9 @@ const COPY: Record<
   en: {
     confirmSubject: 'Your booking is confirmed',
     confirmTitle: 'Booking confirmed',
+    requestedSubject: 'We received your booking request',
+    requestedTitle: 'Booking requested',
+    requestedBody: 'The barber will confirm your booking shortly. You’ll get a confirmation email.',
     cancelSubject: 'Your booking was cancelled',
     cancelTitle: 'Booking cancelled',
     reminderSubject: 'Reminder about your booking',
@@ -104,6 +113,9 @@ const COPY: Record<
   ru: {
     confirmSubject: 'Ваша запись подтверждена',
     confirmTitle: 'Запись подтверждена',
+    requestedSubject: 'Мы получили вашу заявку',
+    requestedTitle: 'Заявка отправлена',
+    requestedBody: 'Барбер скоро подтвердит вашу запись. Вы получите письмо с подтверждением.',
     cancelSubject: 'Ваша запись отменена',
     cancelTitle: 'Запись отменена',
     reminderSubject: 'Напоминание о записи',
@@ -162,6 +174,18 @@ export function bookingConfirmationEmail(locale: string | undefined, d: BookingE
   return {
     subject: c.confirmSubject,
     html: layout(c.confirmTitle, detailRows(c, d) + manage, c, d.appUrl),
+  };
+}
+
+export function bookingRequestedEmail(locale: string | undefined, d: BookingEmailData) {
+  const c = COPY[pickLocale(locale)];
+  const manage = d.manageUrl
+    ? `<p style="margin:12px 0 0"><a href="${d.manageUrl}" target="_blank" rel="noopener noreferrer" style="color:#12b886">${c.manageLink}</a></p>`
+    : '';
+  const body = `<p style="margin:0 0 8px">${c.requestedBody}</p>${detailRows(c, d)}${manage}`;
+  return {
+    subject: c.requestedSubject,
+    html: layout(c.requestedTitle, body, c, d.appUrl),
   };
 }
 

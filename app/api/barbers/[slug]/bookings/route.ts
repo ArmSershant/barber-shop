@@ -10,7 +10,7 @@ import { cookies } from 'next/headers';
 import { getAvailableSlots } from '@/lib/queries/availability';
 import { createBookingSchema } from '@/lib/validation/booking';
 import { sendEmail } from '@/lib/email';
-import { bookingConfirmationEmail } from '@/lib/email-templates';
+import { bookingConfirmationEmail, bookingRequestedEmail } from '@/lib/email-templates';
 import { sendSms } from '@/lib/sms';
 import { bookingConfirmationSms } from '@/lib/sms-templates';
 import { buildIcs } from '@/lib/ics';
@@ -43,7 +43,8 @@ export async function POST(req: NextRequest, { params }: Params) {
         slotGranularityMin: true,
         defaultBufferMin: true,
         deletedAt: true,
-        shop: { select: { ownerUserId: true } },
+        requiresApproval: true,
+        shop: { select: { ownerUserId: true, requiresApproval: true } },
       },
     });
     if (!barber || barber.deletedAt) throw new HttpError(404, 'BARBER_NOT_FOUND', 'Barber not found.');
@@ -117,6 +118,12 @@ export async function POST(req: NextRequest, { params }: Params) {
     const manageToken = user ? null : crypto.randomBytes(18).toString('base64url');
     const endsAt = new Date(body.startsAt.getTime() + durationMin * 60_000);
 
+    // Shop setting governs shop barbers; otherwise the barber's own setting.
+    const requiresApproval = barber.shop
+      ? barber.shop.requiresApproval
+      : barber.requiresApproval;
+    const status = requiresApproval ? 'requested' : 'confirmed';
+
     try {
       const booking = await prisma.booking.create({
         data: {
@@ -129,7 +136,7 @@ export async function POST(req: NextRequest, { params }: Params) {
           manageToken,
           startsAt: body.startsAt,
           endsAt,
-          status: 'confirmed',
+          status,
           totalPriceAmd: priceAmd,
           totalDurationMin: durationMin,
           customerNote: body.note ?? null,
@@ -186,30 +193,35 @@ export async function POST(req: NextRequest, { params }: Params) {
           timeZone: barber.timezone,
         }).format(booking.startsAt);
         const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://barber-shop-alpha-two.vercel.app';
-        const { subject, html } = bookingConfirmationEmail(locale, {
-          customerName,
-          barberName: barber.displayName,
-          when,
-          appUrl,
-          manageUrl: manageToken ? `${appUrl}/manage?token=${encodeURIComponent(manageToken)}` : undefined,
-        });
-        const ics = buildIcs({
-          uid: `${booking.id}@barber-shop.am`,
-          start: booking.startsAt,
-          end: booking.endsAt,
-          summary: `${barber.displayName} — Barber-Shop`,
-          url: `${appUrl}/barbers/${slug}`,
-        });
-        void sendEmail({
-          to: customerEmail,
-          subject,
-          html,
-          attachments: [{ filename: 'booking.ics', content: Buffer.from(ics).toString('base64') }],
-        });
+        const manageUrl = manageToken
+          ? `${appUrl}/manage?token=${encodeURIComponent(manageToken)}`
+          : undefined;
+        const emailData = { customerName, barberName: barber.displayName, when, appUrl, manageUrl };
+
+        if (status === 'requested') {
+          // Pending approval — no calendar invite until the provider accepts.
+          const { subject, html } = bookingRequestedEmail(locale, emailData);
+          void sendEmail({ to: customerEmail, subject, html });
+        } else {
+          const { subject, html } = bookingConfirmationEmail(locale, emailData);
+          const ics = buildIcs({
+            uid: `${booking.id}@barber-shop.am`,
+            start: booking.startsAt,
+            end: booking.endsAt,
+            summary: `${barber.displayName} — Barber-Shop`,
+            url: `${appUrl}/barbers/${slug}`,
+          });
+          void sendEmail({
+            to: customerEmail,
+            subject,
+            html,
+            attachments: [{ filename: 'booking.ics', content: Buffer.from(ics).toString('base64') }],
+          });
+        }
       }
 
       // SMS confirmation (best-effort; no-ops until an SMS provider is configured).
-      if (customerPhone) {
+      if (customerPhone && status === 'confirmed') {
         const locale = (await cookies()).get('NEXT_LOCALE')?.value;
         const when = new Intl.DateTimeFormat(locale ?? 'hy', {
           dateStyle: 'medium',

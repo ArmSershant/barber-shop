@@ -3,7 +3,7 @@
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
-import { Button, Paper, Stack, Text, Textarea, TextInput, Title } from '@mantine/core';
+import { Button, Paper, Stack, Switch, Text, Textarea, TextInput, Title } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { createShopSchema, type CreateShopInput } from '@/lib/validation/provider';
 import { useCreateShopMutation, useUpdateShopMutation, type Shop } from '@/lib/store/api';
@@ -13,6 +13,7 @@ import { ImageUpload } from './ImageUpload';
 
 export function ShopForm({ shop }: { shop: Shop | null }) {
   const t = useTranslations('dashboard.shop');
+  const td = useTranslations('dashboard');
   const [createShop, { isLoading: creating }] = useCreateShopMutation();
   const [updateShop, { isLoading: updating }] = useUpdateShopMutation();
 
@@ -33,6 +34,7 @@ export function ShopForm({ shop }: { shop: Shop | null }) {
       districtId: shop?.districtId ?? undefined,
       logoUrl: shop?.logoUrl ?? undefined,
       coverUrl: shop?.coverUrl ?? undefined,
+      requiresApproval: shop?.requiresApproval ?? false,
     },
   });
 
@@ -80,6 +82,18 @@ export function ShopForm({ shop }: { shop: Shop | null }) {
         <TextInput label={t('address')} error={errors.address?.message} {...register('address')} />
         <TextInput label={t('phone')} error={errors.phone?.message} {...register('phone')} />
         <TextInput label={t('instagram')} error={errors.instagram?.message} {...register('instagram')} />
+        <Controller
+          name="requiresApproval"
+          control={control}
+          render={({ field }) => (
+            <Switch
+              checked={!!field.value}
+              onChange={(e) => field.onChange(e.currentTarget.checked)}
+              label={td('requiresApproval')}
+              description={td('requiresApprovalHint')}
+            />
+          )}
+        />
         {errors.root && (
           <Text c="red" size="sm">
             {errors.root.message}

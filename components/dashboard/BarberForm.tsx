@@ -3,7 +3,7 @@
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
-import { Button, NumberInput, Paper, Stack, Text, Textarea, TextInput, Title } from '@mantine/core';
+import { Button, NumberInput, Paper, Stack, Switch, Text, Textarea, TextInput, Title } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { createBarberSchema, type CreateBarberInput } from '@/lib/validation/provider';
 import { useCreateBarberMutation, useUpdateBarberMutation } from '@/lib/store/api';
@@ -21,10 +21,13 @@ export interface EditableBarber {
   districtId?: number | null;
   photoUrl?: string | null;
   coverUrl?: string | null;
+  requiresApproval?: boolean | null;
+  shopId?: string | null;
 }
 
 export function BarberForm({ barber }: { barber: EditableBarber | null }) {
   const t = useTranslations('dashboard.barber');
+  const td = useTranslations('dashboard');
   const [createBarber, { isLoading: creating }] = useCreateBarberMutation();
   const [updateBarber, { isLoading: updating }] = useUpdateBarberMutation();
 
@@ -43,8 +46,13 @@ export function BarberForm({ barber }: { barber: EditableBarber | null }) {
       districtId: barber?.districtId ?? undefined,
       photoUrl: barber?.photoUrl ?? undefined,
       coverUrl: barber?.coverUrl ?? undefined,
+      requiresApproval: barber?.requiresApproval ?? false,
     },
   });
+
+  // A barber's own approval setting only applies when they're independent;
+  // shop barbers inherit the shop's setting, so hide the toggle for them.
+  const showApproval = !barber?.shopId;
 
   const onSubmit = handleSubmit(async (values) => {
     try {
@@ -101,6 +109,20 @@ export function BarberForm({ barber }: { barber: EditableBarber | null }) {
             <DistrictSelectField value={field.value} onChange={field.onChange} error={errors.districtId?.message} />
           )}
         />
+        {showApproval && (
+          <Controller
+            name="requiresApproval"
+            control={control}
+            render={({ field }) => (
+              <Switch
+                checked={!!field.value}
+                onChange={(e) => field.onChange(e.currentTarget.checked)}
+                label={td('requiresApproval')}
+                description={td('requiresApprovalHint')}
+              />
+            )}
+          />
+        )}
         {errors.root && (
           <Text c="red" size="sm">
             {errors.root.message}

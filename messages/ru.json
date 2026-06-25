@@ -90,7 +90,10 @@
     "rangeAll": "Всё время",
     "statusCompleted": "Выполнена",
     "statusCancelled": "Отменена",
-    "statusNoShow": "Неявка"
+    "statusNoShow": "Неявка",
+    "accept": "Принять",
+    "reject": "Отклонить",
+    "acceptedMsg": "Запись подтверждена."
   },
   "myBookings": {
     "title": "Мои записи",
@@ -311,7 +314,9 @@
     "upcoming": "Предстоящие",
     "noToday": "На сегодня записей нет.",
     "noUpcoming": "Предстоящих записей нет.",
-    "viewAllBookings": "Все записи"
+    "viewAllBookings": "Все записи",
+    "requiresApproval": "Требовать подтверждение записей",
+    "requiresApprovalHint": "Новые записи будут ожидать вашего подтверждения."
   },
   "services": {
     "heading": "Услуги",
@@ -443,7 +448,10 @@
     "bookAnother": "Записаться ещё раз",
     "ownProfile": "Это ваш собственный профиль — запись отключена.",
     "manageLink": "Управлять записью",
-    "reassure": "Без аккаунта · бесплатная отмена"
+    "reassure": "Без аккаунта · бесплатная отмена",
+    "requestedTitle": "Заявка отправлена",
+    "requestedBody": "{when} — ожидает подтверждения барбера. Мы сообщим по почте.",
+    "addCalendar": "Добавить в календарь"
   },
   "manage": {
     "title": "Ваша запись",

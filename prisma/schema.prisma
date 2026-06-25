@@ -211,6 +211,7 @@ model Shop {
   status      ProviderStatus @default(pending)
   isVerified  Boolean        @default(false) @map("is_verified")
   isFeatured  Boolean        @default(false) @map("is_featured")
+  requiresApproval Boolean   @default(false) @map("requires_approval")
   // Copy-on-apply templates: arrays of {weekday,startMinute,endMinute}.
   defaultWorkingHours Json   @default("[]") @map("default_working_hours")
   defaultBreaks       Json   @default("[]") @map("default_breaks")
@@ -245,6 +246,7 @@ model Barber {
   defaultBufferMin   Int            @default(0) @map("default_buffer_min") @db.SmallInt
   isVerified         Boolean        @default(false) @map("is_verified")
   isFeatured         Boolean        @default(false) @map("is_featured")
+  requiresApproval   Boolean        @default(false) @map("requires_approval")
   status             ProviderStatus @default(pending)
   ratingAvg          Decimal        @default(0) @map("rating_avg") @db.Decimal(2, 1)
   ratingCount        Int            @default(0) @map("rating_count")
