@@ -144,7 +144,7 @@ export default function ProviderBookingsPage() {
             {barberNames.length > 1 && (
               <Select
                 size="xs"
-                w={160}
+                w={190}
                 value={barber}
                 onChange={(v) => setBarber(v ?? 'all')}
                 data={[{ value: 'all', label: t('allBarbers') }, ...barberNames.map((n) => ({ value: n, label: n }))]}
@@ -153,7 +153,7 @@ export default function ProviderBookingsPage() {
             )}
             <Select
               size="xs"
-              w={140}
+              w={190}
               value={range}
               onChange={(v) => setRange(v ?? 'all')}
               data={[

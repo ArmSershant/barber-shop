@@ -20,7 +20,9 @@ export async function getAdminOverview() {
         status: true,
         isVerified: true,
         isFeatured: true,
+        logoUrl: true,
         owner: { select: { email: true } },
+        district: { select: { nameEn: true, nameHy: true } },
       },
     }),
     prisma.barber.findMany({
@@ -33,7 +35,9 @@ export async function getAdminOverview() {
         status: true,
         isVerified: true,
         isFeatured: true,
+        photoUrl: true,
         shop: { select: { name: true } },
+        district: { select: { nameEn: true, nameHy: true } },
       },
     }),
     prisma.review.findMany({
@@ -70,6 +74,9 @@ export async function getAdminOverview() {
       isVerified: s.isVerified,
       isFeatured: s.isFeatured,
       ownerEmail: s.owner.email,
+      logoUrl: s.logoUrl,
+      districtEn: s.district?.nameEn ?? null,
+      districtHy: s.district?.nameHy ?? null,
     })),
     barbers: barberList.map((b) => ({
       slug: b.slug,
@@ -78,6 +85,9 @@ export async function getAdminOverview() {
       isVerified: b.isVerified,
       isFeatured: b.isFeatured,
       shopName: b.shop?.name ?? null,
+      photoUrl: b.photoUrl,
+      districtEn: b.district?.nameEn ?? null,
+      districtHy: b.district?.nameHy ?? null,
     })),
     reviews: reviewList.map((r) => ({
       id: r.id,

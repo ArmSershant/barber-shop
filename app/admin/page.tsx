@@ -1,11 +1,13 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import type { Route } from 'next';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import {
   Alert,
   Anchor,
+  Avatar,
   Badge,
   Button,
   Center,
@@ -18,8 +20,11 @@ import {
   Table,
   Tabs,
   Text,
+  TextInput,
   Title,
 } from '@mantine/core';
+import { IconSearch, IconTrash } from '@tabler/icons-react';
+import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import {
   useMeQuery,
@@ -27,6 +32,7 @@ import {
   useSetShopStatusMutation,
   useSetBarberStatusMutation,
   useSetUserStatusMutation,
+  useDeleteUserMutation,
   useSetReviewVisibilityMutation,
   useSetBarberFlagsMutation,
   useSetShopFlagsMutation,
@@ -38,6 +44,9 @@ import { StatusPill } from '@/components/StatusPill';
 export default function AdminPage() {
   const t = useTranslations('admin');
   const td = useTranslations('dashboard');
+  const tav = useTranslations('availability');
+  const locale = useLocale();
+  const [providerQuery, setProviderQuery] = useState('');
   const { data: me, isLoading: meLoading } = useMeQuery();
   const isAdmin = !!me?.user && me.user.roles.includes('admin');
   const { data, isLoading } = useGetAdminOverviewQuery(undefined, { skip: !isAdmin });
@@ -45,6 +54,7 @@ export default function AdminPage() {
   const [setShopStatus] = useSetShopStatusMutation();
   const [setBarberStatus] = useSetBarberStatusMutation();
   const [setUserStatus] = useSetUserStatusMutation();
+  const [deleteUser] = useDeleteUserMutation();
   const [setReviewVisibility] = useSetReviewVisibilityMutation();
   const [setBarberFlags] = useSetBarberFlagsMutation();
   const [setShopFlags] = useSetShopFlagsMutation();
@@ -56,6 +66,24 @@ export default function AdminPage() {
     } catch (e) {
       notifications.show({ message: apiErrorMessage(e), color: 'red' });
     }
+  };
+
+  const onRemove = (id: string, name: string) => {
+    modals.openConfirmModal({
+      title: t('remove'),
+      centered: true,
+      children: <Text size="sm">{t('removeConfirm', { name })}</Text>,
+      labels: { confirm: t('remove'), cancel: tav('cancel') },
+      confirmProps: { color: 'ox' },
+      onConfirm: async () => {
+        try {
+          await deleteUser(id).unwrap();
+          notifications.show({ message: t('removed'), color: 'teal' });
+        } catch (e) {
+          notifications.show({ message: apiErrorMessage(e), color: 'red' });
+        }
+      },
+    });
   };
 
   if (meLoading) {
@@ -80,6 +108,15 @@ export default function AdminPage() {
   const statusBadge = (status: string) => (
     <StatusPill status={status} label={t(`status_${status}`)} />
   );
+  const districtName = (en: string | null, hy: string | null) =>
+    (locale === 'hy' ? hy : en) ?? '—';
+  const matchesQuery = (...fields: (string | null)[]) => {
+    const q = providerQuery.trim().toLowerCase();
+    if (!q) return true;
+    return fields.some((f) => f?.toLowerCase().includes(q));
+  };
+  const shops = (o?.shops ?? []).filter((s) => matchesQuery(s.name, s.ownerEmail));
+  const barbers = (o?.barbers ?? []).filter((b) => matchesQuery(b.displayName, b.shopName));
 
   return (
     <Container size="lg" py="xl">
@@ -114,29 +151,43 @@ export default function AdminPage() {
 
             <Tabs.Panel value="providers" pt="md">
               <Stack gap="xl">
+                <TextInput
+                  placeholder={t('searchProviders')}
+                  value={providerQuery}
+                  onChange={(e) => setProviderQuery(e.currentTarget.value)}
+                  leftSection={<IconSearch size={16} />}
+                  maw={360}
+                />
                 <div>
-                  <Title order={4} mb="sm">
+                  <Title order={4} mb="sm" ff="var(--font-display), Georgia, serif">
                     {t('shops')}
                   </Title>
-                  <Table.ScrollContainer minWidth={600}>
+                  <Table.ScrollContainer minWidth={680}>
                     <Table striped highlightOnHover>
                       <Table.Thead>
                         <Table.Tr>
                           <Table.Th>{t('colName')}</Table.Th>
                           <Table.Th>{t('colOwner')}</Table.Th>
+                          <Table.Th>{t('colDistrict')}</Table.Th>
                           <Table.Th>{t('colStatus')}</Table.Th>
                           <Table.Th>{t('colActions')}</Table.Th>
                         </Table.Tr>
                       </Table.Thead>
                       <Table.Tbody>
-                        {o.shops.map((s) => (
+                        {shops.map((s) => (
                           <Table.Tr key={s.slug}>
                             <Table.Td>
-                              <Anchor component={Link} href={`/shops/${s.slug}` as Route} size="sm">
-                                {s.name}
-                              </Anchor>
+                              <Group gap="xs" wrap="nowrap">
+                                <Avatar src={s.logoUrl ?? undefined} size="sm" radius="sm" color="gold">
+                                  {s.name.charAt(0).toUpperCase()}
+                                </Avatar>
+                                <Anchor component={Link} href={`/shops/${s.slug}` as Route} size="sm">
+                                  {s.name}
+                                </Anchor>
+                              </Group>
                             </Table.Td>
                             <Table.Td>{s.ownerEmail}</Table.Td>
+                            <Table.Td>{districtName(s.districtEn, s.districtHy)}</Table.Td>
                             <Table.Td>{statusBadge(s.status)}</Table.Td>
                             <Table.Td>
                               <Group gap="xs">
@@ -186,28 +237,35 @@ export default function AdminPage() {
                 </div>
 
                 <div>
-                  <Title order={4} mb="sm">
+                  <Title order={4} mb="sm" ff="var(--font-display), Georgia, serif">
                     {t('barbers')}
                   </Title>
-                  <Table.ScrollContainer minWidth={600}>
+                  <Table.ScrollContainer minWidth={760}>
                     <Table striped highlightOnHover>
                       <Table.Thead>
                         <Table.Tr>
                           <Table.Th>{t('colName')}</Table.Th>
                           <Table.Th>{t('colShop')}</Table.Th>
+                          <Table.Th>{t('colDistrict')}</Table.Th>
                           <Table.Th>{t('colStatus')}</Table.Th>
                           <Table.Th>{t('colActions')}</Table.Th>
                         </Table.Tr>
                       </Table.Thead>
                       <Table.Tbody>
-                        {o.barbers.map((b) => (
+                        {barbers.map((b) => (
                           <Table.Tr key={b.slug}>
                             <Table.Td>
-                              <Anchor component={Link} href={`/barbers/${b.slug}` as Route} size="sm">
-                                {b.displayName}
-                              </Anchor>
+                              <Group gap="xs" wrap="nowrap">
+                                <Avatar src={b.photoUrl ?? undefined} size="sm" radius="xl" color="gold">
+                                  {b.displayName.charAt(0).toUpperCase()}
+                                </Avatar>
+                                <Anchor component={Link} href={`/barbers/${b.slug}` as Route} size="sm">
+                                  {b.displayName}
+                                </Anchor>
+                              </Group>
                             </Table.Td>
                             <Table.Td>{b.shopName ?? '—'}</Table.Td>
+                            <Table.Td>{districtName(b.districtEn, b.districtHy)}</Table.Td>
                             <Table.Td>{statusBadge(b.status)}</Table.Td>
                             <Table.Td>
                               <Group gap="xs">
@@ -292,24 +350,37 @@ export default function AdminPage() {
                               <Text size="xs" c="dimmed">
                                 {t('you')}
                               </Text>
-                            ) : u.status === 'suspended' ? (
-                              <Button
-                                size="xs"
-                                variant="light"
-                                color="teal"
-                                onClick={() => run(() => setUserStatus({ id: u.id, status: 'active' }).unwrap())}
-                              >
-                                {t('reinstate')}
-                              </Button>
                             ) : (
-                              <Button
-                                size="xs"
-                                variant="subtle"
-                                color="red"
-                                onClick={() => run(() => setUserStatus({ id: u.id, status: 'suspended' }).unwrap())}
-                              >
-                                {t('suspend')}
-                              </Button>
+                              <Group gap="xs" wrap="nowrap">
+                                {u.status === 'suspended' ? (
+                                  <Button
+                                    size="xs"
+                                    variant="light"
+                                    color="teal"
+                                    onClick={() => run(() => setUserStatus({ id: u.id, status: 'active' }).unwrap())}
+                                  >
+                                    {t('reinstate')}
+                                  </Button>
+                                ) : (
+                                  <Button
+                                    size="xs"
+                                    variant="subtle"
+                                    color="red"
+                                    onClick={() => run(() => setUserStatus({ id: u.id, status: 'suspended' }).unwrap())}
+                                  >
+                                    {t('suspend')}
+                                  </Button>
+                                )}
+                                <Button
+                                  size="xs"
+                                  variant="outline"
+                                  color="ox"
+                                  leftSection={<IconTrash size={13} />}
+                                  onClick={() => onRemove(u.id, u.fullName)}
+                                >
+                                  {t('remove')}
+                                </Button>
+                              </Group>
                             )}
                           </Table.Td>
                         </Table.Tr>
@@ -326,7 +397,7 @@ export default function AdminPage() {
                   <Text c="dimmed">{t('noReviews')}</Text>
                 ) : (
                   o.reviews.map((r) => (
-                    <Paper key={r.id} withBorder p="md" radius="md" opacity={r.isHidden ? 0.6 : 1}>
+                    <Paper key={r.id} withBorder p="md" radius="xs" opacity={r.isHidden ? 0.6 : 1}>
                       <Group justify="space-between" align="flex-start" wrap="nowrap">
                         <div>
                           <Group gap="xs">

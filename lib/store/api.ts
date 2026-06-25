@@ -257,6 +257,9 @@ export interface AdminShop {
   isVerified: boolean;
   isFeatured: boolean;
   ownerEmail: string;
+  logoUrl: string | null;
+  districtEn: string | null;
+  districtHy: string | null;
 }
 export interface AdminBarber {
   slug: string;
@@ -265,6 +268,9 @@ export interface AdminBarber {
   isVerified: boolean;
   isFeatured: boolean;
   shopName: string | null;
+  photoUrl: string | null;
+  districtEn: string | null;
+  districtHy: string | null;
 }
 export interface AdminReview {
   id: string;
@@ -597,6 +603,10 @@ export const api = createApi({
       query: ({ id, status }) => ({ url: `/admin/users/${id}/status`, method: 'POST', body: { status } }),
       invalidatesTags: ['AdminOverview'],
     }),
+    deleteUser: builder.mutation<{ ok: boolean }, string>({
+      query: (id) => ({ url: `/admin/users/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['AdminOverview'],
+    }),
     setReviewVisibility: builder.mutation<{ ok: boolean }, { id: string; hidden: boolean }>({
       query: ({ id, hidden }) => ({ url: `/admin/reviews/${id}/visibility`, method: 'POST', body: { hidden } }),
       invalidatesTags: ['AdminOverview'],
@@ -705,6 +715,7 @@ export const {
   useSetShopStatusMutation,
   useSetBarberStatusMutation,
   useSetUserStatusMutation,
+  useDeleteUserMutation,
   useSetReviewVisibilityMutation,
   useSetBarberFlagsMutation,
   useSetShopFlagsMutation,

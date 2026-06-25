@@ -58,7 +58,12 @@
     "hide": "Hide",
     "unhide": "Unhide",
     "hidden": "Hidden",
-    "noReviews": "No reviews yet."
+    "noReviews": "No reviews yet.",
+    "colDistrict": "District",
+    "searchProviders": "Search providers…",
+    "remove": "Remove",
+    "removed": "Account deleted.",
+    "removeConfirm": "Permanently delete {name}? This removes their account, provider profile, bookings and reviews. This cannot be undone."
   },
   "notifications": {
     "title": "Notifications",

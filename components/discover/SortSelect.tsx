@@ -30,7 +30,7 @@ export function SortSelect() {
       value={value}
       onChange={onChange}
       leftSection={<IconArrowsSort size={15} />}
-      w={180}
+      w={210}
       allowDeselect={false}
       aria-label={t('sortLabel')}
     />
