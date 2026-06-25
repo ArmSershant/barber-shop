@@ -4,7 +4,6 @@ import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import {
   Alert,
-  Badge,
   Button,
   Card,
   Center,
@@ -19,18 +18,13 @@ import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import { useGetManagedBookingQuery, useCancelBookingMutation } from '@/lib/store/api';
 import { apiErrorMessage } from '@/lib/api-error';
+import { StatusPill } from '@/components/StatusPill';
 
 const STATUS_KEY: Record<string, string> = {
   confirmed: 'statusConfirmed',
   cancelled: 'statusCancelled',
   completed: 'statusCompleted',
   no_show: 'statusNoShow',
-};
-const STATUS_COLOR: Record<string, string> = {
-  confirmed: 'teal',
-  cancelled: 'gray',
-  completed: 'blue',
-  no_show: 'red',
 };
 
 export default function ManageBookingPage() {
@@ -83,27 +77,35 @@ export default function ManageBookingPage() {
   return (
     <Container size="sm" py="xl">
       <Stack>
-        <Title order={2}>{t('title')}</Title>
-        <Card withBorder radius="md" padding="lg">
-          <Group justify="space-between" align="flex-start">
+        <Title order={2} ff="var(--font-display), Georgia, serif">
+          {t('title')}
+        </Title>
+        <Card withBorder radius="xs" padding="lg" className="offsetShadow">
+          <Group justify="space-between" align="flex-start" wrap="nowrap">
             <div>
-              <Text fw={600}>
+              <Text fw={700} ff="var(--font-display), Georgia, serif" fz="1.2rem">
+                {booking.barber.displayName}
+              </Text>
+              <Text size="sm" c="dimmed">
+                {booking.services.map(svcLabel).join(', ')}
+              </Text>
+              <Text size="sm" mt="sm">
                 {new Date(booking.startsAt).toLocaleString([], {
-                  dateStyle: 'medium',
+                  dateStyle: 'full',
                   timeStyle: 'short',
                 })}
               </Text>
-              <Text size="sm">{booking.barber.displayName}</Text>
               <Text size="sm" c="dimmed">
-                {booking.services.map(svcLabel).join(', ')} · {booking.totalPriceAmd.toLocaleString()} ֏
+                {booking.totalPriceAmd.toLocaleString()} ֏
               </Text>
             </div>
-            <Badge variant="light" color={STATUS_COLOR[booking.status] ?? 'gray'}>
-              {t(STATUS_KEY[booking.status] ?? 'statusConfirmed')}
-            </Badge>
+            <StatusPill
+              status={booking.status}
+              label={t(STATUS_KEY[booking.status] ?? 'statusConfirmed')}
+            />
           </Group>
           {cancellable && (
-            <Button variant="light" color="red" mt="md" onClick={onCancel}>
+            <Button variant="outline" color="ox" mt="md" onClick={onCancel}>
               {t('cancel')}
             </Button>
           )}

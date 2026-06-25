@@ -13,6 +13,7 @@ import {
   Paper,
   PasswordInput,
   Select,
+  SimpleGrid,
   Stack,
   TextInput,
   Title,
@@ -113,9 +114,11 @@ export default function AccountPage() {
   }
 
   return (
-    <Container size="sm" py="xl">
+    <Container size="lg" py="xl">
       <Stack className="stagger">
-        <Title order={2}>{t('title')}</Title>
+        <Title order={2} ff="var(--font-display), Georgia, serif">
+          {t('title')}
+        </Title>
 
         {!user.emailVerified && (
           <Alert color="yellow">
@@ -126,9 +129,12 @@ export default function AccountPage() {
           </Alert>
         )}
 
-        <Paper withBorder p="lg" radius="md">
+        <SimpleGrid cols={{ base: 1, md: 2 }} spacing="lg" style={{ alignItems: 'start' }}>
+        <Paper withBorder p="xl" radius="xs">
           <Stack>
-            <Title order={3}>{t('profile')}</Title>
+            <Title order={3} fs="italic" ff="var(--font-display), Georgia, serif">
+              {t('profile')}
+            </Title>
             <ImageUpload value={avatarUrl} onChange={setAvatarUrl} label={t('avatar')} radius="xl" />
             <TextInput
               label={t('fullName')}
@@ -157,9 +163,11 @@ export default function AccountPage() {
           </Stack>
         </Paper>
 
-        <Paper withBorder p="lg" radius="md">
+        <Paper withBorder p="xl" radius="xs">
           <Stack>
-            <Title order={3}>{t('password')}</Title>
+            <Title order={3} fs="italic" ff="var(--font-display), Georgia, serif">
+              {t('password')}
+            </Title>
             <PasswordInput
               label={t('currentPassword')}
               value={currentPassword}
@@ -179,6 +187,7 @@ export default function AccountPage() {
             </Button>
           </Stack>
         </Paper>
+        </SimpleGrid>
       </Stack>
     </Container>
   );

@@ -72,7 +72,6 @@ export default function DashboardPage() {
   const bookings = bookingsData?.bookings ?? [];
   const startOfTomorrow = new Date();
   startOfTomorrow.setHours(24, 0, 0, 0);
-  const now = Date.now();
   const active = (b: ProviderBooking) => b.status === 'confirmed' || b.status === 'requested';
   const today = bookings
     .filter((b) => active(b) && new Date(b.startsAt).getTime() < startOfTomorrow.getTime())

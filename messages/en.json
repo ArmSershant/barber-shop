@@ -108,7 +108,9 @@
     "statusNoShow": "No-show",
     "myArea": "My area",
     "myAreaHint": "Set your district to see nearby barbers first.",
-    "areaSaved": "Saved."
+    "areaSaved": "Saved.",
+    "bookAgain": "Book again",
+    "review": "Review"
   },
   "apiErrors": {
     "INVALID_CREDENTIALS": "Invalid email or password.",

@@ -46,8 +46,8 @@ export default function ProviderBookingsPage() {
   const [range, setRange] = useState<string>('all');
 
   const barberNames = useMemo(
-    () => Array.from(new Set(bookings.map((b) => b.barberName))).sort(),
-    [bookings],
+    () => Array.from(new Set((data?.bookings ?? []).map((b) => b.barberName))).sort(),
+    [data],
   );
 
   const weekFromNow = Date.now() + 7 * 24 * 60 * 60 * 1000;

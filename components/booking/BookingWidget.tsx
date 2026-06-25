@@ -4,7 +4,6 @@ import { useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import { useTranslations } from 'next-intl';
 import {
-  Alert,
   Anchor,
   Box,
   Button,
@@ -15,8 +14,10 @@ import {
   Stack,
   Text,
   TextInput,
+  ThemeIcon,
   Title,
 } from '@mantine/core';
+import { IconCheck } from '@tabler/icons-react';
 
 const headerBar = {
   background: 'var(--cta-head-bg)',
@@ -114,25 +115,29 @@ export function BookingWidget({
 
   if (confirmed) {
     return (
-      <Paper withBorder p="lg" radius="md">
-        <Alert color="teal" title={t('confirmedTitle')}>
-          <Stack gap="xs">
-            <Text>{t('confirmedBody', { when: confirmed.when })}</Text>
-            {confirmed.manageToken && (
-              <>
-                <Text size="sm" c="dimmed">
-                  {t('guestManageNote')}
-                </Text>
-                <Anchor href={`/manage?token=${encodeURIComponent(confirmed.manageToken)}`} size="sm">
-                  {t('manageLink')}
-                </Anchor>
-              </>
-            )}
-            <Button variant="light" onClick={reset} mt="sm">
-              {t('bookAnother')}
-            </Button>
-          </Stack>
-        </Alert>
+      <Paper withBorder p="xl" radius="xs" className="offsetShadow">
+        <Stack align="center" gap="xs" ta="center">
+          <ThemeIcon size={56} radius="xl" color="gold" variant="light">
+            <IconCheck size={30} />
+          </ThemeIcon>
+          <Title order={3} ff="var(--font-display), Georgia, serif">
+            {t('confirmedTitle')}
+          </Title>
+          <Text c="dimmed">{t('confirmedBody', { when: confirmed.when })}</Text>
+          {confirmed.manageToken && (
+            <>
+              <Text size="sm" c="dimmed">
+                {t('guestManageNote')}
+              </Text>
+              <Anchor href={`/manage?token=${encodeURIComponent(confirmed.manageToken)}`} size="sm">
+                {t('manageLink')}
+              </Anchor>
+            </>
+          )}
+          <Button variant="default" onClick={reset} mt="sm">
+            {t('bookAnother')}
+          </Button>
+        </Stack>
       </Paper>
     );
   }

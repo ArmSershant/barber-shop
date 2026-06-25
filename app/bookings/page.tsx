@@ -13,17 +13,17 @@ import {
   Group,
   Loader,
   Modal,
-  Paper,
   Rating,
+  Select,
   Stack,
   Text,
   Textarea,
   Title,
 } from '@mantine/core';
+import { IconStarFilled } from '@tabler/icons-react';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import { useLocale } from 'next-intl';
-import { Select } from '@mantine/core';
 import {
   useMeQuery,
   useGetMyBookingsQuery,
@@ -36,6 +36,8 @@ import {
 import { apiErrorMessage } from '@/lib/api-error';
 import { ListSkeleton } from '@/components/ListSkeleton';
 import { StatusPill } from '@/components/StatusPill';
+import { BookingRow } from '@/components/dashboard/BookingRow';
+import { SectionHeader } from '@/components/profile/SectionHeader';
 
 const STATUS_KEY: Record<string, string> = {
   confirmed: 'statusConfirmed',
@@ -140,42 +142,49 @@ export default function MyBookingsPage() {
   };
 
   const renderCard = (b: MyBooking, cancellable: boolean) => (
-    <Paper key={b.id} withBorder p="md" radius="md" className="hoverLift">
-      <Group justify="space-between" wrap="nowrap" align="flex-start">
-        <div>
-          <Text fw={600}>
-            {new Date(b.startsAt).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
-          </Text>
-          <Anchor component={Link} href={`/barbers/${b.barber.slug}` as Route} size="sm">
-            {b.barber.displayName}
-          </Anchor>
-          <Text size="sm" c="dimmed">
-            {b.services.map(svcLabel).join(', ')} · {b.totalPriceAmd.toLocaleString()} ֏
-          </Text>
-        </div>
-        <Stack gap="xs" align="flex-end">
+    <BookingRow
+      key={b.id}
+      date={new Date(b.startsAt)}
+      title={b.barber.displayName}
+      subtitle={`${b.services.map(svcLabel).join(', ')} · ${b.totalPriceAmd.toLocaleString()} ֏`}
+      highlight={b.status === 'requested'}
+      right={
+        <Group gap="xs" wrap="nowrap" align="center">
           <StatusPill status={b.status} label={t(STATUS_KEY[b.status] ?? 'statusConfirmed')} />
           {cancellable && (
-            <Button variant="subtle" color="red" size="xs" onClick={() => onCancel(b)}>
+            <Button variant="outline" color="ox" size="xs" onClick={() => onCancel(b)}>
               {t('cancel')}
             </Button>
           )}
-          {!cancellable && b.status === 'completed' && !b.reviewed && (
-            <Button
-              variant="light"
-              size="xs"
-              onClick={() => {
-                setReviewFor(b);
-                setRating(5);
-                setComment('');
-              }}
-            >
-              {tr('leave')}
-            </Button>
+          {!cancellable && b.status === 'completed' && (
+            <>
+              <Button
+                component={Link}
+                href={`/barbers/${b.barber.slug}` as Route}
+                variant="default"
+                size="xs"
+              >
+                {t('bookAgain')}
+              </Button>
+              {!b.reviewed && (
+                <Button
+                  size="xs"
+                  color="gold"
+                  leftSection={<IconStarFilled size={12} />}
+                  onClick={() => {
+                    setReviewFor(b);
+                    setRating(5);
+                    setComment('');
+                  }}
+                >
+                  {t('review')}
+                </Button>
+              )}
+            </>
           )}
-        </Stack>
-      </Group>
-    </Paper>
+        </Group>
+      }
+    />
   );
 
   return (
@@ -207,7 +216,7 @@ export default function MyBookingsPage() {
           </Stack>
         ) : (
           <>
-            <Title order={4}>{t('upcoming')}</Title>
+            <SectionHeader>{t('upcoming')}</SectionHeader>
             {upcoming.length === 0 ? (
               <Text c="dimmed" size="sm">
                 {t('empty')}
@@ -218,9 +227,7 @@ export default function MyBookingsPage() {
 
             {past.length > 0 && (
               <>
-                <Title order={4} mt="md">
-                  {t('past')}
-                </Title>
+                <SectionHeader>{t('past')}</SectionHeader>
                 {past.map((b) => renderCard(b, false))}
               </>
             )}

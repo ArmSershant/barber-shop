@@ -108,7 +108,9 @@
     "statusNoShow": "Неявка",
     "myArea": "Мой район",
     "myAreaHint": "Укажите район, чтобы видеть ближайших барберов первыми.",
-    "areaSaved": "Сохранено."
+    "areaSaved": "Сохранено.",
+    "bookAgain": "Записаться снова",
+    "review": "Отзыв"
   },
   "apiErrors": {
     "INVALID_CREDENTIALS": "Неверная почта или пароль.",

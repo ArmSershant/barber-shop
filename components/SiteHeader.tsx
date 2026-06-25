@@ -83,6 +83,7 @@ export function SiteHeader() {
         <>
           <NavLink href="/barbers" icon={<IconUser size={16} />} label={t('barbers')} />
           <NavLink href="/shops" icon={<IconBuildingStore size={16} />} label={t('shops')} />
+          <NavLink href="/bookings" icon={<IconCalendarEvent size={16} />} label={t('myBookings')} />
           <NavLink href="/favorites" icon={<IconHeart size={16} />} label={t('saved')} />
         </>
       ) : (
