@@ -203,3 +203,34 @@ html {
     transform: none !important;
   }
 }
+
+// Mobile: modals dock to the bottom as bottom-sheets with a drag handle.
+@media (max-width: 47.99em) {
+  .mantine-Modal-inner {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .mantine-Modal-content {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    max-height: 92vh;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    padding-top: 0.75rem;
+  }
+
+  // Drag handle.
+  .mantine-Modal-content::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 36px;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--line);
+  }
+}
