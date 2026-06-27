@@ -63,6 +63,8 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
   if (!barber) notFound();
 
   const viewer = await getCurrentUser();
+  // Test barbers are hidden from everyone except admins.
+  if (barber.isTest && !viewer?.roles?.includes('admin')) notFound();
   const isOwnProfile = Boolean(
     viewer &&
       (barber.userId === viewer.userId || barber.shop?.ownerUserId === viewer.userId),

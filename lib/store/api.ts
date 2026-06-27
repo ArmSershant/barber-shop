@@ -261,6 +261,7 @@ export interface AdminShop {
   status: string;
   isVerified: boolean;
   isFeatured: boolean;
+  isTest: boolean;
   ownerEmail: string;
   logoUrl: string | null;
   districtEn: string | null;
@@ -272,6 +273,7 @@ export interface AdminBarber {
   status: string;
   isVerified: boolean;
   isFeatured: boolean;
+  isTest: boolean;
   shopName: string | null;
   photoUrl: string | null;
   districtEn: string | null;
@@ -624,14 +626,14 @@ export const api = createApi({
     }),
     setBarberFlags: builder.mutation<
       { ok: boolean },
-      { slug: string; isVerified?: boolean; isFeatured?: boolean }
+      { slug: string; isVerified?: boolean; isFeatured?: boolean; isTest?: boolean }
     >({
       query: ({ slug, ...body }) => ({ url: `/admin/barbers/${slug}/flags`, method: 'POST', body }),
       invalidatesTags: ['AdminOverview'],
     }),
     setShopFlags: builder.mutation<
       { ok: boolean },
-      { slug: string; isVerified?: boolean; isFeatured?: boolean }
+      { slug: string; isVerified?: boolean; isFeatured?: boolean; isTest?: boolean }
     >({
       query: ({ slug, ...body }) => ({ url: `/admin/shops/${slug}/flags`, method: 'POST', body }),
       invalidatesTags: ['AdminOverview'],

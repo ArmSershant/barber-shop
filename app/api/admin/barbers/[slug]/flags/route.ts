@@ -5,7 +5,11 @@ import { errorResponse, ok } from '@/lib/http';
 import { requireRole } from '@/lib/auth/rbac';
 
 type Params = { params: Promise<{ slug: string }> };
-const schema = z.object({ isVerified: z.boolean().optional(), isFeatured: z.boolean().optional() });
+const schema = z.object({
+  isVerified: z.boolean().optional(),
+  isFeatured: z.boolean().optional(),
+  isTest: z.boolean().optional(),
+});
 
 export async function POST(req: NextRequest, { params }: Params) {
   try {

@@ -78,6 +78,7 @@ export async function listBarbers(
     where: {
       deletedAt: null,
       status: { not: 'suspended' },
+      isTest: false, // hide internal/test barbers from public discovery
       // Only list barbers whose responsible account has a verified email:
       // the independent barber's own user, or their shop's owner.
       OR: [{ user: { emailVerified: true } }, { shop: { owner: { emailVerified: true } } }],
@@ -113,6 +114,7 @@ export const getBarberProfile = cache(async (slug: string) => {
       coverUrl: true,
       experienceYears: true,
       isVerified: true,
+      isTest: true,
       districtId: true,
       ratingAvg: true,
       ratingCount: true,

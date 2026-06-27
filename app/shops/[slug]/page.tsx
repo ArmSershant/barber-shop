@@ -5,6 +5,7 @@ import { getLocale, getTranslations } from 'next-intl/server';
 import { Anchor, Avatar, Box, Card, Container, Group, Paper, SimpleGrid, Stack, Text, Title } from '@mantine/core';
 import { IconBrandInstagram, IconPhone, IconRosetteDiscountCheckFilled } from '@tabler/icons-react';
 import { getShopProfile } from '@/lib/queries/shops';
+import { getCurrentUser } from '@/lib/auth/session';
 import { BarberCard } from '@/components/discover/BarberCard';
 import { PortfolioGrid } from '@/components/profile/PortfolioGrid';
 import { AtAGlance } from '@/components/profile/AtAGlance';
@@ -48,6 +49,10 @@ export default async function ShopProfilePage({ params }: { params: Promise<{ sl
   const { slug } = await params;
   const shop = await getShopProfile(slug);
   if (!shop) notFound();
+
+  const viewer = await getCurrentUser();
+  // Test shops are hidden from everyone except admins.
+  if (shop.isTest && !viewer?.roles?.includes('admin')) notFound();
 
   const locale = await getLocale();
   const t = await getTranslations('discover');

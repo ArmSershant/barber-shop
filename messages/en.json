@@ -63,7 +63,10 @@
     "searchProviders": "Search providers…",
     "remove": "Remove",
     "removed": "Account deleted.",
-    "removeConfirm": "Permanently delete {name}? This removes their account, provider profile, bookings and reviews. This cannot be undone."
+    "removeConfirm": "Permanently delete {name}? This removes their account, provider profile, bookings and reviews. This cannot be undone.",
+    "markTest": "Mark test",
+    "unmarkTest": "Unmark test",
+    "testBadge": "TEST"
   },
   "notifications": {
     "title": "Notifications",

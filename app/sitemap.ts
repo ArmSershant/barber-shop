@@ -25,12 +25,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         where: {
           deletedAt: null,
           status: 'active',
+          isTest: false,
           OR: [{ user: { emailVerified: true } }, { shop: { owner: { emailVerified: true } } }],
         },
         select: { slug: true },
       }),
       prisma.shop.findMany({
-        where: { deletedAt: null, status: 'active', owner: { emailVerified: true } },
+        where: { deletedAt: null, status: 'active', isTest: false, owner: { emailVerified: true } },
         select: { slug: true },
       }),
       prisma.district.findMany({ select: { slug: true } }),

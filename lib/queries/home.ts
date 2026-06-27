@@ -16,11 +16,12 @@ export async function getHomeStats(): Promise<HomeStats> {
       where: {
         deletedAt: null,
         status: { not: 'suspended' },
+        isTest: false,
         OR: [{ user: { emailVerified: true } }, { shop: { owner: { emailVerified: true } } }],
       },
     }),
     prisma.shop.count({
-      where: { deletedAt: null, status: { not: 'suspended' }, owner: { emailVerified: true } },
+      where: { deletedAt: null, status: { not: 'suspended' }, isTest: false, owner: { emailVerified: true } },
     }),
     prisma.district.count(),
   ]);

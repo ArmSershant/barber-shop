@@ -26,6 +26,7 @@ export async function listShops(
     where: {
       deletedAt: null,
       status: { not: 'suspended' },
+      isTest: false, // hide internal/test shops from public discovery
       // Only list shops whose owner has verified their email.
       owner: { emailVerified: true },
       ...(q ? { name: { contains: q, mode: 'insensitive' } } : {}),
@@ -99,6 +100,7 @@ export const getShopProfile = cache(async (slug: string) => {
       phone: true,
       instagram: true,
       isVerified: true,
+      isTest: true,
       deletedAt: true,
       district: { select: { id: true, nameEn: true, nameHy: true, slug: true } },
       photos: { orderBy: { sortOrder: 'asc' }, select: { id: true, url: true } },

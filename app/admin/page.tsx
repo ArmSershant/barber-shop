@@ -184,6 +184,11 @@ export default function AdminPage() {
                                 <Anchor component={Link} href={`/shops/${s.slug}` as Route} size="sm">
                                   {s.name}
                                 </Anchor>
+                                {s.isTest && (
+                                  <Badge size="xs" color="gray" variant="outline">
+                                    {t('testBadge')}
+                                  </Badge>
+                                )}
                               </Group>
                             </Table.Td>
                             <Table.Td>{s.ownerEmail}</Table.Td>
@@ -227,6 +232,14 @@ export default function AdminPage() {
                                 >
                                   {s.isFeatured ? t('unfeature') : t('feature')}
                                 </Button>
+                                <Button
+                                  size="xs"
+                                  variant={s.isTest ? 'filled' : 'default'}
+                                  color="gray"
+                                  onClick={() => run(() => setShopFlags({ slug: s.slug, isTest: !s.isTest }).unwrap())}
+                                >
+                                  {s.isTest ? t('unmarkTest') : t('markTest')}
+                                </Button>
                               </Group>
                             </Table.Td>
                           </Table.Tr>
@@ -262,6 +275,11 @@ export default function AdminPage() {
                                 <Anchor component={Link} href={`/barbers/${b.slug}` as Route} size="sm">
                                   {b.displayName}
                                 </Anchor>
+                                {b.isTest && (
+                                  <Badge size="xs" color="gray" variant="outline">
+                                    {t('testBadge')}
+                                  </Badge>
+                                )}
                               </Group>
                             </Table.Td>
                             <Table.Td>{b.shopName ?? '—'}</Table.Td>
@@ -304,6 +322,14 @@ export default function AdminPage() {
                                   onClick={() => run(() => setBarberFlags({ slug: b.slug, isFeatured: !b.isFeatured }).unwrap())}
                                 >
                                   {b.isFeatured ? t('unfeature') : t('feature')}
+                                </Button>
+                                <Button
+                                  size="xs"
+                                  variant={b.isTest ? 'filled' : 'default'}
+                                  color="gray"
+                                  onClick={() => run(() => setBarberFlags({ slug: b.slug, isTest: !b.isTest }).unwrap())}
+                                >
+                                  {b.isTest ? t('unmarkTest') : t('markTest')}
                                 </Button>
                               </Group>
                             </Table.Td>
