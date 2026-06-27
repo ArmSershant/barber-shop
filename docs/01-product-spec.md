@@ -212,8 +212,17 @@ Platform / polish
 - **Enable SMS** once a gateway is signed up (flip `SMS_ENABLED`, set creds, adapt `lib/sms.ts`).
 - Optional later: Google sign-in, Telegram notifications, map view, multi-location, native apps.
 
+### Next-features design docs
+Scoped, not-yet-built directions (decisions captured, ready to implement):
+- **Payments & commission** — `payments-design.md` (settlement models, gateway options, schema/flow). Foundation for the rest.
+- **Loyalty / bonus points** — `loyalty-design.md` (earn/redeem, who funds the discount, points ledger).
+- **Growth backlog** — `growth-features.md` (referrals, deposits, packages, recurring bookings, boosted listings… prioritized by impact ÷ effort).
+
+### Booking approval (shipped, post-Phase-1)
+Per-provider "require approval" toggle: bookings start `requested` → provider Accept/Reject; auto-confirm when off. Migration `0014`.
+
 ### Schema migrations
-`0001`–`0013` applied (init → refresh tokens → time-off/breaks → shop defaults → guest bookings → service types → review notification → user district → barber cover → verified/featured → rebook nudge → auth tokens → shop cover).
+`0001`–`0014` applied (init → refresh tokens → time-off/breaks → shop defaults → guest bookings → service types → review notification → user district → barber cover → verified/featured → rebook nudge → auth tokens → shop cover → **require approval**).
 
 ## 11. Key product risks
 
