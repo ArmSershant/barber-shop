@@ -66,7 +66,13 @@ export function mapBarberCard(b: BarberCardRow): BarberCardData {
 
 /** Public list of barbers for discovery. Hides suspended/deleted. */
 export async function listBarbers(
-  params: { q?: string; district?: string; preferredDistrictId?: number; sort?: BarberSort } = {},
+  params: {
+    q?: string;
+    district?: string;
+    preferredDistrictId?: number;
+    sort?: BarberSort;
+    includeTest?: boolean;
+  } = {},
 ): Promise<BarberCardData[]> {
   const q = params.q?.trim();
   const district = params.district?.trim();
@@ -78,7 +84,8 @@ export async function listBarbers(
     where: {
       deletedAt: null,
       status: { not: 'suspended' },
-      isTest: false, // hide internal/test barbers from public discovery
+      // Hide internal/test barbers from public discovery; admins see all.
+      ...(params.includeTest ? {} : { isTest: false }),
       // Only list barbers whose responsible account has a verified email:
       // the independent barber's own user, or their shop's owner.
       OR: [{ user: { emailVerified: true } }, { shop: { owner: { emailVerified: true } } }],

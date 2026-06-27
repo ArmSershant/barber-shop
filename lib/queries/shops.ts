@@ -18,7 +18,7 @@ export interface ShopCardData {
 
 /** Public list of shops for discovery. Hides suspended/deleted. */
 export async function listShops(
-  params: { q?: string; district?: string; preferredDistrictId?: number } = {},
+  params: { q?: string; district?: string; preferredDistrictId?: number; includeTest?: boolean } = {},
 ): Promise<ShopCardData[]> {
   const q = params.q?.trim();
   const district = params.district?.trim();
@@ -26,7 +26,8 @@ export async function listShops(
     where: {
       deletedAt: null,
       status: { not: 'suspended' },
-      isTest: false, // hide internal/test shops from public discovery
+      // Hide internal/test shops from public discovery; admins see all.
+      ...(params.includeTest ? {} : { isTest: false }),
       // Only list shops whose owner has verified their email.
       owner: { emailVerified: true },
       ...(q ? { name: { contains: q, mode: 'insensitive' } } : {}),

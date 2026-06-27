@@ -33,7 +33,12 @@ export default async function ShopsPage({
 
   const viewer = await getCurrentUser();
   const pref = viewer ? await getPreferredDistrict(viewer.userId) : null;
-  const shops = await listShops({ q, district, preferredDistrictId: district ? undefined : pref?.id });
+  const shops = await listShops({
+    q,
+    district,
+    preferredDistrictId: district ? undefined : pref?.id,
+    includeTest: viewer?.roles?.includes('admin') ?? false,
+  });
   const showHint = pref && !district && shops.length > 0;
 
   return (

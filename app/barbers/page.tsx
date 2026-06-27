@@ -40,6 +40,7 @@ export default async function BarbersPage({
     district,
     sort: sortValue,
     preferredDistrictId: district ? undefined : pref?.id,
+    includeTest: viewer?.roles?.includes('admin') ?? false,
   });
   const showHint = pref && !district && barbers.length > 0;
 

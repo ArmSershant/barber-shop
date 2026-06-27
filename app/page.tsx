@@ -11,28 +11,34 @@ import { SectionHeader } from '@/components/profile/SectionHeader';
 import { listDistricts } from '@/lib/queries/districts';
 import { listBarbers } from '@/lib/queries/barbers';
 import { getHomeStats } from '@/lib/queries/home';
+import { getCurrentUser } from '@/lib/auth/session';
 import styles from './home.module.scss';
 
-// The home content (districts, top barbers, counts) changes rarely, so cache it
-// for a few minutes instead of hitting Neon on every request — the page still
-// renders dynamically for locale, but no longer waits on a DB round-trip.
-const getHomeData = unstable_cache(
-  async () => {
-    const [districts, topBarbers, stats] = await Promise.all([
-      listDistricts().catch(() => []),
-      listBarbers().catch(() => []),
-      getHomeStats().catch(() => ({ barbers: 0, shops: 0, districts: 0 })),
-    ]);
-    return { districts, topBarbers: topBarbers.slice(0, 3), stats };
-  },
-  ['home-data'],
-  { revalidate: 300, tags: ['home-data'] },
-);
+async function fetchHomeData(includeTest: boolean) {
+  const [districts, topBarbers, stats] = await Promise.all([
+    listDistricts().catch(() => []),
+    listBarbers({ includeTest }).catch(() => []),
+    getHomeStats(includeTest).catch(() => ({ barbers: 0, shops: 0, districts: 0 })),
+  ]);
+  return { districts, topBarbers: topBarbers.slice(0, 3), stats };
+}
+
+// The public home content (districts, top barbers, counts) changes rarely, so
+// cache it for a few minutes instead of hitting Neon on every request. Admins
+// bypass the cache so they can see test/internal accounts too.
+const getCachedHomeData = unstable_cache(() => fetchHomeData(false), ['home-data'], {
+  revalidate: 300,
+  tags: ['home-data'],
+});
 
 export default async function HomePage() {
   const t = await getTranslations('home');
   const locale = await getLocale();
-  const { districts, topBarbers: featured, stats } = await getHomeData();
+  const viewer = await getCurrentUser();
+  const isAdmin = viewer?.roles?.includes('admin') ?? false;
+  const { districts, topBarbers: featured, stats } = isAdmin
+    ? await fetchHomeData(true)
+    : await getCachedHomeData();
 
   const statItems = [
     { value: stats.barbers, label: t('statBarbers') },
