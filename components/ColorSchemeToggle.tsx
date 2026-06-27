@@ -23,7 +23,7 @@ export function ColorSchemeToggle() {
         : IconDeviceDesktop;
 
   return (
-    <Menu position="bottom-end" withinPortal>
+    <Menu position="bottom-end" withinPortal={false} zIndex={400}>
       <Menu.Target>
         <ActionIcon variant="default" size="lg" aria-label={t('theme')}>
           <Icon size={18} />

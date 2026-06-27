@@ -97,6 +97,14 @@ export default function RegisterPage() {
                   data={roleOptions}
                   value={field.value}
                   onChange={(value) => field.onChange(value)}
+                  styles={{
+                    label: {
+                      whiteSpace: 'normal',
+                      lineHeight: 1.15,
+                      fontSize: '0.82rem',
+                      paddingInline: 6,
+                    },
+                  }}
                 />
               </Input.Wrapper>
             )}
