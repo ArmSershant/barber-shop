@@ -71,7 +71,15 @@ export function ShopForm({ shop }: { shop: Shop | null }) {
           )}
         />
         <TextInput label={t('name')} error={errors.name?.message} {...register('name')} />
-        <Textarea label={t('description')} autosize minRows={2} error={errors.description?.message} {...register('description')} />
+        <Textarea
+          label={t('description')}
+          description={t('descriptionHint')}
+          placeholder={t('descriptionPlaceholder')}
+          autosize
+          minRows={3}
+          error={errors.description?.message}
+          {...register('description')}
+        />
         <Controller
           name="districtId"
           control={control}

@@ -87,7 +87,15 @@ export function BarberForm({ barber }: { barber: EditableBarber | null }) {
           )}
         />
         <TextInput label={t('displayName')} error={errors.displayName?.message} {...register('displayName')} />
-        <Textarea label={t('bio')} autosize minRows={2} error={errors.bio?.message} {...register('bio')} />
+        <Textarea
+          label={t('bio')}
+          description={t('bioHint')}
+          placeholder={t('bioPlaceholder')}
+          autosize
+          minRows={3}
+          error={errors.bio?.message}
+          {...register('bio')}
+        />
         <Controller
           name="experienceYears"
           control={control}

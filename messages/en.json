@@ -295,7 +295,9 @@
       "create": "Create shop",
       "save": "Save changes",
       "created": "Shop created.",
-      "saved": "Shop updated."
+      "saved": "Shop updated.",
+      "descriptionHint": "Describe your shop — its atmosphere, services, and what sets it apart.",
+      "descriptionPlaceholder": "e.g. A classic barbershop in the heart of Kentron, open since 2018…"
     },
     "barber": {
       "heading": "Your barber profile",
@@ -307,7 +309,9 @@
       "create": "Create profile",
       "save": "Save changes",
       "created": "Profile created.",
-      "saved": "Profile updated."
+      "saved": "Profile updated.",
+      "bioHint": "Tell clients about your experience, specialties, and what makes your work stand out.",
+      "bioPlaceholder": "e.g. 8 years behind the chair, specializing in fades and beard work…"
     },
     "editProfile": "Edit profile",
     "todaysAgenda": "Today's agenda",
