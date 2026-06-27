@@ -25,6 +25,8 @@ export interface User {
   avatarUrl?: string | null;
   emailVerified?: boolean;
   preferredDistrictId?: number | null;
+  newsletterOptIn?: boolean;
+  newsletterLang?: string | null;
 }
 
 export interface MeResponse {
@@ -38,6 +40,7 @@ export interface RegisterRequest {
   password: string;
   fullName: string;
   role: Role;
+  newsletterOptIn?: boolean;
 }
 export interface LoginRequest {
   email: string;
@@ -475,6 +478,8 @@ export const api = createApi({
         phone?: string | null;
         avatarUrl?: string | null;
         preferredDistrictId?: number | null;
+        newsletterOptIn?: boolean;
+        newsletterLang?: 'hy' | 'en' | 'ru' | null;
       }
     >({
       query: (body) => ({ url: '/me', method: 'PATCH', body }),

@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl';
 import {
   Anchor,
   Button,
+  Checkbox,
   Container,
   Input,
   Paper,
@@ -34,7 +35,7 @@ export default function RegisterPage() {
     formState: { errors },
   } = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
-    defaultValues: { role: 'customer' },
+    defaultValues: { role: 'customer', newsletterOptIn: false },
   });
 
   const roleOptions = [
@@ -107,6 +108,17 @@ export default function RegisterPage() {
                   }}
                 />
               </Input.Wrapper>
+            )}
+          />
+          <Controller
+            name="newsletterOptIn"
+            control={control}
+            render={({ field }) => (
+              <Checkbox
+                checked={!!field.value}
+                onChange={(e) => field.onChange(e.currentTarget.checked)}
+                label={t('newsletter')}
+              />
             )}
           />
           {errors.root && (

@@ -8,6 +8,7 @@ import { establishSession } from '@/lib/auth/tokens';
 import { createAuthToken } from '@/lib/auth/verification';
 import { sendEmail } from '@/lib/email';
 import { verifyEmailEmail } from '@/lib/email-templates';
+import { syncNewsletterContact } from '@/lib/newsletter';
 import { requestMeta } from '@/lib/request';
 import type { Role } from '@/lib/auth/jwt';
 
@@ -15,7 +16,8 @@ const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://barber-shop.am';
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, password, fullName, role } = registerSchema.parse(await req.json());
+    const { email, password, fullName, role, newsletterOptIn } = registerSchema.parse(await req.json());
+    const locale = req.cookies.get('NEXT_LOCALE')?.value ?? 'hy';
 
     const passwordHash = await hashPassword(password);
 
@@ -26,6 +28,8 @@ export async function POST(req: NextRequest) {
           fullName,
           passwordHash,
           roles: { create: { role } },
+          newsletterOptIn: newsletterOptIn ?? false,
+          newsletterLang: newsletterOptIn ? locale : null,
         },
         select: { id: true, email: true, fullName: true },
       })
@@ -39,12 +43,22 @@ export async function POST(req: NextRequest) {
 
     // Send a verification email (best-effort; account is usable meanwhile).
     try {
-      const locale = req.cookies.get('NEXT_LOCALE')?.value;
       const raw = await createAuthToken(user.id, 'email_verify');
       const { subject, html } = verifyEmailEmail(locale, `${appUrl}/verify-email?token=${raw}`);
       await sendEmail({ to: user.email, subject, html });
     } catch (verifyErr) {
       console.error('Failed to send verification email:', verifyErr);
+    }
+
+    // Add to the newsletter audience if they opted in (best-effort).
+    if (newsletterOptIn) {
+      void syncNewsletterContact({
+        email: user.email,
+        fullName: user.fullName,
+        optIn: true,
+        lang: locale,
+        roles: [role],
+      });
     }
 
     const roles: Role[] = [role];

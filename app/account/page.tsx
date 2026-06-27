@@ -15,6 +15,7 @@ import {
   Select,
   SimpleGrid,
   Stack,
+  Switch,
   TextInput,
   Title,
 } from '@mantine/core';
@@ -52,6 +53,8 @@ export default function AccountPage() {
   const [phone, setPhone] = useState('');
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [districtId, setDistrictId] = useState<string | null>(null);
+  const [newsletterOptIn, setNewsletterOptIn] = useState(false);
+  const [newsletterLang, setNewsletterLang] = useState<string>('hy');
 
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -63,7 +66,9 @@ export default function AccountPage() {
     setPhone(user.phone ?? '');
     setAvatarUrl(user.avatarUrl ?? null);
     setDistrictId(user.preferredDistrictId ? String(user.preferredDistrictId) : null);
-  }, [user]);
+    setNewsletterOptIn(user.newsletterOptIn ?? false);
+    setNewsletterLang(user.newsletterLang ?? locale);
+  }, [user, locale]);
 
   const districtOptions = (districtsData?.districts ?? []).map((d) => ({
     value: String(d.id),
@@ -77,6 +82,8 @@ export default function AccountPage() {
         phone: phone.trim() || null,
         avatarUrl: avatarUrl ?? null,
         preferredDistrictId: districtId ? Number(districtId) : null,
+        newsletterOptIn,
+        newsletterLang: newsletterOptIn ? (newsletterLang as 'hy' | 'en' | 'ru') : null,
       }).unwrap();
       notifications.show({ message: t('saved'), color: 'teal' });
     } catch (e) {
@@ -157,6 +164,25 @@ export default function AccountPage() {
               searchable
               clearable
             />
+            <Switch
+              checked={newsletterOptIn}
+              onChange={(e) => setNewsletterOptIn(e.currentTarget.checked)}
+              label={t('newsletterToggle')}
+              description={t('newsletterHint')}
+            />
+            {newsletterOptIn && (
+              <Select
+                label={t('newsletterLang')}
+                data={[
+                  { value: 'hy', label: 'Հայերեն' },
+                  { value: 'en', label: 'English' },
+                  { value: 'ru', label: 'Русский' },
+                ]}
+                value={newsletterLang}
+                onChange={(v) => setNewsletterLang(v ?? 'hy')}
+                allowDeselect={false}
+              />
+            )}
             <Button onClick={saveProfile} loading={saving}>
               {t('save')}
             </Button>

@@ -4,6 +4,7 @@ import { errorResponse, HttpError, ok } from '@/lib/http';
 import { requireAuth } from '@/lib/auth/rbac';
 import { updateMeSchema } from '@/lib/validation/me';
 import { deleteReplacedBlob } from '@/lib/blob';
+import { syncNewsletterContact } from '@/lib/newsletter';
 
 export async function GET() {
   try {
@@ -19,6 +20,8 @@ export async function GET() {
         avatarUrl: true,
         emailVerified: true,
         preferredDistrictId: true,
+        newsletterOptIn: true,
+        newsletterLang: true,
         roles: { select: { role: true } },
       },
     });
@@ -59,6 +62,29 @@ export async function PATCH(req: NextRequest) {
     await prisma.user.update({ where: { id: userId }, data });
 
     if (data.avatarUrl !== undefined) await deleteReplacedBlob(oldAvatar, data.avatarUrl);
+
+    // Keep the Resend audience in sync when the newsletter prefs change.
+    if (data.newsletterOptIn !== undefined || data.newsletterLang !== undefined) {
+      const u = await prisma.user.findUnique({
+        where: { id: userId },
+        select: {
+          email: true,
+          fullName: true,
+          newsletterOptIn: true,
+          newsletterLang: true,
+          roles: { select: { role: true } },
+        },
+      });
+      if (u) {
+        void syncNewsletterContact({
+          email: u.email,
+          fullName: u.fullName,
+          optIn: u.newsletterOptIn,
+          lang: u.newsletterLang,
+          roles: u.roles.map((r) => r.role),
+        });
+      }
+    }
 
     return ok({ ok: true });
   } catch (err) {

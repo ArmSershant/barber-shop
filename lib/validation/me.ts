@@ -5,6 +5,8 @@ export const updateMeSchema = z.object({
   phone: z.string().trim().max(40).nullable().optional(),
   avatarUrl: z.string().url().nullable().optional(),
   preferredDistrictId: z.number().int().positive().nullable().optional(),
+  newsletterOptIn: z.boolean().optional(),
+  newsletterLang: z.enum(['hy', 'en', 'ru']).nullable().optional(),
 });
 
 export const changePasswordSchema = z.object({

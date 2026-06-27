@@ -108,6 +108,8 @@ model User {
   avatarUrl     String?    @map("avatar_url")
   status        UserStatus @default(active)
   preferredDistrictId Int? @map("preferred_district_id") @db.SmallInt
+  newsletterOptIn Boolean  @default(false) @map("newsletter_opt_in")
+  newsletterLang  String?  @map("newsletter_lang")
   createdAt     DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt     DateTime   @updatedAt @map("updated_at") @db.Timestamptz(6)
   deletedAt     DateTime?  @map("deleted_at") @db.Timestamptz(6)

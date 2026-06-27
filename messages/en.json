@@ -219,7 +219,11 @@
     "passwordChanged": "Password changed.",
     "verifyBanner": "Your email isn't verified yet.",
     "verifyResend": "Resend verification",
-    "verifyResent": "Verification email sent."
+    "verifyResent": "Verification email sent.",
+    "newsletter": "Monthly newsletter",
+    "newsletterToggle": "Email me monthly updates",
+    "newsletterHint": "What's new on Barber-Shop, once a month. Unsubscribe anytime.",
+    "newsletterLang": "Newsletter language"
   },
   "auth": {
     "login": {
@@ -270,7 +274,8 @@
       "submitting": "Creating…",
       "haveAccount": "Already have an account?",
       "login": "Log in",
-      "failed": "Could not create the account."
+      "failed": "Could not create the account.",
+      "newsletter": "Email me monthly updates about Barber-Shop"
     }
   },
   "dashboard": {
