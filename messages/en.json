@@ -328,7 +328,12 @@
     "noUpcoming": "No upcoming bookings.",
     "viewAllBookings": "All bookings",
     "requiresApproval": "Require approval for bookings",
-    "requiresApprovalHint": "New bookings stay pending until you accept them."
+    "requiresApprovalHint": "New bookings stay pending until you accept them.",
+    "cropTitle": "Reposition photo",
+    "cropHint": "Drag to reposition · pinch or use the slider to zoom",
+    "cropZoom": "Zoom",
+    "cropApply": "Apply",
+    "cropCancel": "Cancel"
   },
   "services": {
     "heading": "Services",

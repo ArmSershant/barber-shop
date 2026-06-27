@@ -328,7 +328,12 @@
     "noUpcoming": "Предстоящих записей нет.",
     "viewAllBookings": "Все записи",
     "requiresApproval": "Требовать подтверждение записей",
-    "requiresApprovalHint": "Новые записи будут ожидать вашего подтверждения."
+    "requiresApprovalHint": "Новые записи будут ожидать вашего подтверждения.",
+    "cropTitle": "Расположить фото",
+    "cropHint": "Перетащите, чтобы сдвинуть · масштаб ползунком",
+    "cropZoom": "Масштаб",
+    "cropApply": "Применить",
+    "cropCancel": "Отмена"
   },
   "services": {
     "heading": "Услуги",

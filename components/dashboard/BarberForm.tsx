@@ -83,7 +83,15 @@ export function BarberForm({ barber }: { barber: EditableBarber | null }) {
           name="coverUrl"
           control={control}
           render={({ field }) => (
-            <ImageUpload value={field.value} onChange={field.onChange} label={t('cover')} radius="md" />
+            <ImageUpload
+              value={field.value}
+              onChange={field.onChange}
+              label={t('cover')}
+              radius="md"
+              aspect={16 / 7}
+              round={false}
+              outputWidth={1280}
+            />
           )}
         />
         <TextInput label={t('displayName')} error={errors.displayName?.message} {...register('displayName')} />

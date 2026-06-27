@@ -60,14 +60,28 @@ export function ShopForm({ shop }: { shop: Shop | null }) {
           name="logoUrl"
           control={control}
           render={({ field }) => (
-            <ImageUpload value={field.value} onChange={field.onChange} label={t('logo')} radius="md" />
+            <ImageUpload
+              value={field.value}
+              onChange={field.onChange}
+              label={t('logo')}
+              radius="md"
+              round={false}
+            />
           )}
         />
         <Controller
           name="coverUrl"
           control={control}
           render={({ field }) => (
-            <ImageUpload value={field.value} onChange={field.onChange} label={t('cover')} radius="md" />
+            <ImageUpload
+              value={field.value}
+              onChange={field.onChange}
+              label={t('cover')}
+              radius="md"
+              aspect={16 / 7}
+              round={false}
+              outputWidth={1280}
+            />
           )}
         />
         <TextInput label={t('name')} error={errors.name?.message} {...register('name')} />
