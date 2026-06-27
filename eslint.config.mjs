@@ -12,7 +12,9 @@ const compat = new FlatCompat({ baseDirectory: __dirname });
 const eslintConfig = [
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
   {
-    ignores: ['.next/**', 'node_modules/**', 'prisma/migrations/**', 'next-env.d.ts'],
+    // `docs/` holds design exports + the Claude Design runtime (support.js) —
+    // vendored files, not app code, so they're excluded from linting.
+    ignores: ['.next/**', 'node_modules/**', 'prisma/migrations/**', 'next-env.d.ts', 'docs/**'],
   },
   {
     rules: {
