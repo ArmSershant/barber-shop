@@ -8,7 +8,8 @@ export const createBookingSchema = z.object({
     .object({
       name: z.string().trim().min(1).max(120),
       phone: z.string().trim().min(3).max(40),
-      email: z.string().trim().email().optional(),
+      // Required so every guest receives an emailed confirmation + manage link.
+      email: z.string().trim().email(),
     })
     .optional(),
 });

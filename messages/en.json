@@ -443,7 +443,7 @@
     "yourName": "Your name",
     "yourPhone": "Phone",
     "yourEmail": "Email (optional)",
-    "guestHint": "No account needed — just your name and phone.",
+    "guestHint": "Enter your details — we'll email your confirmation and a link to manage your booking.",
     "book": "Book",
     "booking": "Booking…",
     "confirmedTitle": "Booking confirmed",
@@ -455,7 +455,9 @@
     "reassure": "No account needed · free cancellation",
     "requestedTitle": "Request sent",
     "requestedBody": "{when} — pending the barber's confirmation. We'll email you once it's confirmed.",
-    "addCalendar": "Add to calendar"
+    "addCalendar": "Add to calendar",
+    "registerNudge": "Create an account to track your bookings and check out faster next time.",
+    "registerCta": "Sign up"
   },
   "manage": {
     "title": "Your booking",

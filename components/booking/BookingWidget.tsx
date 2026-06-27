@@ -94,7 +94,7 @@ export function BookingWidget({
         slug: barberSlug,
         serviceIds,
         startsAt: slot,
-        guest: isGuest ? { name, phone, email: email || undefined } : undefined,
+        guest: isGuest ? { name, phone, email: email.trim() } : undefined,
       }).unwrap();
       setConfirmed({
         when: new Date(res.booking.startsAt).toLocaleString(),
@@ -172,12 +172,23 @@ export function BookingWidget({
           <Button variant="default" onClick={reset} mt="xs">
             {t('bookAnother')}
           </Button>
+          {confirmed.manageToken && (
+            <Stack gap={4} mt="md" ta="center">
+              <Text size="sm" c="dimmed">
+                {t('registerNudge')}
+              </Text>
+              <Button component="a" href="/register" variant="subtle" size="sm">
+                {t('registerCta')}
+              </Button>
+            </Stack>
+          )}
         </Stack>
       </Paper>
     );
   }
 
-  const canBook = Boolean(slot) && (!isGuest || (name.trim() && phone.trim()));
+  const emailValid = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.trim());
+  const canBook = Boolean(slot) && (!isGuest || (name.trim() && phone.trim() && emailValid));
 
   return (
     <Paper withBorder p={0} radius="xs" className="offsetShadow" style={{ overflow: 'hidden' }}>
@@ -246,7 +257,14 @@ export function BookingWidget({
             </Text>
             <TextInput label={t('yourName')} value={name} onChange={(e) => setName(e.currentTarget.value)} required />
             <TextInput label={t('yourPhone')} value={phone} onChange={(e) => setPhone(e.currentTarget.value)} required />
-            <TextInput label={t('yourEmail')} value={email} onChange={(e) => setEmail(e.currentTarget.value)} />
+            <TextInput
+              label={t('yourEmail')}
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.currentTarget.value)}
+              required
+            />
           </Stack>
         )}
 
