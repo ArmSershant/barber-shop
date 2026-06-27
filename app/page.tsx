@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { unstable_cache } from 'next/cache';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { Anchor, Container, Group, SimpleGrid, Stack, Text, Title } from '@mantine/core';
 import { IconBuildingStore } from '@tabler/icons-react';
@@ -12,16 +13,26 @@ import { listBarbers } from '@/lib/queries/barbers';
 import { getHomeStats } from '@/lib/queries/home';
 import styles from './home.module.scss';
 
+// The home content (districts, top barbers, counts) changes rarely, so cache it
+// for a few minutes instead of hitting Neon on every request — the page still
+// renders dynamically for locale, but no longer waits on a DB round-trip.
+const getHomeData = unstable_cache(
+  async () => {
+    const [districts, topBarbers, stats] = await Promise.all([
+      listDistricts().catch(() => []),
+      listBarbers().catch(() => []),
+      getHomeStats().catch(() => ({ barbers: 0, shops: 0, districts: 0 })),
+    ]);
+    return { districts, topBarbers: topBarbers.slice(0, 3), stats };
+  },
+  ['home-data'],
+  { revalidate: 300, tags: ['home-data'] },
+);
+
 export default async function HomePage() {
   const t = await getTranslations('home');
   const locale = await getLocale();
-  // Don't fail the build if the DB is unreachable at prerender time (e.g. CI).
-  const [districts, topBarbers, stats] = await Promise.all([
-    listDistricts().catch(() => []),
-    listBarbers().catch(() => []),
-    getHomeStats().catch(() => ({ barbers: 0, shops: 0, districts: 0 })),
-  ]);
-  const featured = topBarbers.slice(0, 3);
+  const { districts, topBarbers: featured, stats } = await getHomeData();
 
   const statItems = [
     { value: stats.barbers, label: t('statBarbers') },
@@ -38,8 +49,8 @@ export default async function HomePage() {
   return (
     <Container size="lg" py={64}>
       <Stack gap={72}>
-        {/* HERO */}
-        <Stack align="center" gap="lg" ta="center" className="animate-in">
+        {/* HERO — no entrance animation so the LCP (title) paints immediately. */}
+        <Stack align="center" gap="lg" ta="center">
           <Text className={styles.eyebrow}>{t('heroEyebrow')}</Text>
 
           <Title order={1} className={styles.heroTitle}>
