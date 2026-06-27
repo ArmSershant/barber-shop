@@ -19,6 +19,7 @@ import {
 } from '@mantine/core';
 import { IconCheck, IconCalendarPlus } from '@tabler/icons-react';
 import { buildIcs } from '@/lib/ics';
+import { PhoneInput } from '@/components/PhoneInput';
 
 const headerBar = {
   background: 'var(--cta-head-bg)',
@@ -256,7 +257,7 @@ export function BookingWidget({
               {t('guestHint')}
             </Text>
             <TextInput label={t('yourName')} value={name} onChange={(e) => setName(e.currentTarget.value)} required />
-            <TextInput label={t('yourPhone')} value={phone} onChange={(e) => setPhone(e.currentTarget.value)} required />
+            <PhoneInput label={t('yourPhone')} value={phone} onChange={setPhone} required />
             <TextInput
               label={t('yourEmail')}
               type="email"

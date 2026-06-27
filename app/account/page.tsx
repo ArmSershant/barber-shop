@@ -29,6 +29,7 @@ import {
 } from '@/lib/store/api';
 import { apiErrorMessage } from '@/lib/api-error';
 import { ImageUpload } from '@/components/dashboard/ImageUpload';
+import { PhoneInput } from '@/components/PhoneInput';
 
 export default function AccountPage() {
   const t = useTranslations('account');
@@ -148,12 +149,11 @@ export default function AccountPage() {
               value={fullName}
               onChange={(e) => setFullName(e.currentTarget.value)}
             />
-            <TextInput
+            <PhoneInput
               label={t('phone')}
               description={t('phoneHint')}
-              placeholder="+374 .. .. .. .."
               value={phone}
-              onChange={(e) => setPhone(e.currentTarget.value)}
+              onChange={setPhone}
             />
             <Select
               label={t('district')}
