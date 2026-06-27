@@ -29,6 +29,7 @@ export function BarberCard({ barber }: { barber: BarberCardData }) {
     : null;
   const subtitle = [barber.shop?.name ?? t('independent'), districtName].filter(Boolean).join(' · ');
   const cover = absoluteImage(barber.coverUrl);
+  const avatar = absoluteImage(barber.photoUrl);
 
   return (
     <Card
@@ -47,9 +48,18 @@ export function BarberCard({ barber }: { barber: BarberCardData }) {
             <IconStarFilled size={10} /> {t('featured')}
           </span>
         )}
+
+        {/* Barber avatar, overlapping the cover's bottom-left edge. */}
+        <div className={styles.avatar}>
+          {avatar ? (
+            <NextImage src={avatar} alt="" fill sizes="160px" quality={90} style={{ objectFit: 'cover' }} />
+          ) : (
+            <span>{barber.displayName.charAt(0).toUpperCase()}</span>
+          )}
+        </div>
       </Box>
 
-      <Stack gap={4} p="md">
+      <Stack gap={4} px="md" pb="md" pt={46}>
         <Group gap={4} wrap="nowrap">
           <Text fw={700} truncate ff="var(--font-display), Georgia, serif" fz="1.2rem">
             {barber.displayName}
