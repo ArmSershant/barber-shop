@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { Button, Paper, Stack, Switch, Text, Textarea, TextInput, Title } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { createShopSchema, type CreateShopInput } from '@/lib/validation/provider';
+import { shopFormSchema, type ShopFormInput } from '@/lib/validation/provider';
 import { useCreateShopMutation, useUpdateShopMutation, type Shop } from '@/lib/store/api';
 import { apiErrorMessage } from '@/lib/api-error';
 import { DistrictSelectField } from './DistrictSelectField';
@@ -23,10 +23,11 @@ export function ShopForm({ shop }: { shop: Shop | null }) {
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm<CreateShopInput>({
-    resolver: zodResolver(createShopSchema),
+  } = useForm<ShopFormInput>({
+    resolver: zodResolver(shopFormSchema),
     defaultValues: {
       name: shop?.name ?? '',
+      slug: shop?.slug ?? undefined,
       description: shop?.description ?? '',
       address: shop?.address ?? '',
       phone: shop?.phone ?? '',
@@ -85,6 +86,16 @@ export function ShopForm({ shop }: { shop: Shop | null }) {
           )}
         />
         <TextInput label={t('name')} error={errors.name?.message} {...register('name')} />
+        {shop && (
+          <TextInput
+            label={td('urlLabel')}
+            description={td('urlHint', { path: '/shops/' })}
+            leftSection={<Text size="sm" c="dimmed">/shops/</Text>}
+            leftSectionWidth={68}
+            error={errors.slug?.message}
+            {...register('slug')}
+          />
+        )}
         <Textarea
           label={t('description')}
           description={t('descriptionHint')}

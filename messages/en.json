@@ -138,7 +138,8 @@
     "NOT_COMPLETED": "Only completed bookings can be reviewed.",
     "ALREADY_REVIEWED": "You already reviewed this booking.",
     "VALIDATION_ERROR": "Please check the entered data.",
-    "INTERNAL": "Something went wrong."
+    "INTERNAL": "Something went wrong.",
+    "SLUG_TAKEN": "That URL is already taken."
   },
   "home": {
     "subtitle": "Book barbers in Yerevan.",
@@ -333,7 +334,9 @@
     "cropHint": "Drag to reposition · pinch or use the slider to zoom",
     "cropZoom": "Zoom",
     "cropApply": "Apply",
-    "cropCancel": "Cancel"
+    "cropCancel": "Cancel",
+    "urlLabel": "Page URL",
+    "urlHint": "Your public address: barber-shop.am{path}… Lowercase letters, numbers and hyphens only."
   },
   "services": {
     "heading": "Services",

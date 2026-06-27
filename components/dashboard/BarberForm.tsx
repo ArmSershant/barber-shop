@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { Button, NumberInput, Paper, Stack, Switch, Text, Textarea, TextInput, Title } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { createBarberSchema, type CreateBarberInput } from '@/lib/validation/provider';
+import { barberFormSchema, type BarberFormInput } from '@/lib/validation/provider';
 import { useCreateBarberMutation, useUpdateBarberMutation } from '@/lib/store/api';
 import { apiErrorMessage } from '@/lib/api-error';
 import { DistrictSelectField } from './DistrictSelectField';
@@ -37,10 +37,11 @@ export function BarberForm({ barber }: { barber: EditableBarber | null }) {
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm<CreateBarberInput>({
-    resolver: zodResolver(createBarberSchema),
+  } = useForm<BarberFormInput>({
+    resolver: zodResolver(barberFormSchema),
     defaultValues: {
       displayName: barber?.displayName ?? '',
+      slug: barber?.slug ?? undefined,
       bio: barber?.bio ?? '',
       experienceYears: barber?.experienceYears ?? undefined,
       districtId: barber?.districtId ?? undefined,
@@ -95,6 +96,16 @@ export function BarberForm({ barber }: { barber: EditableBarber | null }) {
           )}
         />
         <TextInput label={t('displayName')} error={errors.displayName?.message} {...register('displayName')} />
+        {barber && (
+          <TextInput
+            label={td('urlLabel')}
+            description={td('urlHint', { path: '/barbers/' })}
+            leftSection={<Text size="sm" c="dimmed">/barbers/</Text>}
+            leftSectionWidth={78}
+            error={errors.slug?.message}
+            {...register('slug')}
+          />
+        )}
         <Textarea
           label={t('bio')}
           description={t('bioHint')}

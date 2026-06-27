@@ -5,6 +5,7 @@ import { requireRole } from '@/lib/auth/rbac';
 import { assertOwnsShopBySlug } from '@/lib/auth/ownership';
 import { updateShopSchema } from '@/lib/validation/provider';
 import { deleteReplacedBlob } from '@/lib/blob';
+import { isReservedSlug } from '@/lib/slug';
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -33,11 +34,24 @@ export async function GET(_req: NextRequest, { params }: Params) {
 // Owner: update shop fields.
 export async function PATCH(req: NextRequest, { params }: Params) {
   try {
-    const { userId } = await requireRole('shop_owner', 'admin');
+    const { userId, roles } = await requireRole('shop_owner', 'admin');
     const { slug } = await params;
-    const existing = await assertOwnsShopBySlug(slug, userId);
+    const existing = await assertOwnsShopBySlug(slug, userId, roles);
 
     const data = updateShopSchema.parse(await req.json());
+
+    // Renaming the page URL: enforce reserved words + uniqueness.
+    if (data.slug && data.slug !== slug) {
+      if (isReservedSlug(data.slug)) {
+        throw new HttpError(409, 'SLUG_TAKEN', 'That URL is not available.');
+      }
+      const clash = await prisma.shop.findUnique({
+        where: { slug: data.slug },
+        select: { id: true },
+      });
+      if (clash) throw new HttpError(409, 'SLUG_TAKEN', 'That URL is already taken.');
+    }
+
     const shop = await prisma.shop.update({ where: { slug }, data });
 
     // Barbers share the shop's location: cascade the district to the roster.

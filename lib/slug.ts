@@ -14,6 +14,24 @@ export function slugify(input: string): string {
     .replace(/^-+|-+$/g, '');
 }
 
+// Slugs that would clash with app routes or look like system pages.
+export const RESERVED_SLUGS = new Set([
+  'new',
+  'edit',
+  'me',
+  'admin',
+  'api',
+  'dashboard',
+  'login',
+  'register',
+  'account',
+  'settings',
+]);
+
+export function isReservedSlug(slug: string): boolean {
+  return RESERVED_SLUGS.has(slug);
+}
+
 /**
  * Build a unique slug from `name`, using `fallback` when the name produces an
  * empty slug, and `isTaken` to probe the database for collisions.

@@ -6,6 +6,7 @@ import { assertCanEditBarberBySlug } from '@/lib/auth/ownership';
 import { updateBarberSchema } from '@/lib/validation/provider';
 import { getBarberProfile } from '@/lib/queries/barbers';
 import { deleteReplacedBlob } from '@/lib/blob';
+import { isReservedSlug } from '@/lib/slug';
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -30,11 +31,24 @@ export async function GET(_req: NextRequest, { params }: Params) {
 // Owner (the barber's user, or the shop owner): update profile.
 export async function PATCH(req: NextRequest, { params }: Params) {
   try {
-    const { userId } = await requireAuth();
+    const { userId, roles } = await requireAuth();
     const { slug } = await params;
-    const existing = await assertCanEditBarberBySlug(slug, userId);
+    const existing = await assertCanEditBarberBySlug(slug, userId, roles);
 
     const data = updateBarberSchema.parse(await req.json());
+
+    // Renaming the page URL: enforce reserved words + uniqueness.
+    if (data.slug && data.slug !== slug) {
+      if (isReservedSlug(data.slug)) {
+        throw new HttpError(409, 'SLUG_TAKEN', 'That URL is not available.');
+      }
+      const clash = await prisma.barber.findUnique({
+        where: { slug: data.slug },
+        select: { id: true },
+      });
+      if (clash) throw new HttpError(409, 'SLUG_TAKEN', 'That URL is already taken.');
+    }
+
     const barber = await prisma.barber.update({ where: { slug }, data });
 
     // Clean up replaced images from Blob storage.
