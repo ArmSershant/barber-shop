@@ -337,7 +337,8 @@
     "cropApply": "Apply",
     "cropCancel": "Cancel",
     "urlLabel": "Page URL",
-    "urlHint": "Your public address: barber-shop.am{path}… Lowercase letters, numbers and hyphens only."
+    "urlHint": "Your public address: barber-shop.am{path}… Lowercase letters, numbers and hyphens only.",
+    "save": "Save"
   },
   "services": {
     "heading": "Services",
