@@ -2,10 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { Group, Input, Select, TextInput } from '@mantine/core';
+// The country picker needs the full flag set, so the (large) flag-icons sheet
+// is imported here — only on pages that render PhoneInput — instead of globally,
+// keeping it off the render-blocking path for the home/discovery pages.
+import 'flag-icons/css/flag-icons.min.css';
 
-// Curated dial codes (Armenia first). Flags via the flag-icons CSS already
-// loaded in the root layout. Stored value is the full international number,
-// e.g. "+37491234567".
+// Curated dial codes (Armenia first). Stored value is the full international
+// number, e.g. "+37491234567".
 const COUNTRIES = [
   { code: 'am', name: 'Armenia', dial: '+374' },
   { code: 'ru', name: 'Russia', dial: '+7' },

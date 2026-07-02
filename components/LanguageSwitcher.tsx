@@ -5,6 +5,7 @@ import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { setLocale } from '@/i18n/locale';
 import { locales, localeNames, localeFlags, type Locale } from '@/i18n/config';
+import { Flag } from './Flag';
 import styles from './LanguageSwitcher.module.scss';
 
 export function LanguageSwitcher() {
@@ -32,7 +33,7 @@ export function LanguageSwitcher() {
           aria-pressed={l === active}
           title={localeNames[l]}
         >
-          <span className={`fi fi-${localeFlags[l]}`} aria-hidden="true" />
+          <Flag code={localeFlags[l]} />
           <span className={styles.srOnly}>{localeNames[l]}</span>
         </button>
       ))}
