@@ -37,7 +37,12 @@ export default function ProviderBookingsPage() {
   const tst = useTranslations('serviceTypes');
   const svcLabel = (s: { type: string | null; name: string }) =>
     s.type && s.type !== 'other' ? tst(s.type) : s.name;
-  const { data, isLoading } = useGetProviderBookingsQuery();
+  // Poll + refetch on focus so new customer requests appear without a manual reload.
+  const { data, isLoading } = useGetProviderBookingsQuery(undefined, {
+    pollingInterval: 30_000,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+  });
   const [cancelBooking] = useCancelBookingMutation();
   const [completeBooking] = useCompleteBookingMutation();
   const [noShowBooking] = useNoShowBookingMutation();

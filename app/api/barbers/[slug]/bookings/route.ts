@@ -14,6 +14,7 @@ import { bookingConfirmationEmail, bookingRequestedEmail } from '@/lib/email-tem
 import { sendSms } from '@/lib/sms';
 import { bookingConfirmationSms } from '@/lib/sms-templates';
 import { buildIcs } from '@/lib/ics';
+import { cappedRedeemPoints, type LoyaltyScope } from '@/lib/loyalty';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -44,7 +45,18 @@ export async function POST(req: NextRequest, { params }: Params) {
         defaultBufferMin: true,
         deletedAt: true,
         requiresApproval: true,
-        shop: { select: { ownerUserId: true, requiresApproval: true } },
+        loyaltyEnabled: true,
+        loyaltyAmdPerPoint: true,
+        loyaltyMaxRedeemPct: true,
+        shop: {
+          select: {
+            ownerUserId: true,
+            requiresApproval: true,
+            loyaltyEnabled: true,
+            loyaltyAmdPerPoint: true,
+            loyaltyMaxRedeemPct: true,
+          },
+        },
       },
     });
     if (!barber || barber.deletedAt) throw new HttpError(404, 'BARBER_NOT_FOUND', 'Barber not found.');
@@ -124,33 +136,67 @@ export async function POST(req: NextRequest, { params }: Params) {
       : barber.requiresApproval;
     const status = requiresApproval ? 'requested' : 'confirmed';
 
+    // Loyalty scope + config: the shop (shop barbers) or the independent barber.
+    const usingShop = Boolean(barber.shopId && barber.shop);
+    const loyaltyConfig = usingShop ? barber.shop! : barber;
+    const scope: LoyaltyScope = usingShop
+      ? { scopeShopId: barber.shopId! }
+      : { scopeBarberId: barber.id };
+    const wantsRedeem = Boolean(user && loyaltyConfig.loyaltyEnabled && (body.redeemPoints ?? 0) > 0);
+
     try {
-      const booking = await prisma.booking.create({
-        data: {
-          barberId: barber.id,
-          shopId: barber.shopId,
-          customerUserId: user?.userId ?? null,
-          guestName: user ? null : body.guest!.name,
-          guestPhone: user ? null : body.guest!.phone,
-          guestEmail: user ? null : body.guest!.email ?? null,
-          manageToken,
-          startsAt: body.startsAt,
-          endsAt,
-          status,
-          totalPriceAmd: priceAmd,
-          totalDurationMin: durationMin,
-          customerNote: body.note ?? null,
-          services: {
-            create: effectiveServices.map((s) => ({
-              serviceId: s.id,
-              typeSnapshot: s.type,
-              nameSnapshot: s.name,
-              priceAmdSnapshot: s.priceAmd,
-              durationMinSnapshot: s.durationMin,
-            })),
+      const booking = await prisma.$transaction(async (tx) => {
+        // Recompute the capped redemption inside the tx to avoid double-spend.
+        let redeemPoints = 0;
+        if (wantsRedeem) {
+          const agg = await tx.pointsLedger.aggregate({
+            where: { userId: user!.userId, ...scope },
+            _sum: { delta: true },
+          });
+          redeemPoints = cappedRedeemPoints({
+            requested: body.redeemPoints!,
+            balance: agg._sum.delta ?? 0,
+            priceAmd,
+            amdPerPoint: loyaltyConfig.loyaltyAmdPerPoint,
+            maxRedeemPct: loyaltyConfig.loyaltyMaxRedeemPct,
+          });
+        }
+        const discountAmd = redeemPoints * loyaltyConfig.loyaltyAmdPerPoint;
+
+        const created = await tx.booking.create({
+          data: {
+            barberId: barber.id,
+            shopId: barber.shopId,
+            customerUserId: user?.userId ?? null,
+            guestName: user ? null : body.guest!.name,
+            guestPhone: user ? null : body.guest!.phone,
+            guestEmail: user ? null : body.guest!.email ?? null,
+            manageToken,
+            startsAt: body.startsAt,
+            endsAt,
+            status,
+            totalPriceAmd: priceAmd - discountAmd,
+            totalDurationMin: durationMin,
+            customerNote: body.note ?? null,
+            services: {
+              create: effectiveServices.map((s) => ({
+                serviceId: s.id,
+                typeSnapshot: s.type,
+                nameSnapshot: s.name,
+                priceAmdSnapshot: s.priceAmd,
+                durationMinSnapshot: s.durationMin,
+              })),
+            },
           },
-        },
-        select: { id: true, startsAt: true, endsAt: true, status: true, totalPriceAmd: true, totalDurationMin: true },
+          select: { id: true, startsAt: true, endsAt: true, status: true, totalPriceAmd: true, totalDurationMin: true },
+        });
+
+        if (redeemPoints > 0) {
+          await tx.pointsLedger.create({
+            data: { userId: user!.userId, bookingId: created.id, delta: -redeemPoints, reason: 'redeemed', ...scope },
+          });
+        }
+        return created;
       });
       // Resolve customer name + email (registered user or guest).
       const customerRecord = user

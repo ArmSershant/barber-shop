@@ -279,11 +279,7 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
 
       {bookable && (
         <div id="book" style={{ marginTop: 'var(--mantine-spacing-xl)', scrollMarginTop: '1rem' }}>
-          <BookingWidget
-            barberSlug={barber.slug}
-            services={barber.services}
-            loyaltyPointsPer100={barber.loyaltyEarnRate}
-          />
+          <BookingWidget barberSlug={barber.slug} services={barber.services} loyalty={barber.loyalty} />
         </div>
       )}
       {isOwnProfile && (

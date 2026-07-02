@@ -24,6 +24,8 @@ export interface EditableBarber {
   requiresApproval?: boolean | null;
   loyaltyEnabled?: boolean | null;
   loyaltyPointsPer100?: number | null;
+  loyaltyAmdPerPoint?: number | null;
+  loyaltyMaxRedeemPct?: number | null;
   shopId?: string | null;
 }
 
@@ -53,6 +55,8 @@ export function BarberForm({ barber }: { barber: EditableBarber | null }) {
       requiresApproval: barber?.requiresApproval ?? false,
       loyaltyEnabled: barber?.loyaltyEnabled ?? false,
       loyaltyPointsPer100: barber?.loyaltyPointsPer100 ?? 1,
+      loyaltyAmdPerPoint: barber?.loyaltyAmdPerPoint ?? 1,
+      loyaltyMaxRedeemPct: barber?.loyaltyMaxRedeemPct ?? 50,
     },
   });
 
@@ -172,21 +176,52 @@ export function BarberForm({ barber }: { barber: EditableBarber | null }) {
               )}
             />
             {loyaltyEnabled && (
-              <Controller
-                name="loyaltyPointsPer100"
-                control={control}
-                render={({ field }) => (
-                  <NumberInput
-                    label={td('loyaltyRate')}
-                    description={td('loyaltyRateHint')}
-                    min={0}
-                    max={50}
-                    value={field.value ?? 1}
-                    onChange={(value) => field.onChange(value === '' ? 0 : Number(value))}
-                    error={errors.loyaltyPointsPer100?.message}
-                  />
-                )}
-              />
+              <>
+                <Controller
+                  name="loyaltyPointsPer100"
+                  control={control}
+                  render={({ field }) => (
+                    <NumberInput
+                      label={td('loyaltyRate')}
+                      description={td('loyaltyRateHint')}
+                      min={0}
+                      max={50}
+                      value={field.value ?? 1}
+                      onChange={(value) => field.onChange(value === '' ? 0 : Number(value))}
+                      error={errors.loyaltyPointsPer100?.message}
+                    />
+                  )}
+                />
+                <Controller
+                  name="loyaltyAmdPerPoint"
+                  control={control}
+                  render={({ field }) => (
+                    <NumberInput
+                      label={td('loyaltyValue')}
+                      description={td('loyaltyValueHint')}
+                      min={1}
+                      value={field.value ?? 1}
+                      onChange={(value) => field.onChange(value === '' ? 1 : Number(value))}
+                      error={errors.loyaltyAmdPerPoint?.message}
+                    />
+                  )}
+                />
+                <Controller
+                  name="loyaltyMaxRedeemPct"
+                  control={control}
+                  render={({ field }) => (
+                    <NumberInput
+                      label={td('loyaltyMaxRedeem')}
+                      description={td('loyaltyMaxRedeemHint')}
+                      min={0}
+                      max={100}
+                      value={field.value ?? 50}
+                      onChange={(value) => field.onChange(value === '' ? 0 : Number(value))}
+                      error={errors.loyaltyMaxRedeemPct?.message}
+                    />
+                  )}
+                />
+              </>
             )}
           </>
         )}

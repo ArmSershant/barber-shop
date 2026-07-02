@@ -61,6 +61,8 @@ export interface Shop {
   requiresApproval?: boolean;
   loyaltyEnabled?: boolean;
   loyaltyPointsPer100?: number;
+  loyaltyAmdPerPoint?: number;
+  loyaltyMaxRedeemPct?: number;
   status: string;
 }
 
@@ -77,6 +79,8 @@ export interface Barber {
   requiresApproval?: boolean;
   loyaltyEnabled?: boolean;
   loyaltyPointsPer100?: number;
+  loyaltyAmdPerPoint?: number;
+  loyaltyMaxRedeemPct?: number;
   status: string;
 }
 
@@ -110,7 +114,14 @@ export interface BarberProfileData {
   districtId: number | null;
   photoUrl: string | null;
   coverUrl: string | null;
-  loyaltyEarnRate?: number;
+  loyalty?: {
+    enabled: boolean;
+    earnRate: number;
+    amdPerPoint: number;
+    maxRedeemPct: number;
+    scopeKind: 'shop' | 'barber';
+    scopeSlug: string;
+  };
 }
 
 export interface GalleryImage {
@@ -190,6 +201,7 @@ export interface CreateBookingRequest {
   startsAt: string;
   note?: string;
   guest?: { name: string; phone: string; email?: string };
+  redeemPoints?: number;
 }
 export interface CreateBookingResult {
   booking: {
@@ -583,8 +595,8 @@ export const api = createApi({
     }),
     createBooking: builder.mutation<CreateBookingResult, { slug: string } & CreateBookingRequest>({
       query: ({ slug, ...body }) => ({ url: `/barbers/${slug}/bookings`, method: 'POST', body }),
-      // Refresh the customer's own list too, so a new booking shows immediately.
-      invalidatesTags: ['Availability', 'MyBookings'],
+      // Refresh the customer's own list + points (redemption changes balance).
+      invalidatesTags: ['Availability', 'MyBookings', 'MyPoints'],
     }),
 
     getNotifications: builder.query<{ notifications: NotificationItem[]; unread: number }, void>({
@@ -609,7 +621,7 @@ export const api = createApi({
         method: 'POST',
         body: { reason, token },
       }),
-      invalidatesTags: ['ProviderBookings', 'MyBookings', 'ManagedBooking', 'Availability'],
+      invalidatesTags: ['ProviderBookings', 'MyBookings', 'ManagedBooking', 'Availability', 'MyPoints'],
     }),
     getManagedBooking: builder.query<{ booking: ManagedBooking }, string>({
       query: (token) => `/bookings/manage?token=${encodeURIComponent(token)}`,

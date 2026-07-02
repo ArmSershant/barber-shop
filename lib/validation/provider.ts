@@ -11,6 +11,8 @@ export const slugField = z
 
 // Loyalty: points a customer earns per 100 ֏ (0 = off; capped to keep it sane).
 const loyaltyPointsPer100Field = z.number().int().min(0).max(50);
+const loyaltyAmdPerPointField = z.number().int().min(1).max(100_000);
+const loyaltyMaxRedeemPctField = z.number().int().min(0).max(100);
 
 export const createShopSchema = z.object({
   name: z.string().trim().min(2).max(120),
@@ -24,6 +26,8 @@ export const createShopSchema = z.object({
   requiresApproval: z.boolean().optional(),
   loyaltyEnabled: z.boolean().optional(),
   loyaltyPointsPer100: loyaltyPointsPer100Field.optional(),
+  loyaltyAmdPerPoint: loyaltyAmdPerPointField.optional(),
+  loyaltyMaxRedeemPct: loyaltyMaxRedeemPctField.optional(),
 });
 // `slug` is auto-generated on create; editable only via update.
 export const updateShopSchema = createShopSchema.partial().extend({ slug: slugField.optional() });
@@ -38,6 +42,8 @@ export const createBarberSchema = z.object({
   requiresApproval: z.boolean().optional(),
   loyaltyEnabled: z.boolean().optional(),
   loyaltyPointsPer100: loyaltyPointsPer100Field.optional(),
+  loyaltyAmdPerPoint: loyaltyAmdPerPointField.optional(),
+  loyaltyMaxRedeemPct: loyaltyMaxRedeemPctField.optional(),
 });
 export const updateBarberSchema = createBarberSchema.partial().extend({ slug: slugField.optional() });
 

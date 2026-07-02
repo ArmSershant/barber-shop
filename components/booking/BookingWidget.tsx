@@ -29,6 +29,7 @@ const headerBar = {
 import { DatePickerInput } from '@mantine/dates';
 import {
   useMeQuery,
+  useMyPointsQuery,
   useGetAvailabilityQuery,
   useCreateBookingMutation,
 } from '@/lib/store/api';
@@ -42,15 +43,24 @@ export interface WidgetService {
   priceAmd: number;
 }
 
+export interface WidgetLoyalty {
+  enabled: boolean;
+  earnRate: number; // points per 100 ֏
+  amdPerPoint: number; // ֏ value of one point on redemption
+  maxRedeemPct: number; // max % of a booking points can cover
+  scopeKind: 'shop' | 'barber';
+  scopeSlug: string;
+}
+
 export function BookingWidget({
   barberSlug,
   services,
-  loyaltyPointsPer100 = 0,
+  loyalty,
 }: {
   barberSlug: string;
   services: WidgetService[];
-  /** Provider's earn rate (points per 100 ֏); 0 = loyalty off, no hint. */
-  loyaltyPointsPer100?: number;
+  /** The loyalty program that applies here (shop's or the barber's). */
+  loyalty?: WidgetLoyalty;
 }) {
   const t = useTranslations('booking');
   const tst = useTranslations('serviceTypes');
@@ -64,6 +74,7 @@ export function BookingWidget({
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
+  const [usePoints, setUsePoints] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [confirmed, setConfirmed] = useState<
     { when: string; manageToken: string | null; pending: boolean; start: string; end: string } | null
@@ -89,7 +100,21 @@ export function BookingWidget({
 
   // Loyalty points a logged-in customer would earn for this booking, at the
   // provider's rate (points per 100 ֏). 0 when the provider hasn't opted in.
-  const earnPoints = loyaltyPointsPer100 > 0 ? Math.floor((total.price * loyaltyPointsPer100) / 100) : 0;
+  const loyaltyOn = Boolean(loyalty?.enabled);
+  const earnPoints = loyaltyOn ? Math.floor((total.price * loyalty!.earnRate) / 100) : 0;
+
+  // The customer's balance at this provider, and how much they can redeem here.
+  const { data: points } = useMyPointsQuery(undefined, { skip: isGuest || !loyaltyOn });
+  const balanceHere =
+    points?.balances.find((b) => b.kind === loyalty?.scopeKind && b.slug === loyalty?.scopeSlug)?.balance ?? 0;
+  const maxDiscount = loyaltyOn ? Math.floor((total.price * loyalty!.maxRedeemPct) / 100) : 0;
+  const redeemablePoints =
+    loyaltyOn && loyalty!.amdPerPoint > 0
+      ? Math.min(balanceHere, Math.floor(maxDiscount / loyalty!.amdPerPoint))
+      : 0;
+  const discountAmd = usePoints ? redeemablePoints * (loyalty?.amdPerPoint ?? 0) : 0;
+  const finalPrice = total.price - discountAmd;
+  const canRedeem = !isGuest && redeemablePoints > 0;
 
   const fmtSlot = (iso: string) =>
     new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -103,6 +128,7 @@ export function BookingWidget({
         serviceIds,
         startsAt: slot,
         guest: isGuest ? { name, phone, email: email.trim() } : undefined,
+        redeemPoints: usePoints && canRedeem ? redeemablePoints : undefined,
       }).unwrap();
       setConfirmed({
         when: new Date(res.booking.startsAt).toLocaleString(),
@@ -284,14 +310,29 @@ export function BookingWidget({
 
         {serviceIds.length > 0 && (
           <Stack gap={6} mt="xs">
+            {canRedeem && (
+              <Checkbox
+                checked={usePoints}
+                onChange={(e) => setUsePoints(e.currentTarget.checked)}
+                label={t('redeemToggle', {
+                  points: redeemablePoints,
+                  amount: (redeemablePoints * (loyalty?.amdPerPoint ?? 0)).toLocaleString(),
+                })}
+              />
+            )}
             <Group justify="space-between" align="center">
               <Text fw={700} ff="var(--font-display), Georgia, serif" fz="1.35rem">
-                {t('total')}: {total.price.toLocaleString()} ֏ · {total.duration} min
+                {t('total')}: {finalPrice.toLocaleString()} ֏ · {total.duration} min
               </Text>
               <Button color="ox" size="md" onClick={onBook} loading={booking} disabled={!canBook}>
                 {t('book')}
               </Button>
             </Group>
+            {discountAmd > 0 && (
+              <Text size="xs" c="var(--gold)" ta="right">
+                {t('redeemApplied', { amount: discountAmd.toLocaleString(), points: redeemablePoints })}
+              </Text>
+            )}
             <Text size="xs" c="dimmed" ta="right">
               {t('reassure')}
             </Text>

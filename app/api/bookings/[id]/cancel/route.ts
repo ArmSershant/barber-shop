@@ -5,6 +5,7 @@ import { getCurrentUser } from '@/lib/auth/session';
 import { cancelBookingSchema } from '@/lib/validation/booking';
 import { sendEmail } from '@/lib/email';
 import { bookingCancelledEmail } from '@/lib/email-templates';
+import { refundRedemptionForBooking } from '@/lib/loyalty';
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -60,6 +61,13 @@ export async function POST(req: NextRequest, { params }: Params) {
       where: { id },
       data: { status: 'cancelled', cancelReason: body.reason ?? null, cancelledBy },
     });
+
+    // Return any loyalty points spent on this booking. Best-effort.
+    try {
+      await refundRedemptionForBooking(id);
+    } catch (refundErr) {
+      console.error('Failed to refund loyalty redemption:', refundErr);
+    }
 
     // Notify the other side. Best-effort.
     try {

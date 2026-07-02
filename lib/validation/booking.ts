@@ -4,6 +4,8 @@ export const createBookingSchema = z.object({
   serviceIds: z.array(z.string().uuid()).min(1).max(10),
   startsAt: z.coerce.date(),
   note: z.string().trim().max(500).optional(),
+  // Loyalty points the (logged-in) customer wants to spend; server caps it.
+  redeemPoints: z.number().int().min(0).max(1_000_000).optional(),
   guest: z
     .object({
       name: z.string().trim().min(1).max(120),

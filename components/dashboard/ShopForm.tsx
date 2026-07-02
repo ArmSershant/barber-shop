@@ -39,6 +39,8 @@ export function ShopForm({ shop }: { shop: Shop | null }) {
       requiresApproval: shop?.requiresApproval ?? false,
       loyaltyEnabled: shop?.loyaltyEnabled ?? false,
       loyaltyPointsPer100: shop?.loyaltyPointsPer100 ?? 1,
+      loyaltyAmdPerPoint: shop?.loyaltyAmdPerPoint ?? 1,
+      loyaltyMaxRedeemPct: shop?.loyaltyMaxRedeemPct ?? 50,
     },
   });
 
@@ -145,21 +147,52 @@ export function ShopForm({ shop }: { shop: Shop | null }) {
           )}
         />
         {loyaltyEnabled && (
-          <Controller
-            name="loyaltyPointsPer100"
-            control={control}
-            render={({ field }) => (
-              <NumberInput
-                label={td('loyaltyRate')}
-                description={td('loyaltyRateHint')}
-                min={0}
-                max={50}
-                value={field.value ?? 1}
-                onChange={(value) => field.onChange(value === '' ? 0 : Number(value))}
-                error={errors.loyaltyPointsPer100?.message}
-              />
-            )}
-          />
+          <>
+            <Controller
+              name="loyaltyPointsPer100"
+              control={control}
+              render={({ field }) => (
+                <NumberInput
+                  label={td('loyaltyRate')}
+                  description={td('loyaltyRateHint')}
+                  min={0}
+                  max={50}
+                  value={field.value ?? 1}
+                  onChange={(value) => field.onChange(value === '' ? 0 : Number(value))}
+                  error={errors.loyaltyPointsPer100?.message}
+                />
+              )}
+            />
+            <Controller
+              name="loyaltyAmdPerPoint"
+              control={control}
+              render={({ field }) => (
+                <NumberInput
+                  label={td('loyaltyValue')}
+                  description={td('loyaltyValueHint')}
+                  min={1}
+                  value={field.value ?? 1}
+                  onChange={(value) => field.onChange(value === '' ? 1 : Number(value))}
+                  error={errors.loyaltyAmdPerPoint?.message}
+                />
+              )}
+            />
+            <Controller
+              name="loyaltyMaxRedeemPct"
+              control={control}
+              render={({ field }) => (
+                <NumberInput
+                  label={td('loyaltyMaxRedeem')}
+                  description={td('loyaltyMaxRedeemHint')}
+                  min={0}
+                  max={100}
+                  value={field.value ?? 50}
+                  onChange={(value) => field.onChange(value === '' ? 0 : Number(value))}
+                  error={errors.loyaltyMaxRedeemPct?.message}
+                />
+              )}
+            />
+          </>
         )}
         {errors.root && (
           <Text c="red" size="sm">

@@ -354,7 +354,11 @@
     "loyaltyToggle": "Offer loyalty points",
     "loyaltyHint": "Reward customers with points on every completed booking.",
     "loyaltyRate": "Points per 100 ֏",
-    "loyaltyRateHint": "e.g. 1 → a 2,000 ֏ visit earns 20 points."
+    "loyaltyRateHint": "e.g. 1 → a 2,000 ֏ visit earns 20 points.",
+    "loyaltyValue": "֏ per point",
+    "loyaltyValueHint": "Redemption value of one point. e.g. 1 = 100 points give 100 ֏ off.",
+    "loyaltyMaxRedeem": "Max points discount (%)",
+    "loyaltyMaxRedeemHint": "The most of a booking points can cover. e.g. 50 = up to half the price."
   },
   "services": {
     "heading": "Services",
@@ -492,7 +496,9 @@
     "addCalendar": "Add to calendar",
     "registerNudge": "Create an account to track your bookings and check out faster next time.",
     "registerCta": "Sign up",
-    "earnHint": "You'll earn ~{points} points"
+    "earnHint": "You'll earn ~{points} points",
+    "redeemToggle": "Use {points} points — save {amount} ֏",
+    "redeemApplied": "−{amount} ֏ with {points} points"
   },
   "manage": {
     "title": "Your booking",

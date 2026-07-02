@@ -223,9 +223,12 @@ model Shop {
   isFeatured  Boolean        @default(false) @map("is_featured")
   isTest      Boolean        @default(false) @map("is_test")
   requiresApproval Boolean   @default(false) @map("requires_approval")
-  // Loyalty: shop opts in and sets how many points a customer earns per 100 ֏.
+  // Loyalty: shop opts in and sets how many points a customer earns per 100 ֏,
+  // the ֏ value of a point on redemption, and the max % of a booking points cover.
   loyaltyEnabled     Boolean @default(false) @map("loyalty_enabled")
   loyaltyPointsPer100 Int    @default(1) @map("loyalty_points_per_100")
+  loyaltyAmdPerPoint  Int    @default(1) @map("loyalty_amd_per_point")
+  loyaltyMaxRedeemPct Int    @default(50) @map("loyalty_max_redeem_pct")
   // Copy-on-apply templates: arrays of {weekday,startMinute,endMinute}.
   defaultWorkingHours Json   @default("[]") @map("default_working_hours")
   defaultBreaks       Json   @default("[]") @map("default_breaks")
@@ -263,10 +266,13 @@ model Barber {
   isFeatured         Boolean        @default(false) @map("is_featured")
   isTest             Boolean        @default(false) @map("is_test")
   requiresApproval   Boolean        @default(false) @map("requires_approval")
-  // Loyalty: independent barbers opt in and set points earned per 100 ֏.
+  // Loyalty: independent barbers opt in and set points earned per 100 ֏, the ֏
+  // value of a point, and the max % of a booking points can cover.
   // (Shop-employed barbers inherit their shop's loyalty program instead.)
   loyaltyEnabled     Boolean        @default(false) @map("loyalty_enabled")
   loyaltyPointsPer100 Int           @default(1) @map("loyalty_points_per_100")
+  loyaltyAmdPerPoint  Int           @default(1) @map("loyalty_amd_per_point")
+  loyaltyMaxRedeemPct Int           @default(50) @map("loyalty_max_redeem_pct")
   status             ProviderStatus @default(pending)
   ratingAvg          Decimal        @default(0) @map("rating_avg") @db.Decimal(2, 1)
   ratingCount        Int            @default(0) @map("rating_count")

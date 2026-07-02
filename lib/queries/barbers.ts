@@ -128,6 +128,8 @@ export const getBarberProfile = cache(async (slug: string) => {
       deletedAt: true,
       loyaltyEnabled: true,
       loyaltyPointsPer100: true,
+      loyaltyAmdPerPoint: true,
+      loyaltyMaxRedeemPct: true,
       shop: {
         select: {
           slug: true,
@@ -135,6 +137,8 @@ export const getBarberProfile = cache(async (slug: string) => {
           ownerUserId: true,
           loyaltyEnabled: true,
           loyaltyPointsPer100: true,
+          loyaltyAmdPerPoint: true,
+          loyaltyMaxRedeemPct: true,
         },
       },
       district: { select: { nameEn: true, nameHy: true, slug: true } },
@@ -186,17 +190,20 @@ export const getBarberProfile = cache(async (slug: string) => {
     : barber.ownedServices;
   const { barberServices: _bs, ownedServices: _os, ...rest } = barber;
 
-  // Effective earn rate: shop barbers use the shop's program, independents their
-  // own. 0 when the responsible provider hasn't enabled loyalty.
-  const loyaltyEarnRate = barber.shop
-    ? barber.shop.loyaltyEnabled
-      ? barber.shop.loyaltyPointsPer100
-      : 0
-    : barber.loyaltyEnabled
-      ? barber.loyaltyPointsPer100
-      : 0;
+  // Loyalty program the customer interacts with here: the shop (shop barbers)
+  // or the independent barber. `earnRate` is 0 when loyalty is off.
+  const usingShop = Boolean(barber.shop);
+  const src = usingShop ? barber.shop! : barber;
+  const loyalty = {
+    enabled: src.loyaltyEnabled,
+    earnRate: src.loyaltyEnabled ? src.loyaltyPointsPer100 : 0,
+    amdPerPoint: src.loyaltyAmdPerPoint,
+    maxRedeemPct: src.loyaltyMaxRedeemPct,
+    scopeKind: usingShop ? ('shop' as const) : ('barber' as const),
+    scopeSlug: usingShop ? barber.shop!.slug : barber.slug,
+  };
 
-  return { ...rest, services, ratingAvg: Number(barber.ratingAvg), loyaltyEarnRate };
+  return { ...rest, services, ratingAvg: Number(barber.ratingAvg), loyalty };
 });
 
 export type BarberProfile = NonNullable<Awaited<ReturnType<typeof getBarberProfile>>>;
