@@ -117,7 +117,8 @@
     "myAreaHint": "Set your district to see nearby barbers first.",
     "areaSaved": "Saved.",
     "bookAgain": "Book again",
-    "review": "Review"
+    "review": "Review",
+    "pointsEarned": "+{points} points"
   },
   "apiErrors": {
     "INVALID_CREDENTIALS": "Invalid email or password.",
@@ -228,7 +229,17 @@
     "newsletter": "Monthly newsletter",
     "newsletterToggle": "Email me monthly updates",
     "newsletterHint": "What's new on Barber-Shop, once a month. Unsubscribe anytime.",
-    "newsletterLang": "Newsletter language"
+    "newsletterLang": "Newsletter language",
+    "pointsTitle": "Loyalty points",
+    "pointsUnit": "points",
+    "pointsHint": "Earn points on every completed booking — redeem them for discounts soon.",
+    "pointsHistory": "Recent activity",
+    "pointsEmpty": "No points activity yet. Complete a booking to start earning.",
+    "pointsFrom": "from {name}",
+    "reasonEarned": "Earned",
+    "reasonRedeemed": "Redeemed",
+    "reasonExpired": "Expired",
+    "reasonAdjustment": "Adjustment"
   },
   "auth": {
     "login": {
@@ -338,7 +349,11 @@
     "cropCancel": "Cancel",
     "urlLabel": "Page URL",
     "urlHint": "Your public address: barber-shop.am{path}… Lowercase letters, numbers and hyphens only.",
-    "save": "Save"
+    "save": "Save",
+    "loyaltyToggle": "Offer loyalty points",
+    "loyaltyHint": "Reward customers with points on every completed booking.",
+    "loyaltyRate": "Points per 100 ֏",
+    "loyaltyRateHint": "e.g. 1 → a 2,000 ֏ visit earns 20 points."
   },
   "services": {
     "heading": "Services",
@@ -475,7 +490,8 @@
     "requestedBody": "{when} — pending the barber's confirmation. We'll email you once it's confirmed.",
     "addCalendar": "Add to calendar",
     "registerNudge": "Create an account to track your bookings and check out faster next time.",
-    "registerCta": "Sign up"
+    "registerCta": "Sign up",
+    "earnHint": "You'll earn ~{points} points"
   },
   "manage": {
     "title": "Your booking",

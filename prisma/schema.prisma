@@ -59,6 +59,13 @@ enum CancelledBy {
   system
 }
 
+enum PointsReason {
+  earned
+  redeemed
+  expired
+  adjustment
+}
+
 enum NotificationChannel {
   email
   inapp
@@ -123,6 +130,7 @@ model User {
   favorites     Favorite[]
   refreshTokens RefreshToken[]
   authTokens    AuthToken[]
+  pointsLedger  PointsLedger[]
 
   @@map("users")
 }
@@ -215,6 +223,9 @@ model Shop {
   isFeatured  Boolean        @default(false) @map("is_featured")
   isTest      Boolean        @default(false) @map("is_test")
   requiresApproval Boolean   @default(false) @map("requires_approval")
+  // Loyalty: shop opts in and sets how many points a customer earns per 100 ֏.
+  loyaltyEnabled     Boolean @default(false) @map("loyalty_enabled")
+  loyaltyPointsPer100 Int    @default(1) @map("loyalty_points_per_100")
   // Copy-on-apply templates: arrays of {weekday,startMinute,endMinute}.
   defaultWorkingHours Json   @default("[]") @map("default_working_hours")
   defaultBreaks       Json   @default("[]") @map("default_breaks")
@@ -228,6 +239,7 @@ model Shop {
   services Service[]
   photos   ShopPhoto[]
   bookings Booking[]
+  pointsLedger PointsLedger[]
 
   @@index([districtId, status])
   @@map("shops")
@@ -251,6 +263,10 @@ model Barber {
   isFeatured         Boolean        @default(false) @map("is_featured")
   isTest             Boolean        @default(false) @map("is_test")
   requiresApproval   Boolean        @default(false) @map("requires_approval")
+  // Loyalty: independent barbers opt in and set points earned per 100 ֏.
+  // (Shop-employed barbers inherit their shop's loyalty program instead.)
+  loyaltyEnabled     Boolean        @default(false) @map("loyalty_enabled")
+  loyaltyPointsPer100 Int           @default(1) @map("loyalty_points_per_100")
   status             ProviderStatus @default(pending)
   ratingAvg          Decimal        @default(0) @map("rating_avg") @db.Decimal(2, 1)
   ratingCount        Int            @default(0) @map("rating_count")
@@ -270,6 +286,7 @@ model Barber {
   reviews         Review[]
   portfolioImages PortfolioImage[]
   favorites       Favorite[]
+  pointsLedger    PointsLedger[]
 
   @@index([districtId, status])
   @@index([ratingAvg(sort: Desc)])
@@ -405,6 +422,7 @@ model Booking {
   shop     Shop?            @relation(fields: [shopId], references: [id])
   services BookingService[]
   review   Review?
+  pointsLedger PointsLedger[]
 
   @@index([barberId, startsAt])
   @@index([customerUserId, startsAt(sort: Desc)])
@@ -428,6 +446,33 @@ model BookingService {
 
   @@index([bookingId])
   @@map("booking_services")
+}
+
+// Append-only loyalty points ledger. Points are scoped to a provider: either a
+// shop (shop bookings, pooled across its barbers) or an independent barber.
+// Exactly one of scopeShopId / scopeBarberId is set. A customer's balance at a
+// provider = SUM(delta) over that scope (computed from the ledger, no cache).
+// Positive delta = earned/adjusted up; negative = redeemed/expired.
+model PointsLedger {
+  id            String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId        String       @map("user_id") @db.Uuid
+  bookingId     String?      @map("booking_id") @db.Uuid
+  scopeShopId   String?      @map("scope_shop_id") @db.Uuid
+  scopeBarberId String?      @map("scope_barber_id") @db.Uuid
+  delta         Int
+  reason        PointsReason
+  createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  booking     Booking? @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  scopeShop   Shop?    @relation(fields: [scopeShopId], references: [id], onDelete: Cascade)
+  scopeBarber Barber?  @relation(fields: [scopeBarberId], references: [id], onDelete: Cascade)
+
+  // One earn (or expire) row per booking — makes accrual idempotent.
+  @@unique([bookingId, reason])
+  @@index([userId, scopeShopId, scopeBarberId])
+  @@index([userId, createdAt(sort: Desc)])
+  @@map("points_ledger")
 }
 
 // ---------------------------------------------------------------------------

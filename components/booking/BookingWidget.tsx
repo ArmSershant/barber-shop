@@ -17,7 +17,7 @@ import {
   ThemeIcon,
   Title,
 } from '@mantine/core';
-import { IconCheck, IconCalendarPlus } from '@tabler/icons-react';
+import { IconCheck, IconCalendarPlus, IconGift } from '@tabler/icons-react';
 import { buildIcs } from '@/lib/ics';
 import { PhoneInput } from '@/components/PhoneInput';
 
@@ -45,9 +45,12 @@ export interface WidgetService {
 export function BookingWidget({
   barberSlug,
   services,
+  loyaltyPointsPer100 = 0,
 }: {
   barberSlug: string;
   services: WidgetService[];
+  /** Provider's earn rate (points per 100 ֏); 0 = loyalty off, no hint. */
+  loyaltyPointsPer100?: number;
 }) {
   const t = useTranslations('booking');
   const tst = useTranslations('serviceTypes');
@@ -83,6 +86,10 @@ export function BookingWidget({
   }, [services, serviceIds]);
 
   const isGuest = !me?.user;
+
+  // Loyalty points a logged-in customer would earn for this booking, at the
+  // provider's rate (points per 100 ֏). 0 when the provider hasn't opted in.
+  const earnPoints = loyaltyPointsPer100 > 0 ? Math.floor((total.price * loyaltyPointsPer100) / 100) : 0;
 
   const fmtSlot = (iso: string) =>
     new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -288,6 +295,14 @@ export function BookingWidget({
             <Text size="xs" c="dimmed" ta="right">
               {t('reassure')}
             </Text>
+            {!isGuest && earnPoints > 0 && (
+              <Group gap={6} justify="flex-end" wrap="nowrap">
+                <IconGift size={14} color="var(--gold)" />
+                <Text size="xs" c="var(--gold)">
+                  {t('earnHint', { points: earnPoints })}
+                </Text>
+              </Group>
+            )}
           </Stack>
         )}
       </Stack>

@@ -22,6 +22,8 @@ export interface EditableBarber {
   photoUrl?: string | null;
   coverUrl?: string | null;
   requiresApproval?: boolean | null;
+  loyaltyEnabled?: boolean | null;
+  loyaltyPointsPer100?: number | null;
   shopId?: string | null;
 }
 
@@ -36,6 +38,7 @@ export function BarberForm({ barber }: { barber: EditableBarber | null }) {
     control,
     handleSubmit,
     setError,
+    watch,
     formState: { errors },
   } = useForm<BarberFormInput>({
     resolver: zodResolver(barberFormSchema),
@@ -48,8 +51,12 @@ export function BarberForm({ barber }: { barber: EditableBarber | null }) {
       photoUrl: barber?.photoUrl ?? undefined,
       coverUrl: barber?.coverUrl ?? undefined,
       requiresApproval: barber?.requiresApproval ?? false,
+      loyaltyEnabled: barber?.loyaltyEnabled ?? false,
+      loyaltyPointsPer100: barber?.loyaltyPointsPer100 ?? 1,
     },
   });
+
+  const loyaltyEnabled = watch('loyaltyEnabled');
 
   // A barber's own approval setting only applies when they're independent;
   // shop barbers inherit the shop's setting, so hide the toggle for them.
@@ -149,6 +156,39 @@ export function BarberForm({ barber }: { barber: EditableBarber | null }) {
               />
             )}
           />
+        )}
+        {showApproval && (
+          <>
+            <Controller
+              name="loyaltyEnabled"
+              control={control}
+              render={({ field }) => (
+                <Switch
+                  checked={!!field.value}
+                  onChange={(e) => field.onChange(e.currentTarget.checked)}
+                  label={td('loyaltyToggle')}
+                  description={td('loyaltyHint')}
+                />
+              )}
+            />
+            {loyaltyEnabled && (
+              <Controller
+                name="loyaltyPointsPer100"
+                control={control}
+                render={({ field }) => (
+                  <NumberInput
+                    label={td('loyaltyRate')}
+                    description={td('loyaltyRateHint')}
+                    min={0}
+                    max={50}
+                    value={field.value ?? 1}
+                    onChange={(value) => field.onChange(value === '' ? 0 : Number(value))}
+                    error={errors.loyaltyPointsPer100?.message}
+                  />
+                )}
+              />
+            )}
+          </>
         )}
         {errors.root && (
           <Text c="red" size="sm">

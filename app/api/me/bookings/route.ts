@@ -23,6 +23,7 @@ export async function GET() {
         services: { select: { typeSnapshot: true, nameSnapshot: true } },
         barber: { select: { displayName: true, slug: true } },
         review: { select: { id: true } },
+        pointsLedger: { where: { reason: 'earned' }, select: { delta: true } },
       },
     });
 
@@ -36,6 +37,7 @@ export async function GET() {
         services: b.services.map((s) => ({ type: s.typeSnapshot, name: s.nameSnapshot })),
         barber: b.barber,
         reviewed: Boolean(b.review),
+        pointsEarned: b.pointsLedger.reduce((sum, p) => sum + p.delta, 0),
       })),
     });
   } catch (err) {

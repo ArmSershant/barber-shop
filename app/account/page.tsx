@@ -30,6 +30,7 @@ import {
 import { apiErrorMessage } from '@/lib/api-error';
 import { ImageUpload } from '@/components/dashboard/ImageUpload';
 import { PhoneInput } from '@/components/PhoneInput';
+import { PointsCard } from '@/components/account/PointsCard';
 
 export default function AccountPage() {
   const t = useTranslations('account');
@@ -61,6 +62,8 @@ export default function AccountPage() {
   const [newPassword, setNewPassword] = useState('');
 
   const user = me?.user ?? null;
+  const isCustomer =
+    !!user && !user.roles.includes('shop_owner') && !user.roles.includes('barber') && !user.roles.includes('admin');
   useEffect(() => {
     if (!user) return;
     setFullName(user.fullName ?? '');
@@ -213,6 +216,8 @@ export default function AccountPage() {
             </Button>
           </Stack>
         </Paper>
+
+        {isCustomer && <PointsCard />}
         </SimpleGrid>
       </Stack>
     </Container>

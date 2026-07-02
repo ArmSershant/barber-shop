@@ -3,7 +3,7 @@
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
-import { Button, Paper, Stack, Switch, Text, Textarea, TextInput, Title } from '@mantine/core';
+import { Button, NumberInput, Paper, Stack, Switch, Text, Textarea, TextInput, Title } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { shopFormSchema, type ShopFormInput } from '@/lib/validation/provider';
 import { useCreateShopMutation, useUpdateShopMutation, type Shop } from '@/lib/store/api';
@@ -22,6 +22,7 @@ export function ShopForm({ shop }: { shop: Shop | null }) {
     control,
     handleSubmit,
     setError,
+    watch,
     formState: { errors },
   } = useForm<ShopFormInput>({
     resolver: zodResolver(shopFormSchema),
@@ -36,8 +37,12 @@ export function ShopForm({ shop }: { shop: Shop | null }) {
       logoUrl: shop?.logoUrl ?? undefined,
       coverUrl: shop?.coverUrl ?? undefined,
       requiresApproval: shop?.requiresApproval ?? false,
+      loyaltyEnabled: shop?.loyaltyEnabled ?? false,
+      loyaltyPointsPer100: shop?.loyaltyPointsPer100 ?? 1,
     },
   });
+
+  const loyaltyEnabled = watch('loyaltyEnabled');
 
   const onSubmit = handleSubmit(async (values) => {
     try {
@@ -127,6 +132,35 @@ export function ShopForm({ shop }: { shop: Shop | null }) {
             />
           )}
         />
+        <Controller
+          name="loyaltyEnabled"
+          control={control}
+          render={({ field }) => (
+            <Switch
+              checked={!!field.value}
+              onChange={(e) => field.onChange(e.currentTarget.checked)}
+              label={td('loyaltyToggle')}
+              description={td('loyaltyHint')}
+            />
+          )}
+        />
+        {loyaltyEnabled && (
+          <Controller
+            name="loyaltyPointsPer100"
+            control={control}
+            render={({ field }) => (
+              <NumberInput
+                label={td('loyaltyRate')}
+                description={td('loyaltyRateHint')}
+                min={0}
+                max={50}
+                value={field.value ?? 1}
+                onChange={(value) => field.onChange(value === '' ? 0 : Number(value))}
+                error={errors.loyaltyPointsPer100?.message}
+              />
+            )}
+          />
+        )}
         {errors.root && (
           <Text c="red" size="sm">
             {errors.root.message}

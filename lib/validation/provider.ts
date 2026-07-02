@@ -9,6 +9,9 @@ export const slugField = z
   .max(60)
   .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Use lowercase letters, numbers and single hyphens.');
 
+// Loyalty: points a customer earns per 100 ֏ (0 = off; capped to keep it sane).
+const loyaltyPointsPer100Field = z.number().int().min(0).max(50);
+
 export const createShopSchema = z.object({
   name: z.string().trim().min(2).max(120),
   description: z.string().trim().max(2000).optional(),
@@ -19,6 +22,8 @@ export const createShopSchema = z.object({
   logoUrl: z.string().url().optional(),
   coverUrl: z.string().url().optional(),
   requiresApproval: z.boolean().optional(),
+  loyaltyEnabled: z.boolean().optional(),
+  loyaltyPointsPer100: loyaltyPointsPer100Field.optional(),
 });
 // `slug` is auto-generated on create; editable only via update.
 export const updateShopSchema = createShopSchema.partial().extend({ slug: slugField.optional() });
@@ -31,6 +36,8 @@ export const createBarberSchema = z.object({
   photoUrl: z.string().url().optional(),
   coverUrl: z.string().url().optional(),
   requiresApproval: z.boolean().optional(),
+  loyaltyEnabled: z.boolean().optional(),
+  loyaltyPointsPer100: loyaltyPointsPer100Field.optional(),
 });
 export const updateBarberSchema = createBarberSchema.partial().extend({ slug: slugField.optional() });
 

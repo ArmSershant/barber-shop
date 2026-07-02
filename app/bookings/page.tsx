@@ -141,12 +141,24 @@ export default function MyBookingsPage() {
     });
   };
 
-  const renderCard = (b: MyBooking, cancellable: boolean) => (
+  const renderCard = (b: MyBooking, cancellable: boolean) => {
+    const earned = b.pointsEarned;
+    return (
     <BookingRow
       key={b.id}
       date={new Date(b.startsAt)}
       title={b.barber.displayName}
-      subtitle={`${b.services.map(svcLabel).join(', ')} · ${b.totalPriceAmd.toLocaleString()} ֏`}
+      subtitle={
+        <>
+          {b.services.map(svcLabel).join(', ')} · {b.totalPriceAmd.toLocaleString()} ֏
+          {earned > 0 && (
+            <Text component="span" c="var(--gold)">
+              {' · '}
+              {t('pointsEarned', { points: earned })}
+            </Text>
+          )}
+        </>
+      }
       highlight={b.status === 'requested'}
       right={
         <Group gap="xs" wrap="nowrap" align="center">
@@ -185,7 +197,8 @@ export default function MyBookingsPage() {
         </Group>
       }
     />
-  );
+    );
+  };
 
   return (
     <Container size="sm" py="xl">

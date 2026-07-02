@@ -59,6 +59,8 @@ export interface Shop {
   coverUrl?: string | null;
   districtId?: number | null;
   requiresApproval?: boolean;
+  loyaltyEnabled?: boolean;
+  loyaltyPointsPer100?: number;
   status: string;
 }
 
@@ -73,6 +75,8 @@ export interface Barber {
   districtId?: number | null;
   shopId?: string | null;
   requiresApproval?: boolean;
+  loyaltyEnabled?: boolean;
+  loyaltyPointsPer100?: number;
   status: string;
 }
 
@@ -106,6 +110,7 @@ export interface BarberProfileData {
   districtId: number | null;
   photoUrl: string | null;
   coverUrl: string | null;
+  loyaltyEarnRate?: number;
 }
 
 export interface GalleryImage {
@@ -220,6 +225,7 @@ export interface MyBooking {
   services: BookedService[];
   barber: { displayName: string; slug: string };
   reviewed: boolean;
+  pointsEarned: number;
 }
 
 export interface ManagedBooking {
@@ -303,6 +309,25 @@ export interface AdminOverview {
   users: AdminUser[];
 }
 
+export type PointsReason = 'earned' | 'redeemed' | 'expired' | 'adjustment';
+export interface PointsBalance {
+  kind: 'shop' | 'barber';
+  name: string;
+  slug: string;
+  balance: number;
+}
+export interface PointsEntry {
+  id: string;
+  delta: number;
+  reason: PointsReason;
+  createdAt: string;
+  providerName: string | null;
+}
+export interface PointsSummary {
+  balances: PointsBalance[];
+  history: PointsEntry[];
+}
+
 // All requests are same-origin to /api; `credentials: 'include'` sends the
 // httpOnly auth cookies.
 const rawBaseQuery = fetchBaseQuery({ baseUrl: '/api', credentials: 'include' });
@@ -362,11 +387,16 @@ export const api = createApi({
     'Portfolio',
     'ShopPhotos',
     'Favorites',
+    'MyPoints',
   ],
   endpoints: (builder) => ({
     me: builder.query<MeResponse, void>({
       query: () => '/me',
       providesTags: ['Me'],
+    }),
+    myPoints: builder.query<PointsSummary, void>({
+      query: () => '/me/points',
+      providesTags: ['MyPoints'],
     }),
     register: builder.mutation<AuthResponse, RegisterRequest>({
       query: (body) => ({ url: '/auth/register', method: 'POST', body }),
@@ -687,6 +717,7 @@ export const api = createApi({
 
 export const {
   useMeQuery,
+  useMyPointsQuery,
   useRegisterMutation,
   useLoginMutation,
   useLogoutMutation,

@@ -5,6 +5,7 @@ import { requireAuth } from '@/lib/auth/rbac';
 import { loadStartedProviderBooking } from '@/lib/queries/provider-booking';
 import { sendEmail } from '@/lib/email';
 import { reviewRequestEmail } from '@/lib/email-templates';
+import { earnPointsForBooking } from '@/lib/loyalty';
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -15,6 +16,13 @@ export async function POST(_req: NextRequest, { params }: Params) {
     await loadStartedProviderBooking(id, userId);
 
     await prisma.booking.update({ where: { id }, data: { status: 'completed' } });
+
+    // Accrue loyalty points — best-effort, never blocks completion.
+    try {
+      await earnPointsForBooking(id);
+    } catch (pointsErr) {
+      console.error('Failed to accrue loyalty points:', pointsErr);
+    }
 
     // Nudge the customer to leave a review — best-effort, never blocks completion.
     try {

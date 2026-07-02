@@ -126,7 +126,17 @@ export const getBarberProfile = cache(async (slug: string) => {
       ratingAvg: true,
       ratingCount: true,
       deletedAt: true,
-      shop: { select: { slug: true, name: true, ownerUserId: true } },
+      loyaltyEnabled: true,
+      loyaltyPointsPer100: true,
+      shop: {
+        select: {
+          slug: true,
+          name: true,
+          ownerUserId: true,
+          loyaltyEnabled: true,
+          loyaltyPointsPer100: true,
+        },
+      },
       district: { select: { nameEn: true, nameHy: true, slug: true } },
       ownedServices: {
         where: { isActive: true },
@@ -176,7 +186,17 @@ export const getBarberProfile = cache(async (slug: string) => {
     : barber.ownedServices;
   const { barberServices: _bs, ownedServices: _os, ...rest } = barber;
 
-  return { ...rest, services, ratingAvg: Number(barber.ratingAvg) };
+  // Effective earn rate: shop barbers use the shop's program, independents their
+  // own. 0 when the responsible provider hasn't enabled loyalty.
+  const loyaltyEarnRate = barber.shop
+    ? barber.shop.loyaltyEnabled
+      ? barber.shop.loyaltyPointsPer100
+      : 0
+    : barber.loyaltyEnabled
+      ? barber.loyaltyPointsPer100
+      : 0;
+
+  return { ...rest, services, ratingAvg: Number(barber.ratingAvg), loyaltyEarnRate };
 });
 
 export type BarberProfile = NonNullable<Awaited<ReturnType<typeof getBarberProfile>>>;
