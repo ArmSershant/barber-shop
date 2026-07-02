@@ -391,7 +391,7 @@ export const api = createApi({
     }),
     updateShop: builder.mutation<{ shop: Shop }, { slug: string; data: UpdateShopInput }>({
       query: ({ slug, data }) => ({ url: `/shops/${slug}`, method: 'PATCH', body: data }),
-      invalidatesTags: ['ProviderMe'],
+      invalidatesTags: ['ProviderMe', 'AdminOverview'],
     }),
     createBarber: builder.mutation<{ barber: Barber }, CreateBarberInput>({
       query: (body) => ({ url: '/barbers', method: 'POST', body }),
@@ -399,7 +399,12 @@ export const api = createApi({
     }),
     updateBarber: builder.mutation<{ barber: Barber }, { slug: string; data: UpdateBarberInput }>({
       query: ({ slug, data }) => ({ url: `/barbers/${slug}`, method: 'PATCH', body: data }),
-      invalidatesTags: (_r, _e, arg) => ['ProviderMe', 'ShopBarbers', { type: 'Barber', id: arg.slug }],
+      invalidatesTags: (_r, _e, arg) => [
+        'ProviderMe',
+        'ShopBarbers',
+        'AdminOverview',
+        { type: 'Barber', id: arg.slug },
+      ],
     }),
     getBarber: builder.query<{ barber: BarberProfileData }, string>({
       query: (slug) => `/barbers/${slug}`,

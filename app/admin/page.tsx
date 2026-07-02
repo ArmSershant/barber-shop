@@ -17,13 +17,14 @@ import {
   Paper,
   SimpleGrid,
   Stack,
+  Modal,
   Table,
   Tabs,
   Text,
   TextInput,
   Title,
 } from '@mantine/core';
-import { IconSearch, IconTrash } from '@tabler/icons-react';
+import { IconSearch, IconTrash, IconLink } from '@tabler/icons-react';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import {
@@ -36,6 +37,8 @@ import {
   useSetReviewVisibilityMutation,
   useSetBarberFlagsMutation,
   useSetShopFlagsMutation,
+  useUpdateShopMutation,
+  useUpdateBarberMutation,
 } from '@/lib/store/api';
 import { apiErrorMessage } from '@/lib/api-error';
 import { ListSkeleton } from '@/components/ListSkeleton';
@@ -58,6 +61,39 @@ export default function AdminPage() {
   const [setReviewVisibility] = useSetReviewVisibilityMutation();
   const [setBarberFlags] = useSetBarberFlagsMutation();
   const [setShopFlags] = useSetShopFlagsMutation();
+  const [updateShop] = useUpdateShopMutation();
+  const [updateBarber] = useUpdateBarberMutation();
+
+  // Inline URL (slug) editor for a provider row.
+  const [slugEdit, setSlugEdit] = useState<{ kind: 'shop' | 'barber'; slug: string; name: string } | null>(null);
+  const [slugValue, setSlugValue] = useState('');
+  const [savingSlug, setSavingSlug] = useState(false);
+
+  const openSlugEdit = (kind: 'shop' | 'barber', slug: string, name: string) => {
+    setSlugEdit({ kind, slug, name });
+    setSlugValue(slug);
+  };
+
+  const saveSlug = async () => {
+    if (!slugEdit) return;
+    const next = slugValue.trim().toLowerCase();
+    if (!next || next === slugEdit.slug) {
+      setSlugEdit(null);
+      return;
+    }
+    setSavingSlug(true);
+    try {
+      const body = { slug: slugEdit.slug, data: { slug: next } };
+      if (slugEdit.kind === 'shop') await updateShop(body).unwrap();
+      else await updateBarber(body).unwrap();
+      notifications.show({ message: t('saved'), color: 'teal' });
+      setSlugEdit(null);
+    } catch (e) {
+      notifications.show({ message: apiErrorMessage(e), color: 'red' });
+    } finally {
+      setSavingSlug(false);
+    }
+  };
 
   const run = async (fn: () => Promise<unknown>) => {
     try {
@@ -240,6 +276,14 @@ export default function AdminPage() {
                                 >
                                   {s.isTest ? t('unmarkTest') : t('markTest')}
                                 </Button>
+                                <Button
+                                  size="xs"
+                                  variant="default"
+                                  leftSection={<IconLink size={13} />}
+                                  onClick={() => openSlugEdit('shop', s.slug, s.name)}
+                                >
+                                  {t('editUrl')}
+                                </Button>
                               </Group>
                             </Table.Td>
                           </Table.Tr>
@@ -330,6 +374,14 @@ export default function AdminPage() {
                                   onClick={() => run(() => setBarberFlags({ slug: b.slug, isTest: !b.isTest }).unwrap())}
                                 >
                                   {b.isTest ? t('unmarkTest') : t('markTest')}
+                                </Button>
+                                <Button
+                                  size="xs"
+                                  variant="default"
+                                  leftSection={<IconLink size={13} />}
+                                  onClick={() => openSlugEdit('barber', b.slug, b.displayName)}
+                                >
+                                  {t('editUrl')}
                                 </Button>
                               </Group>
                             </Table.Td>
@@ -463,6 +515,39 @@ export default function AdminPage() {
           </Tabs>
         )}
       </Stack>
+
+      <Modal
+        opened={!!slugEdit}
+        onClose={() => setSlugEdit(null)}
+        title={`${t('editUrl')}${slugEdit ? ` — ${slugEdit.name}` : ''}`}
+        centered
+        radius="md"
+      >
+        <Stack gap="md">
+          <TextInput
+            label={td('urlLabel')}
+            description={td('urlHint', { path: slugEdit?.kind === 'shop' ? '/shops/' : '/barbers/' })}
+            leftSection={
+              <Text size="sm" c="dimmed">
+                {slugEdit?.kind === 'shop' ? '/shops/' : '/barbers/'}
+              </Text>
+            }
+            leftSectionWidth={slugEdit?.kind === 'shop' ? 68 : 78}
+            value={slugValue}
+            onChange={(e) => setSlugValue(e.currentTarget.value)}
+            onKeyDown={(e) => e.key === 'Enter' && saveSlug()}
+            data-autofocus
+          />
+          <Group justify="flex-end">
+            <Button variant="default" onClick={() => setSlugEdit(null)}>
+              {tav('cancel')}
+            </Button>
+            <Button onClick={saveSlug} loading={savingSlug}>
+              {td('save')}
+            </Button>
+          </Group>
+        </Stack>
+      </Modal>
     </Container>
   );
 }
