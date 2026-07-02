@@ -8,20 +8,29 @@ const ARMENIAN_TO_LATIN: Record<string, string> = {
   \u0585: 'o', \u0586: 'f',
 };
 
-function transliterateArmenian(input: string): string {
+// Russian (lowercase) Cyrillic \u2192 Latin. \u044a/\u044c are dropped.
+const RUSSIAN_TO_LATIN: Record<string, string> = {
+  \u0430: 'a', \u0431: 'b', \u0432: 'v', \u0433: 'g', \u0434: 'd', \u0435: 'e', \u0451: 'yo', \u0436: 'zh', \u0437: 'z',
+  \u0438: 'i', \u0439: 'y', \u043a: 'k', \u043b: 'l', \u043c: 'm', \u043d: 'n', \u043e: 'o', \u043f: 'p', \u0440: 'r',
+  \u0441: 's', \u0442: 't', \u0443: 'u', \u0444: 'f', \u0445: 'kh', \u0446: 'ts', \u0447: 'ch', \u0448: 'sh',
+  \u0449: 'shch', \u044a: '', \u044b: 'y', \u044c: '', \u044d: 'e', \u044e: 'yu', \u044f: 'ya',
+};
+
+function transliterate(input: string): string {
   return input
-    .replace(/\u0578\u0582/g, 'u') // digraph
-    .replace(/\u0587/g, 'ev') // ech-yiwn ligature
-    .replace(/[\u0561-\u0586]/g, (ch) => ARMENIAN_TO_LATIN[ch] ?? '');
+    .replace(/\u0578\u0582/g, 'u') // Armenian digraph
+    .replace(/\u0587/g, 'ev') // Armenian ech-yiwn ligature
+    .replace(/[\u0561-\u0586]/g, (ch) => ARMENIAN_TO_LATIN[ch] ?? '')
+    .replace(/[\u0430-\u044f\u0451]/g, (ch) => RUSSIAN_TO_LATIN[ch] ?? '');
 }
 
 /**
- * Turn a name into a URL-safe slug. Armenian text is transliterated to Latin;
- * other non-Latin scripts still fall back to the caller-provided base
+ * Turn a name into a URL-safe slug. Armenian and Russian text is transliterated
+ * to Latin; other non-Latin scripts still fall back to the caller-provided base
  * (e.g. "shop"/"barber") when nothing usable remains.
  */
 export function slugify(input: string): string {
-  return transliterateArmenian(input.toLowerCase())
+  return transliterate(input.toLowerCase())
     .normalize('NFKD')
     .replace(/[\u0300-\u036f]/g, '') // strip diacritics
     .trim()
