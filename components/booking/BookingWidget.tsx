@@ -32,6 +32,7 @@ import {
   useMyPointsQuery,
   useGetAvailabilityQuery,
   useCreateBookingMutation,
+  useJoinWaitlistMutation,
 } from '@/lib/store/api';
 import { apiErrorMessage } from '@/lib/api-error';
 
@@ -56,17 +57,22 @@ export function BookingWidget({
   barberSlug,
   services,
   loyalty,
+  waitlistEnabled = false,
 }: {
   barberSlug: string;
   services: WidgetService[];
   /** The loyalty program that applies here (shop's or the barber's). */
   loyalty?: WidgetLoyalty;
+  /** Whether the provider accepts waitlist sign-ups for full days. */
+  waitlistEnabled?: boolean;
 }) {
   const t = useTranslations('booking');
   const tst = useTranslations('serviceTypes');
   const serviceLabel = (s: WidgetService) => (s.type && s.type !== 'other' ? tst(s.type) : s.name);
   const { data: me } = useMeQuery();
   const [createBooking, { isLoading: booking }] = useCreateBookingMutation();
+  const [joinWaitlist, { isLoading: joiningWaitlist }] = useJoinWaitlistMutation();
+  const [waitlisted, setWaitlisted] = useState(false);
 
   const [serviceIds, setServiceIds] = useState<string[]>([]);
   const [date, setDate] = useState<Date | null>(null);
@@ -138,6 +144,16 @@ export function BookingWidget({
         end: res.booking.endsAt,
       });
       setSlot(null);
+    } catch (e) {
+      setError(apiErrorMessage(e));
+    }
+  };
+
+  const onJoinWaitlist = async () => {
+    setError(null);
+    try {
+      await joinWaitlist({ slug: barberSlug, date: dateStr }).unwrap();
+      setWaitlisted(true);
     } catch (e) {
       setError(apiErrorMessage(e));
     }
@@ -249,7 +265,7 @@ export function BookingWidget({
         <DatePickerInput
           label={t('pickDate')}
           value={date}
-          onChange={(d) => { setDate(d); setSlot(null); }}
+          onChange={(d) => { setDate(d); setSlot(null); setWaitlisted(false); }}
           minDate={new Date()}
           maxDate={dayjs().add(60, 'day').toDate()}
           valueFormat="DD MMM YYYY"
@@ -264,9 +280,22 @@ export function BookingWidget({
             {isFetching ? (
               <Loader size="sm" />
             ) : (availability?.slots.length ?? 0) === 0 ? (
-              <Text c="dimmed" size="sm">
-                {t('noSlots')}
-              </Text>
+              <Stack gap={8}>
+                <Text c="dimmed" size="sm">
+                  {t('noSlots')}
+                </Text>
+                {waitlistEnabled &&
+                  !isGuest &&
+                  (waitlisted ? (
+                    <Text size="sm" c="var(--gold)">
+                      {t('waitlistJoined')}
+                    </Text>
+                  ) : (
+                    <Button size="xs" variant="light" onClick={onJoinWaitlist} loading={joiningWaitlist}>
+                      {t('waitlistJoin')}
+                    </Button>
+                  ))}
+              </Stack>
             ) : (
               <Group gap="xs">
                 {availability!.slots.map((s) => (

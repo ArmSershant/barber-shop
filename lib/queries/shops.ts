@@ -1,5 +1,6 @@
 import { cache } from 'react';
 import { prisma } from '@/lib/db';
+import { activePromoPercent } from '@/lib/pricing';
 
 export interface ShopCardData {
   id: string;
@@ -10,6 +11,7 @@ export interface ShopCardData {
   address: string | null;
   isVerified: boolean;
   isFeatured: boolean;
+  discountPercent: number;
   district: { id: number; nameEn: string; nameHy: string; slug: string } | null;
   barberCount: number;
   ratingAvg: number;
@@ -18,7 +20,13 @@ export interface ShopCardData {
 
 /** Public list of shops for discovery. Hides suspended/deleted. */
 export async function listShops(
-  params: { q?: string; district?: string; preferredDistrictId?: number; includeTest?: boolean } = {},
+  params: {
+    q?: string;
+    district?: string;
+    preferredDistrictId?: number;
+    minRating?: number;
+    includeTest?: boolean;
+  } = {},
 ): Promise<ShopCardData[]> {
   const q = params.q?.trim();
   const district = params.district?.trim();
@@ -44,6 +52,9 @@ export async function listShops(
       address: true,
       isVerified: true,
       isFeatured: true,
+      promoPercent: true,
+      promoStartsAt: true,
+      promoEndsAt: true,
       district: { select: { id: true, nameEn: true, nameHy: true, slug: true } },
       _count: { select: { barbers: { where: { deletedAt: null } } } },
       // Shop rating is derived from its barbers' aggregate review scores.
@@ -71,6 +82,7 @@ export async function listShops(
       address: s.address,
       isVerified: s.isVerified,
       isFeatured: s.isFeatured,
+      discountPercent: activePromoPercent(s.promoPercent, s.promoStartsAt, s.promoEndsAt, Date.now()),
       district: s.district,
       barberCount: s._count.barbers,
       ratingAvg,
@@ -78,11 +90,14 @@ export async function listShops(
     };
   });
 
+  // Shop rating is derived from its barbers, so filter it in memory.
+  const filtered = params.minRating ? mapped.filter((s) => s.ratingAvg >= params.minRating!) : mapped;
+
   const pref = params.preferredDistrictId;
   if (pref && !district) {
-    mapped.sort((a, b) => Number(b.district?.id === pref) - Number(a.district?.id === pref));
+    filtered.sort((a, b) => Number(b.district?.id === pref) - Number(a.district?.id === pref));
   }
-  return mapped;
+  return filtered;
 }
 
 /** Full public shop profile, or null if not found/deleted. */

@@ -3,7 +3,8 @@
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
-import { Button, NumberInput, Paper, Stack, Switch, Text, Textarea, TextInput, Title } from '@mantine/core';
+import { Button, Group, NumberInput, Paper, Stack, Switch, Text, Textarea, TextInput, Title } from '@mantine/core';
+import { DatePickerInput } from '@mantine/dates';
 import { notifications } from '@mantine/notifications';
 import { shopFormSchema, type ShopFormInput } from '@/lib/validation/provider';
 import { useCreateShopMutation, useUpdateShopMutation, type Shop } from '@/lib/store/api';
@@ -41,10 +42,16 @@ export function ShopForm({ shop }: { shop: Shop | null }) {
       loyaltyPointsPer100: shop?.loyaltyPointsPer100 ?? 1,
       loyaltyAmdPerPoint: shop?.loyaltyAmdPerPoint ?? 1,
       loyaltyMaxRedeemPct: shop?.loyaltyMaxRedeemPct ?? 50,
+      promoPercent: shop?.promoPercent ?? 0,
+      promoStartsAt: shop?.promoStartsAt ? new Date(shop.promoStartsAt) : undefined,
+      promoEndsAt: shop?.promoEndsAt ? new Date(shop.promoEndsAt) : undefined,
+      firstVisitPercent: shop?.firstVisitPercent ?? 0,
+      waitlistEnabled: shop?.waitlistEnabled ?? true,
     },
   });
 
   const loyaltyEnabled = watch('loyaltyEnabled');
+  const promoPercent = watch('promoPercent');
 
   const onSubmit = handleSubmit(async (values) => {
     try {
@@ -194,6 +201,68 @@ export function ShopForm({ shop }: { shop: Shop | null }) {
             />
           </>
         )}
+        <Controller
+          name="firstVisitPercent"
+          control={control}
+          render={({ field }) => (
+            <NumberInput
+              label={td('firstVisitLabel')}
+              description={td('firstVisitHint')}
+              min={0}
+              max={100}
+              suffix="%"
+              value={field.value ?? 0}
+              onChange={(value) => field.onChange(value === '' ? 0 : Number(value))}
+              error={errors.firstVisitPercent?.message}
+            />
+          )}
+        />
+        <Controller
+          name="promoPercent"
+          control={control}
+          render={({ field }) => (
+            <NumberInput
+              label={td('promoLabel')}
+              description={td('promoHint')}
+              min={0}
+              max={100}
+              suffix="%"
+              value={field.value ?? 0}
+              onChange={(value) => field.onChange(value === '' ? 0 : Number(value))}
+              error={errors.promoPercent?.message}
+            />
+          )}
+        />
+        {(promoPercent ?? 0) > 0 && (
+          <Group grow>
+            <Controller
+              name="promoStartsAt"
+              control={control}
+              render={({ field }) => (
+                <DatePickerInput label={td('promoFrom')} value={field.value ?? null} onChange={field.onChange} clearable />
+              )}
+            />
+            <Controller
+              name="promoEndsAt"
+              control={control}
+              render={({ field }) => (
+                <DatePickerInput label={td('promoTo')} value={field.value ?? null} onChange={field.onChange} clearable />
+              )}
+            />
+          </Group>
+        )}
+        <Controller
+          name="waitlistEnabled"
+          control={control}
+          render={({ field }) => (
+            <Switch
+              checked={field.value ?? true}
+              onChange={(e) => field.onChange(e.currentTarget.checked)}
+              label={td('waitlistToggle')}
+              description={td('waitlistHint')}
+            />
+          )}
+        />
         {errors.root && (
           <Text c="red" size="sm">
             {errors.root.message}

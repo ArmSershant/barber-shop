@@ -48,6 +48,9 @@ export function BarberCard({ barber }: { barber: BarberCardData }) {
             <IconStarFilled size={10} /> {t('featured')}
           </span>
         )}
+        {barber.discountPercent > 0 && (
+          <span className={styles.discountTag}>−{barber.discountPercent}%</span>
+        )}
 
         {/* Barber avatar, overlapping the cover's bottom-left edge. */}
         <div className={styles.avatar}>

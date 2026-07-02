@@ -40,7 +40,7 @@ export function NotificationsBell() {
     setOpened(false);
     if (n.type === 'review_request' || n.type === 'booking_confirmed') {
       router.push('/bookings');
-    } else if (n.type === 'review_received' && n.payload?.barberSlug) {
+    } else if ((n.type === 'review_received' || n.type === 'waitlist_slot') && n.payload?.barberSlug) {
       router.push(`/barbers/${String(n.payload.barberSlug)}` as Route);
     } else {
       router.push('/dashboard/bookings');
@@ -60,6 +60,8 @@ export function NotificationsBell() {
       return t('reviewReceived', { name, rating: String(n.payload?.rating ?? '') });
     if (n.type === 'review_request')
       return t('reviewRequest', { name: String(n.payload?.barberName ?? '') });
+    if (n.type === 'waitlist_slot')
+      return t('waitlistSlot', { name: String(n.payload?.barberName ?? '') });
     return n.type;
   };
 

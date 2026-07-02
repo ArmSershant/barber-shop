@@ -11,7 +11,8 @@ export function SortSelect() {
   const t = useTranslations('discover');
   const router = useRouter();
   const params = useSearchParams();
-  const value = params.get('sort') === 'new' ? 'new' : 'top';
+  const raw = params.get('sort');
+  const value = raw === 'new' || raw === 'price' ? raw : 'top';
 
   const onChange = (next: string | null) => {
     const p = new URLSearchParams(params.toString());
@@ -26,6 +27,7 @@ export function SortSelect() {
       data={[
         { value: 'top', label: t('sortTop') },
         { value: 'new', label: t('sortNew') },
+        { value: 'price', label: t('sortPrice') },
       ]}
       value={value}
       onChange={onChange}

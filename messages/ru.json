@@ -76,7 +76,8 @@
     "cancelled": "Запись отменена: {name} — {when}",
     "reviewReceived": "Новый отзыв: {rating}★ — {name}",
     "reviewRequest": "Как прошёл визит к {name}? Оставьте отзыв",
-    "confirmed": "Бронирование подтверждено: {name} — {when}"
+    "confirmed": "Бронирование подтверждено: {name} — {when}",
+    "waitlistSlot": "Освободилось место у {name} — забронируйте"
   },
   "providerBookings": {
     "title": "Записи",
@@ -143,7 +144,8 @@
     "VALIDATION_ERROR": "Проверьте введённые данные.",
     "INTERNAL": "Что-то пошло не так.",
     "SLUG_TAKEN": "Этот адрес уже занят.",
-    "RATE_LIMITED": "Слишком много запросов. Подождите немного и попробуйте снова."
+    "RATE_LIMITED": "Слишком много запросов. Подождите немного и попробуйте снова.",
+    "WAITLIST_DISABLED": "Лист ожидания здесь недоступен."
   },
   "home": {
     "subtitle": "Бронируйте барберов в Ереване.",
@@ -359,7 +361,15 @@
     "loyaltyValue": "֏ за балл",
     "loyaltyValueHint": "Стоимость одного балла при списании. напр. 1 = 100 баллов дают скидку 100 ֏.",
     "loyaltyMaxRedeem": "Макс. скидка баллами (%)",
-    "loyaltyMaxRedeemHint": "Какую часть брони покрывают баллы. напр. 50 = до половины цены."
+    "loyaltyMaxRedeemHint": "Какую часть брони покрывают баллы. напр. 50 = до половины цены.",
+    "firstVisitLabel": "Скидка за первый визит",
+    "firstVisitHint": "Скидка на первое бронирование клиента у вас. 0 = выкл.",
+    "promoLabel": "Акционная скидка",
+    "promoHint": "Временная скидка для всех. 0 = выкл.",
+    "promoFrom": "Начало акции",
+    "promoTo": "Конец акции",
+    "waitlistToggle": "Разрешить лист ожидания",
+    "waitlistHint": "Клиенты получат уведомление, когда занятый день освободится."
   },
   "services": {
     "heading": "Услуги",
@@ -398,7 +408,9 @@
     "replyEdit": "Изменить ответ",
     "replyFrom": "Ответ барбера",
     "replySaved": "Ответ сохранён.",
-    "replyError": "Не удалось сохранить ответ."
+    "replyError": "Не удалось сохранить ответ.",
+    "photoAdd": "Добавить фото",
+    "photoRemove": "Удалить фото"
   },
   "serviceTypes": {
     "haircut": "Мужская стрижка",
@@ -507,7 +519,9 @@
     "registerCta": "Регистрация",
     "earnHint": "Вы получите ~{points} баллов",
     "redeemToggle": "Использовать {points} баллов — скидка {amount} ֏",
-    "redeemApplied": "−{amount} ֏ за {points} баллов"
+    "redeemApplied": "−{amount} ֏ за {points} баллов",
+    "waitlistJoin": "В лист ожидания",
+    "waitlistJoined": "Вы в листе ожидания — сообщим, когда освободится место."
   },
   "manage": {
     "title": "Ваша запись",
@@ -552,7 +566,12 @@
     "sortLabel": "Сортировка",
     "sortTop": "По рейтингу",
     "sortNew": "Новые",
-    "inYerevan": "{count} в Ереване"
+    "inYerevan": "{count} в Ереване",
+    "sortPrice": "Цена: по возрастанию",
+    "ratingAny": "Любой рейтинг",
+    "ratingMin": "{n}★ и выше",
+    "ratingLabel": "Минимальный рейтинг",
+    "openNow": "Открыто сейчас"
   },
   "notFound": {
     "heading": "Это кресло пустует",

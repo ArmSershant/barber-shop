@@ -22,16 +22,18 @@ import { BarberCard } from '@/components/discover/BarberCard';
 import { BarberSearch } from '@/components/discover/BarberSearch';
 import { DistrictFilterChips } from '@/components/discover/DistrictFilterChips';
 import { SortSelect } from '@/components/discover/SortSelect';
+import { DiscoveryFilters } from '@/components/discover/DiscoveryFilters';
 
 export default async function BarbersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; district?: string; sort?: string }>;
+  searchParams: Promise<{ q?: string; district?: string; sort?: string; rating?: string; open?: string }>;
 }) {
-  const { q, district, sort } = await searchParams;
+  const { q, district, sort, rating, open } = await searchParams;
   const t = await getTranslations('discover');
   const locale = await getLocale();
-  const sortValue: BarberSort = sort === 'new' ? 'new' : 'top';
+  const sortValue: BarberSort = sort === 'new' || sort === 'price' ? sort : 'top';
+  const minRating = rating ? Number(rating) : undefined;
 
   const viewer = await getCurrentUser();
   const pref = viewer ? await getPreferredDistrict(viewer.userId) : null;
@@ -39,6 +41,8 @@ export default async function BarbersPage({
     q,
     district,
     sort: sortValue,
+    minRating,
+    openNow: open === '1',
     preferredDistrictId: district ? undefined : pref?.id,
     includeTest: viewer?.roles?.includes('admin') ?? false,
   });
@@ -61,6 +65,10 @@ export default async function BarbersPage({
             <BarberSearch initialQuery={q ?? ''} />
           </div>
           <SortSelect />
+        </Group>
+
+        <Group gap="sm" wrap="wrap">
+          <DiscoveryFilters basePath="/barbers" showOpenNow />
         </Group>
 
         <DistrictFilterChips basePath="/barbers" />

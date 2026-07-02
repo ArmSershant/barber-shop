@@ -89,9 +89,8 @@ theme; animated favicon-style pole logo; `unstable_cache` on the home query.
 - **SMS** 🟡 — fully wired but gated; flip `SMS_ENABLED` + configure a provider.
 - **Points expiry** ⬜ — earn/redeem done; a 12-month inactivity lapse cron is
   deferred (design in `loyalty-design.md` §6).
-- **Migration hygiene** — apply `0017_loyalty`, `0018_loyalty_redeem`,
-  `0019_rate_limits`, `0020_review_reply` in prod, then
-  `prisma migrate resolve --applied …` + `prisma generate`.
+- **Migration hygiene** — apply migrations through `0023_review_photo` in prod
+  (`pnpm prisma migrate deploy` + `prisma generate`).
 
 ---
 
@@ -112,21 +111,20 @@ Ordered by impact ÷ effort and dependency. Each item notes what it unblocks.
    **per-provider**, a referral reward has no obvious scope to land in (which
    provider funds/holds the points?). Options: a platform-wide credit concept, or
    fund it as a first-booking discount (Phase E #18). Decide the model first.
-6. **Waitlist / "notify when a slot opens"** ⬜ — subscribe to a full day,
-   auto-notify on cancellation. *Captures dropped demand.* Self-contained; buildable.
+6. **Waitlist / "notify when a slot opens"** ✅ — customers join a full day
+   (per-provider `waitlistEnabled`); auto-notified (in-app + email) on cancellation.
 7. **Rebook nudges** ✅ — already live in `cron/reminders` (`rebookNudgeSentAt`).
 8. **Web push notifications** ⬜ 🚧 *needs VAPID keys (your setup, like SMS).* The
    `push` channel exists; code can be gated/no-op until keys are set.
-9. **Provider self-promotions** ⬜ — time-boxed discount surfaced on discovery.
-   Buildable (pay-in-person), but overlaps loyalty-redemption pricing — do carefully.
+9. **Provider self-promotions** ✅ — owner-set time-boxed promo % (with a date
+   window), surfaced as a "−N%" badge on discovery + applied at booking.
 
 ### Phase C — Discovery & UX polish
-10. **Map view + filters** ⬜ 🚧 *needs a maps-provider choice.* Filters (rating/
-    price/open-now) are buildable now; the map needs Leaflet+OSM (free) or a keyed
-    provider — pick one. `shops.lat/lng` exist.
+10. **Discovery filters** ✅ (min rating, price sort, open-now) / **Map view** ⬜ 🚧
+    *still needs a maps-provider choice* (Leaflet+OSM free, or keyed).
 11. **PWA / installable app** ✅ — manifest + icons + theme-color shipped.
-12. **Review replies** ✅ / **photo reviews** ⬜ — providers can now reply to reviews
-    (shown on the profile). Photo reviews still open.
+12. **Review replies** ✅ / **photo reviews** ✅ — providers reply to reviews;
+    customers can attach a photo. Both shown on the profile.
 
 ### Phase D — Monetization
 13. **Provider subscriptions** — `SubscriptionStatus` enum already exists; paid
@@ -140,7 +138,8 @@ Ordered by impact ÷ effort and dependency. Each item notes what it unblocks.
 
 ### Phase E — Loyalty completion
 17. **Points expiry cron** ✅ — 12-month inactivity lapse runs in the daily cron.
-18. **First-booking discount** ⬜ for new accounts (platform-funded, capped).
+18. **First-visit discount** ✅ — implemented per-provider (owner-set %), applied to
+    a customer's first booking with that provider (best-of vs. active promo).
 
 ---
 

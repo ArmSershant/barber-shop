@@ -3,7 +3,8 @@
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
-import { Button, NumberInput, Paper, Stack, Switch, Text, Textarea, TextInput, Title } from '@mantine/core';
+import { Button, Group, NumberInput, Paper, Stack, Switch, Text, Textarea, TextInput, Title } from '@mantine/core';
+import { DatePickerInput } from '@mantine/dates';
 import { notifications } from '@mantine/notifications';
 import { barberFormSchema, type BarberFormInput } from '@/lib/validation/provider';
 import { useCreateBarberMutation, useUpdateBarberMutation } from '@/lib/store/api';
@@ -26,6 +27,11 @@ export interface EditableBarber {
   loyaltyPointsPer100?: number | null;
   loyaltyAmdPerPoint?: number | null;
   loyaltyMaxRedeemPct?: number | null;
+  promoPercent?: number | null;
+  promoStartsAt?: string | Date | null;
+  promoEndsAt?: string | Date | null;
+  firstVisitPercent?: number | null;
+  waitlistEnabled?: boolean | null;
   shopId?: string | null;
 }
 
@@ -57,10 +63,16 @@ export function BarberForm({ barber }: { barber: EditableBarber | null }) {
       loyaltyPointsPer100: barber?.loyaltyPointsPer100 ?? 1,
       loyaltyAmdPerPoint: barber?.loyaltyAmdPerPoint ?? 1,
       loyaltyMaxRedeemPct: barber?.loyaltyMaxRedeemPct ?? 50,
+      promoPercent: barber?.promoPercent ?? 0,
+      promoStartsAt: barber?.promoStartsAt ? new Date(barber.promoStartsAt) : undefined,
+      promoEndsAt: barber?.promoEndsAt ? new Date(barber.promoEndsAt) : undefined,
+      firstVisitPercent: barber?.firstVisitPercent ?? 0,
+      waitlistEnabled: barber?.waitlistEnabled ?? true,
     },
   });
 
   const loyaltyEnabled = watch('loyaltyEnabled');
+  const promoPercent = watch('promoPercent');
 
   // A barber's own approval setting only applies when they're independent;
   // shop barbers inherit the shop's setting, so hide the toggle for them.
@@ -223,6 +235,82 @@ export function BarberForm({ barber }: { barber: EditableBarber | null }) {
                 />
               </>
             )}
+          </>
+        )}
+        {showApproval && (
+          <>
+            <Controller
+              name="firstVisitPercent"
+              control={control}
+              render={({ field }) => (
+                <NumberInput
+                  label={td('firstVisitLabel')}
+                  description={td('firstVisitHint')}
+                  min={0}
+                  max={100}
+                  suffix="%"
+                  value={field.value ?? 0}
+                  onChange={(value) => field.onChange(value === '' ? 0 : Number(value))}
+                  error={errors.firstVisitPercent?.message}
+                />
+              )}
+            />
+            <Controller
+              name="promoPercent"
+              control={control}
+              render={({ field }) => (
+                <NumberInput
+                  label={td('promoLabel')}
+                  description={td('promoHint')}
+                  min={0}
+                  max={100}
+                  suffix="%"
+                  value={field.value ?? 0}
+                  onChange={(value) => field.onChange(value === '' ? 0 : Number(value))}
+                  error={errors.promoPercent?.message}
+                />
+              )}
+            />
+            {(promoPercent ?? 0) > 0 && (
+              <Group grow>
+                <Controller
+                  name="promoStartsAt"
+                  control={control}
+                  render={({ field }) => (
+                    <DatePickerInput
+                      label={td('promoFrom')}
+                      value={field.value ?? null}
+                      onChange={field.onChange}
+                      clearable
+                    />
+                  )}
+                />
+                <Controller
+                  name="promoEndsAt"
+                  control={control}
+                  render={({ field }) => (
+                    <DatePickerInput
+                      label={td('promoTo')}
+                      value={field.value ?? null}
+                      onChange={field.onChange}
+                      clearable
+                    />
+                  )}
+                />
+              </Group>
+            )}
+            <Controller
+              name="waitlistEnabled"
+              control={control}
+              render={({ field }) => (
+                <Switch
+                  checked={field.value ?? true}
+                  onChange={(e) => field.onChange(e.currentTarget.checked)}
+                  label={td('waitlistToggle')}
+                  description={td('waitlistHint')}
+                />
+              )}
+            />
           </>
         )}
         {errors.root && (

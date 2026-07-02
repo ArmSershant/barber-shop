@@ -6,6 +6,7 @@ export const reviewSchema = z.object({
     (v) => (typeof v === 'string' && v.trim() === '' ? undefined : v),
     z.string().trim().max(1000).optional(),
   ),
+  photoUrl: z.string().url().optional(),
 });
 
 export type ReviewInput = z.infer<typeof reviewSchema>;

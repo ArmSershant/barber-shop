@@ -13,7 +13,7 @@ export async function POST(req: NextRequest, { params }: Params) {
   try {
     const { userId } = await requireAuth();
     const { id } = await params;
-    const { rating, comment } = reviewSchema.parse(await req.json());
+    const { rating, comment, photoUrl } = reviewSchema.parse(await req.json());
 
     const booking = await prisma.booking.findUnique({
       where: { id },
@@ -44,6 +44,7 @@ export async function POST(req: NextRequest, { params }: Params) {
             customerUserId: userId,
             rating,
             comment,
+            photoUrl,
           },
         });
         const agg = await tx.review.aggregate({

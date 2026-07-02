@@ -63,6 +63,11 @@ export interface Shop {
   loyaltyPointsPer100?: number;
   loyaltyAmdPerPoint?: number;
   loyaltyMaxRedeemPct?: number;
+  promoPercent?: number;
+  promoStartsAt?: string | null;
+  promoEndsAt?: string | null;
+  firstVisitPercent?: number;
+  waitlistEnabled?: boolean;
   status: string;
 }
 
@@ -81,6 +86,11 @@ export interface Barber {
   loyaltyPointsPer100?: number;
   loyaltyAmdPerPoint?: number;
   loyaltyMaxRedeemPct?: number;
+  promoPercent?: number;
+  promoStartsAt?: string | null;
+  promoEndsAt?: string | null;
+  firstVisitPercent?: number;
+  waitlistEnabled?: boolean;
   status: string;
 }
 
@@ -598,6 +608,9 @@ export const api = createApi({
       // Refresh the customer's own list + points (redemption changes balance).
       invalidatesTags: ['Availability', 'MyBookings', 'MyPoints'],
     }),
+    joinWaitlist: builder.mutation<{ ok: boolean }, { slug: string; date: string }>({
+      query: ({ slug, date }) => ({ url: `/barbers/${slug}/waitlist`, method: 'POST', body: { date } }),
+    }),
 
     getNotifications: builder.query<{ notifications: NotificationItem[]; unread: number }, void>({
       query: () => '/notifications',
@@ -643,7 +656,10 @@ export const api = createApi({
       query: (id) => ({ url: `/bookings/${id}/accept`, method: 'POST' }),
       invalidatesTags: ['ProviderBookings'],
     }),
-    createReview: builder.mutation<{ ok: boolean }, { id: string; rating: number; comment?: string }>({
+    createReview: builder.mutation<
+      { ok: boolean },
+      { id: string; rating: number; comment?: string; photoUrl?: string }
+    >({
       query: ({ id, ...body }) => ({ url: `/bookings/${id}/review`, method: 'POST', body }),
       invalidatesTags: ['MyBookings'],
     }),
@@ -731,6 +747,7 @@ export const api = createApi({
 export const {
   useMeQuery,
   useMyPointsQuery,
+  useJoinWaitlistMutation,
   useRegisterMutation,
   useLoginMutation,
   useLogoutMutation,

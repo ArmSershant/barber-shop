@@ -76,7 +76,8 @@
     "cancelled": "Booking cancelled: {name} — {when}",
     "reviewReceived": "New review: {rating}★ — {name}",
     "reviewRequest": "How was your visit with {name}? Leave a review",
-    "confirmed": "Booking confirmed: {name} — {when}"
+    "confirmed": "Booking confirmed: {name} — {when}",
+    "waitlistSlot": "A slot opened with {name} — book now"
   },
   "providerBookings": {
     "title": "Bookings",
@@ -143,7 +144,8 @@
     "VALIDATION_ERROR": "Please check the entered data.",
     "INTERNAL": "Something went wrong.",
     "SLUG_TAKEN": "That URL is already taken.",
-    "RATE_LIMITED": "Too many requests. Please wait a moment and try again."
+    "RATE_LIMITED": "Too many requests. Please wait a moment and try again.",
+    "WAITLIST_DISABLED": "Waitlist is not available here."
   },
   "home": {
     "subtitle": "Book barbers in Yerevan.",
@@ -359,7 +361,15 @@
     "loyaltyValue": "֏ per point",
     "loyaltyValueHint": "Redemption value of one point. e.g. 1 = 100 points give 100 ֏ off.",
     "loyaltyMaxRedeem": "Max points discount (%)",
-    "loyaltyMaxRedeemHint": "The most of a booking points can cover. e.g. 50 = up to half the price."
+    "loyaltyMaxRedeemHint": "The most of a booking points can cover. e.g. 50 = up to half the price.",
+    "firstVisitLabel": "First-visit discount",
+    "firstVisitHint": "Discount for a customer’s first booking with you. 0 = off.",
+    "promoLabel": "Promotion discount",
+    "promoHint": "A temporary discount for everyone. 0 = off.",
+    "promoFrom": "Promo starts",
+    "promoTo": "Promo ends",
+    "waitlistToggle": "Allow waitlist",
+    "waitlistHint": "Let customers get notified when a full day frees up."
   },
   "services": {
     "heading": "Services",
@@ -398,7 +408,9 @@
     "replyEdit": "Edit reply",
     "replyFrom": "Reply from the barber",
     "replySaved": "Reply saved.",
-    "replyError": "Could not save reply."
+    "replyError": "Could not save reply.",
+    "photoAdd": "Add a photo",
+    "photoRemove": "Remove photo"
   },
   "serviceTypes": {
     "haircut": "Men's haircut",
@@ -507,7 +519,9 @@
     "registerCta": "Sign up",
     "earnHint": "You'll earn ~{points} points",
     "redeemToggle": "Use {points} points — save {amount} ֏",
-    "redeemApplied": "−{amount} ֏ with {points} points"
+    "redeemApplied": "−{amount} ֏ with {points} points",
+    "waitlistJoin": "Join waitlist",
+    "waitlistJoined": "You’re on the waitlist — we’ll notify you if a slot opens."
   },
   "manage": {
     "title": "Your booking",
@@ -552,7 +566,12 @@
     "sortLabel": "Sort",
     "sortTop": "Top rated",
     "sortNew": "Newest",
-    "inYerevan": "{count} in Yerevan"
+    "inYerevan": "{count} in Yerevan",
+    "sortPrice": "Price: low to high",
+    "ratingAny": "Any rating",
+    "ratingMin": "{n}★ & up",
+    "ratingLabel": "Minimum rating",
+    "openNow": "Open now"
   },
   "notFound": {
     "heading": "This chair's empty",

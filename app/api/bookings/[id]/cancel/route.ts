@@ -6,6 +6,7 @@ import { cancelBookingSchema } from '@/lib/validation/booking';
 import { sendEmail } from '@/lib/email';
 import { bookingCancelledEmail } from '@/lib/email-templates';
 import { refundRedemptionForBooking } from '@/lib/loyalty';
+import { notifyWaitlistForDay } from '@/lib/waitlist';
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -24,6 +25,7 @@ export async function POST(req: NextRequest, { params }: Params) {
         manageToken: true,
         status: true,
         startsAt: true,
+        barberId: true,
         guestName: true,
         guestEmail: true,
         customer: { select: { fullName: true, email: true, phone: true } },
@@ -31,6 +33,7 @@ export async function POST(req: NextRequest, { params }: Params) {
           select: {
             userId: true,
             displayName: true,
+            slug: true,
             timezone: true,
             shop: { select: { ownerUserId: true } },
           },
@@ -67,6 +70,21 @@ export async function POST(req: NextRequest, { params }: Params) {
       await refundRedemptionForBooking(id);
     } catch (refundErr) {
       console.error('Failed to refund loyalty redemption:', refundErr);
+    }
+
+    // A slot just freed up — notify anyone waitlisted for that day. Best-effort.
+    try {
+      await notifyWaitlistForDay(
+        {
+          id: booking.barberId,
+          displayName: booking.barber.displayName,
+          slug: booking.barber.slug,
+          timezone: booking.barber.timezone,
+        },
+        booking.startsAt,
+      );
+    } catch (waitlistErr) {
+      console.error('Failed to notify waitlist:', waitlistErr);
     }
 
     // Notify the other side. Best-effort.

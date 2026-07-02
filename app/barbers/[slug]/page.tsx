@@ -280,7 +280,12 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
 
       {bookable && (
         <div id="book" style={{ marginTop: 'var(--mantine-spacing-xl)', scrollMarginTop: '1rem' }}>
-          <BookingWidget barberSlug={barber.slug} services={barber.services} loyalty={barber.loyalty} />
+          <BookingWidget
+            barberSlug={barber.slug}
+            services={barber.services}
+            loyalty={barber.loyalty}
+            waitlistEnabled={barber.waitlistEnabled}
+          />
         </div>
       )}
       {isOwnProfile && (
@@ -313,6 +318,14 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
                 <Text size="sm" mt={6}>
                   {r.comment}
                 </Text>
+              )}
+              {r.photoUrl && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={r.photoUrl}
+                  alt=""
+                  style={{ marginTop: 8, maxWidth: 160, borderRadius: 8, objectFit: 'cover' }}
+                />
               )}
               <ReviewReply reviewId={r.id} reply={r.reply} canReply={isOwnProfile} />
             </Card>

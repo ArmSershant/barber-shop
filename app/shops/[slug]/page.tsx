@@ -197,6 +197,7 @@ export default async function ShopProfilePage({ params }: { params: Promise<{ sl
                 ...b,
                 coverUrl: null,
                 minPrice: null,
+                discountPercent: 0,
                 shop: { slug: shop.slug, name: shop.name },
                 district: shop.district,
               }}

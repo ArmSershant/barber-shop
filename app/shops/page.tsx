@@ -21,13 +21,14 @@ import { getCurrentUser } from '@/lib/auth/session';
 import { ShopCard } from '@/components/discover/ShopCard';
 import { ShopSearch } from '@/components/discover/ShopSearch';
 import { DistrictFilter } from '@/components/discover/DistrictFilter';
+import { DiscoveryFilters } from '@/components/discover/DiscoveryFilters';
 
 export default async function ShopsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; district?: string }>;
+  searchParams: Promise<{ q?: string; district?: string; rating?: string }>;
 }) {
-  const { q, district } = await searchParams;
+  const { q, district, rating } = await searchParams;
   const t = await getTranslations('discover');
   const locale = await getLocale();
 
@@ -36,6 +37,7 @@ export default async function ShopsPage({
   const shops = await listShops({
     q,
     district,
+    minRating: rating ? Number(rating) : undefined,
     preferredDistrictId: district ? undefined : pref?.id,
     includeTest: viewer?.roles?.includes('admin') ?? false,
   });
@@ -58,6 +60,7 @@ export default async function ShopsPage({
           </div>
           <DistrictFilter basePath="/shops" q={q ?? ''} value={district ?? ''} />
         </Group>
+        <DiscoveryFilters basePath="/shops" />
         {showHint && (
           <Text size="sm" c="dimmed">
             {t('showingFirst', { district: locale === 'hy' ? pref!.nameHy : pref!.nameEn })}

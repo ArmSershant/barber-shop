@@ -76,6 +76,24 @@ model RateLimit {
   @@map("rate_limits")
 }
 
+// A customer waiting for a slot to open on a barber's given local day. Notified
+// (once) when a booking on that barber/day is cancelled.
+model WaitlistEntry {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  barberId   String    @map("barber_id") @db.Uuid
+  userId     String    @map("user_id") @db.Uuid
+  date       String // YYYY-MM-DD, barber-local day
+  notifiedAt DateTime? @map("notified_at") @db.Timestamptz(6)
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  barber Barber @relation(fields: [barberId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([barberId, userId, date])
+  @@index([barberId, date])
+  @@map("waitlist_entries")
+}
+
 enum NotificationChannel {
   email
   inapp
@@ -91,6 +109,7 @@ enum NotificationType {
   reminder
   review_request
   review_received
+  waitlist_slot
 }
 
 enum SubscriptionStatus {
@@ -141,6 +160,7 @@ model User {
   refreshTokens RefreshToken[]
   authTokens    AuthToken[]
   pointsLedger  PointsLedger[]
+  waitlist      WaitlistEntry[]
 
   @@map("users")
 }
@@ -239,6 +259,12 @@ model Shop {
   loyaltyPointsPer100 Int    @default(1) @map("loyalty_points_per_100")
   loyaltyAmdPerPoint  Int    @default(1) @map("loyalty_amd_per_point")
   loyaltyMaxRedeemPct Int    @default(50) @map("loyalty_max_redeem_pct")
+  // Marketing (owner-managed): time-boxed promo %, first-visit %, waitlist opt-in.
+  promoPercent      Int       @default(0) @map("promo_percent")
+  promoStartsAt     DateTime? @map("promo_starts_at") @db.Timestamptz(6)
+  promoEndsAt       DateTime? @map("promo_ends_at") @db.Timestamptz(6)
+  firstVisitPercent Int       @default(0) @map("first_visit_percent")
+  waitlistEnabled   Boolean   @default(true) @map("waitlist_enabled")
   // Copy-on-apply templates: arrays of {weekday,startMinute,endMinute}.
   defaultWorkingHours Json   @default("[]") @map("default_working_hours")
   defaultBreaks       Json   @default("[]") @map("default_breaks")
@@ -283,6 +309,12 @@ model Barber {
   loyaltyPointsPer100 Int           @default(1) @map("loyalty_points_per_100")
   loyaltyAmdPerPoint  Int           @default(1) @map("loyalty_amd_per_point")
   loyaltyMaxRedeemPct Int           @default(50) @map("loyalty_max_redeem_pct")
+  // Marketing (owner-managed): time-boxed promo %, first-visit %, waitlist opt-in.
+  promoPercent      Int             @default(0) @map("promo_percent")
+  promoStartsAt     DateTime?       @map("promo_starts_at") @db.Timestamptz(6)
+  promoEndsAt       DateTime?       @map("promo_ends_at") @db.Timestamptz(6)
+  firstVisitPercent Int             @default(0) @map("first_visit_percent")
+  waitlistEnabled   Boolean         @default(true) @map("waitlist_enabled")
   status             ProviderStatus @default(pending)
   ratingAvg          Decimal        @default(0) @map("rating_avg") @db.Decimal(2, 1)
   ratingCount        Int            @default(0) @map("rating_count")
@@ -303,6 +335,7 @@ model Barber {
   portfolioImages PortfolioImage[]
   favorites       Favorite[]
   pointsLedger    PointsLedger[]
+  waitlist        WaitlistEntry[]
 
   @@index([districtId, status])
   @@index([ratingAvg(sort: Desc)])
@@ -503,6 +536,7 @@ model Review {
   rating         Int      @db.SmallInt
   comment        String?
   isHidden       Boolean  @default(false) @map("is_hidden")
+  photoUrl       String?  @map("photo_url")
   reply          String?
   repliedAt      DateTime? @map("replied_at") @db.Timestamptz(6)
   createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)

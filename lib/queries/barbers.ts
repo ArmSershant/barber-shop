@@ -1,5 +1,6 @@
 import { cache } from 'react';
 import { prisma } from '@/lib/db';
+import { activePromoPercent } from '@/lib/pricing';
 
 export interface BarberCardData {
   id: string;
@@ -13,11 +14,13 @@ export interface BarberCardData {
   isVerified: boolean;
   isFeatured: boolean;
   minPrice: number | null;
+  /** Active promo discount % (provider's, in its window); 0 if none. */
+  discountPercent: number;
   shop: { slug: string; name: string } | null;
   district: { id: number; nameEn: string; nameHy: string; slug: string } | null;
 }
 
-export type BarberSort = 'top' | 'new';
+export type BarberSort = 'top' | 'new' | 'price';
 
 /** Shared Prisma selection for barber discovery cards (list + favorites). */
 export const barberCardSelect = {
@@ -31,7 +34,12 @@ export const barberCardSelect = {
   ratingCount: true,
   isVerified: true,
   isFeatured: true,
-  shop: { select: { slug: true, name: true } },
+  promoPercent: true,
+  promoStartsAt: true,
+  promoEndsAt: true,
+  shop: {
+    select: { slug: true, name: true, promoPercent: true, promoStartsAt: true, promoEndsAt: true },
+  },
   district: { select: { id: true, nameEn: true, nameHy: true, slug: true } },
   // For the "from X ֏" minimum price: own catalog for independents, assigned
   // shop services (with per-barber overrides) for shop barbers.
@@ -42,25 +50,39 @@ export const barberCardSelect = {
   },
 } as const;
 
+type PromoFields = { promoPercent: number; promoStartsAt: Date | null; promoEndsAt: Date | null };
 type BarberCardRow = {
   ratingAvg: unknown;
-  shop: { slug: string; name: string } | null;
+  shop: ({ slug: string; name: string } & PromoFields) | null;
   ownedServices: { priceAmd: number }[];
   barberServices: { priceAmdOverride: number | null; service: { priceAmd: number } }[];
-} & Omit<BarberCardData, 'ratingAvg' | 'minPrice' | 'shop'>;
+} & PromoFields &
+  Omit<BarberCardData, 'ratingAvg' | 'minPrice' | 'shop' | 'discountPercent'>;
 
 /** Maps a raw barber row (selected via barberCardSelect) into a discovery card. */
 export function mapBarberCard(b: BarberCardRow): BarberCardData {
   const prices = b.shop
     ? b.barberServices.map((bs) => bs.priceAmdOverride ?? bs.service.priceAmd)
     : b.ownedServices.map((s) => s.priceAmd);
-  const { ownedServices: _o, barberServices: _bs, ...rest } = b;
+  const {
+    ownedServices: _o,
+    barberServices: _bs,
+    promoPercent,
+    promoStartsAt,
+    promoEndsAt,
+    shop,
+    ...rest
+  } = b;
+
+  // Effective promo: the shop's (shop barbers) or the barber's own.
+  const promo: PromoFields = shop ?? { promoPercent, promoStartsAt, promoEndsAt };
 
   return {
     ...rest,
-    shop: b.shop,
+    shop: shop ? { slug: shop.slug, name: shop.name } : null,
     ratingAvg: Number(b.ratingAvg),
     minPrice: prices.length ? Math.min(...prices) : null,
+    discountPercent: activePromoPercent(promo.promoPercent, promo.promoStartsAt, promo.promoEndsAt, Date.now()),
   };
 }
 
@@ -71,6 +93,8 @@ export async function listBarbers(
     district?: string;
     preferredDistrictId?: number;
     sort?: BarberSort;
+    minRating?: number;
+    openNow?: boolean;
     includeTest?: boolean;
   } = {},
 ): Promise<BarberCardData[]> {
@@ -86,6 +110,7 @@ export async function listBarbers(
       status: { not: 'suspended' },
       // Hide internal/test barbers from public discovery; admins see all.
       ...(params.includeTest ? {} : { isTest: false }),
+      ...(params.minRating ? { ratingAvg: { gte: params.minRating } } : {}),
       // Only list barbers whose responsible account has a verified email:
       // the independent barber's own user, or their shop's owner.
       OR: [{ user: { emailVerified: true } }, { shop: { owner: { emailVerified: true } } }],
@@ -96,7 +121,17 @@ export async function listBarbers(
     take: 60,
     select: barberCardSelect,
   });
-  const mapped = barbers.map(mapBarberCard);
+  let mapped = barbers.map(mapBarberCard);
+
+  // "Open now": keep barbers whose working hours cover the current Yerevan time.
+  if (params.openNow) {
+    mapped = await filterOpenNow(mapped);
+  }
+
+  // Price sort is on a derived value (min service price), so sort in memory.
+  if (params.sort === 'price') {
+    mapped.sort((a, b) => (a.minPrice ?? Infinity) - (b.minPrice ?? Infinity));
+  }
 
   // Customer's home district first (stable sort keeps rating order within).
   const pref = params.preferredDistrictId;
@@ -104,6 +139,36 @@ export async function listBarbers(
     mapped.sort((a, b) => Number(b.district?.id === pref) - Number(a.district?.id === pref));
   }
   return mapped;
+}
+
+/** Keep only barbers open at the current Asia/Yerevan time (per working hours). */
+async function filterOpenNow(cards: BarberCardData[]): Promise<BarberCardData[]> {
+  if (cards.length === 0) return cards;
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Asia/Yerevan',
+      weekday: 'long',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    })
+      .formatToParts(new Date())
+      .map((p) => [p.type, p.value]),
+  );
+  const dayIndex: Record<string, number> = {
+    Monday: 0, Tuesday: 1, Wednesday: 2, Thursday: 3, Friday: 4, Saturday: 5, Sunday: 6,
+  };
+  const weekday = dayIndex[parts.weekday as string];
+  const nowMin = (Number(parts.hour) % 24) * 60 + Number(parts.minute);
+
+  const hours = await prisma.workingHours.findMany({
+    where: { barberId: { in: cards.map((c) => c.id) }, weekday },
+    select: { barberId: true, startMinute: true, endMinute: true },
+  });
+  const openIds = new Set(
+    hours.filter((h) => nowMin >= h.startMinute && nowMin < h.endMinute).map((h) => h.barberId),
+  );
+  return cards.filter((c) => openIds.has(c.id));
 }
 
 /** Full public profile for a barber, or null if not found/deleted. */
@@ -130,6 +195,7 @@ export const getBarberProfile = cache(async (slug: string) => {
       loyaltyPointsPer100: true,
       loyaltyAmdPerPoint: true,
       loyaltyMaxRedeemPct: true,
+      waitlistEnabled: true,
       shop: {
         select: {
           slug: true,
@@ -139,6 +205,7 @@ export const getBarberProfile = cache(async (slug: string) => {
           loyaltyPointsPer100: true,
           loyaltyAmdPerPoint: true,
           loyaltyMaxRedeemPct: true,
+          waitlistEnabled: true,
         },
       },
       district: { select: { nameEn: true, nameHy: true, slug: true } },
@@ -171,6 +238,7 @@ export const getBarberProfile = cache(async (slug: string) => {
           id: true,
           rating: true,
           comment: true,
+          photoUrl: true,
           reply: true,
           repliedAt: true,
           createdAt: true,
@@ -205,7 +273,9 @@ export const getBarberProfile = cache(async (slug: string) => {
     scopeSlug: usingShop ? barber.shop!.slug : barber.slug,
   };
 
-  return { ...rest, services, ratingAvg: Number(barber.ratingAvg), loyalty };
+  const waitlistEnabled = usingShop ? barber.shop!.waitlistEnabled : barber.waitlistEnabled;
+
+  return { ...rest, services, ratingAvg: Number(barber.ratingAvg), loyalty, waitlistEnabled };
 });
 
 export type BarberProfile = NonNullable<Awaited<ReturnType<typeof getBarberProfile>>>;

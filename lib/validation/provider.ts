@@ -14,6 +14,15 @@ const loyaltyPointsPer100Field = z.number().int().min(0).max(50);
 const loyaltyAmdPerPointField = z.number().int().min(1).max(100_000);
 const loyaltyMaxRedeemPctField = z.number().int().min(0).max(100);
 
+// Owner-managed marketing fields (shared by shop + barber schemas).
+const marketingFields = {
+  promoPercent: z.number().int().min(0).max(100).optional(),
+  promoStartsAt: z.coerce.date().nullish(),
+  promoEndsAt: z.coerce.date().nullish(),
+  firstVisitPercent: z.number().int().min(0).max(100).optional(),
+  waitlistEnabled: z.boolean().optional(),
+};
+
 export const createShopSchema = z.object({
   name: z.string().trim().min(2).max(120),
   description: z.string().trim().max(2000).optional(),
@@ -28,6 +37,7 @@ export const createShopSchema = z.object({
   loyaltyPointsPer100: loyaltyPointsPer100Field.optional(),
   loyaltyAmdPerPoint: loyaltyAmdPerPointField.optional(),
   loyaltyMaxRedeemPct: loyaltyMaxRedeemPctField.optional(),
+  ...marketingFields,
 });
 // `slug` is auto-generated on create; editable only via update.
 export const updateShopSchema = createShopSchema.partial().extend({ slug: slugField.optional() });
@@ -44,6 +54,7 @@ export const createBarberSchema = z.object({
   loyaltyPointsPer100: loyaltyPointsPer100Field.optional(),
   loyaltyAmdPerPoint: loyaltyAmdPerPointField.optional(),
   loyaltyMaxRedeemPct: loyaltyMaxRedeemPctField.optional(),
+  ...marketingFields,
 });
 export const updateBarberSchema = createBarberSchema.partial().extend({ slug: slugField.optional() });
 

@@ -15,6 +15,7 @@ import { sendSms } from '@/lib/sms';
 import { bookingConfirmationSms } from '@/lib/sms-templates';
 import { buildIcs } from '@/lib/ics';
 import { cappedRedeemPoints, type LoyaltyScope } from '@/lib/loyalty';
+import { autoDiscountPercent, applyPercentDiscount } from '@/lib/pricing';
 import { enforceRateLimit } from '@/lib/rate-limit';
 
 dayjs.extend(utc);
@@ -50,6 +51,10 @@ export async function POST(req: NextRequest, { params }: Params) {
         loyaltyEnabled: true,
         loyaltyAmdPerPoint: true,
         loyaltyMaxRedeemPct: true,
+        promoPercent: true,
+        promoStartsAt: true,
+        promoEndsAt: true,
+        firstVisitPercent: true,
         shop: {
           select: {
             ownerUserId: true,
@@ -57,6 +62,10 @@ export async function POST(req: NextRequest, { params }: Params) {
             loyaltyEnabled: true,
             loyaltyAmdPerPoint: true,
             loyaltyMaxRedeemPct: true,
+            promoPercent: true,
+            promoStartsAt: true,
+            promoEndsAt: true,
+            firstVisitPercent: true,
           },
         },
       },
@@ -146,6 +155,29 @@ export async function POST(req: NextRequest, { params }: Params) {
       : { scopeBarberId: barber.id };
     const wantsRedeem = Boolean(user && loyaltyConfig.loyaltyEnabled && (body.redeemPoints ?? 0) > 0);
 
+    // Automatic discount: provider promo (in its window) or a first-visit rate for
+    // this customer's first booking with the provider — whichever is larger.
+    let isFirstVisit = false;
+    if (user) {
+      const prior = await prisma.booking.count({
+        where: {
+          customerUserId: user.userId,
+          status: { not: 'cancelled' },
+          ...(usingShop ? { shopId: barber.shopId! } : { barberId: barber.id }),
+        },
+      });
+      isFirstVisit = prior === 0;
+    }
+    const autoPercent = autoDiscountPercent({
+      promoPercent: loyaltyConfig.promoPercent,
+      promoStartsAt: loyaltyConfig.promoStartsAt,
+      promoEndsAt: loyaltyConfig.promoEndsAt,
+      firstVisitPercent: loyaltyConfig.firstVisitPercent,
+      isFirstVisit,
+      nowMs: Date.now(),
+    });
+    const discountedBase = applyPercentDiscount(priceAmd, autoPercent);
+
     try {
       const booking = await prisma.$transaction(async (tx) => {
         // Recompute the capped redemption inside the tx to avoid double-spend.
@@ -158,7 +190,7 @@ export async function POST(req: NextRequest, { params }: Params) {
           redeemPoints = cappedRedeemPoints({
             requested: body.redeemPoints!,
             balance: agg._sum.delta ?? 0,
-            priceAmd,
+            priceAmd: discountedBase,
             amdPerPoint: loyaltyConfig.loyaltyAmdPerPoint,
             maxRedeemPct: loyaltyConfig.loyaltyMaxRedeemPct,
           });
@@ -177,7 +209,7 @@ export async function POST(req: NextRequest, { params }: Params) {
             startsAt: body.startsAt,
             endsAt,
             status,
-            totalPriceAmd: priceAmd - discountAmd,
+            totalPriceAmd: discountedBase - discountAmd,
             totalDurationMin: durationMin,
             customerNote: body.note ?? null,
             services: {

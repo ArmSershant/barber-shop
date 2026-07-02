@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Link from 'next/link';
 import type { Route } from 'next';
 import { useTranslations } from 'next-intl';
@@ -20,7 +20,7 @@ import {
   Textarea,
   Title,
 } from '@mantine/core';
-import { IconStarFilled } from '@tabler/icons-react';
+import { IconStarFilled, IconCamera } from '@tabler/icons-react';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import { useLocale } from 'next-intl';
@@ -79,6 +79,28 @@ export default function MyBookingsPage() {
   const [reviewFor, setReviewFor] = useState<MyBooking | null>(null);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const reviewPhotoInput = useRef<HTMLInputElement>(null);
+
+  const onReviewPhoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    setUploadingPhoto(true);
+    try {
+      const body = new FormData();
+      body.append('file', file);
+      const res = await fetch('/api/upload', { method: 'POST', body, credentials: 'include' });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json?.error?.message ?? 'Upload failed');
+      setPhotoUrl(json.url as string);
+    } catch (err) {
+      notifications.show({ message: err instanceof Error ? err.message : 'Upload failed', color: 'red' });
+    } finally {
+      setUploadingPhoto(false);
+    }
+  };
 
   const submitReview = async () => {
     if (!reviewFor) return;
@@ -87,11 +109,13 @@ export default function MyBookingsPage() {
         id: reviewFor.id,
         rating,
         comment: comment.trim() || undefined,
+        photoUrl: photoUrl ?? undefined,
       }).unwrap();
       notifications.show({ message: tr('submitted'), color: 'teal' });
       setReviewFor(null);
       setRating(5);
       setComment('');
+      setPhotoUrl(null);
     } catch (e) {
       notifications.show({ message: apiErrorMessage(e), color: 'red' });
     }
@@ -257,6 +281,36 @@ export default function MyBookingsPage() {
             onChange={(e) => setComment(e.currentTarget.value)}
             autosize
             minRows={2}
+          />
+          {photoUrl ? (
+            <Group gap="sm" align="center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={photoUrl}
+                alt=""
+                style={{ width: 64, height: 64, objectFit: 'cover', borderRadius: 8 }}
+              />
+              <Button variant="subtle" color="ox" size="xs" onClick={() => setPhotoUrl(null)}>
+                {tr('photoRemove')}
+              </Button>
+            </Group>
+          ) : (
+            <Button
+              variant="default"
+              size="xs"
+              loading={uploadingPhoto}
+              leftSection={<IconCamera size={14} />}
+              onClick={() => reviewPhotoInput.current?.click()}
+            >
+              {tr('photoAdd')}
+            </Button>
+          )}
+          <input
+            ref={reviewPhotoInput}
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+            hidden
+            onChange={onReviewPhoto}
           />
           <Button onClick={submitReview} loading={reviewing}>
             {tr('submit')}

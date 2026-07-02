@@ -40,6 +40,7 @@ export function ShopCard({ shop }: { shop: ShopCardData }) {
       {/* Photo thumbnail — striped placeholder until a real image is uploaded. */}
       <Box className={`${styles.shopThumb} ${cover ? '' : 'placeholderStripes'}`}>
         {cover && <NextImage src={cover} alt="" fill sizes="104px" style={{ objectFit: 'cover' }} />}
+        {shop.discountPercent > 0 && <span className={styles.discountTag}>−{shop.discountPercent}%</span>}
       </Box>
 
       <Stack gap={6} p="md" style={{ flex: 1, minWidth: 0 }}>
