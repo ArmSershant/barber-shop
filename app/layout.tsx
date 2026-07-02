@@ -78,7 +78,6 @@ export async function generateMetadata(): Promise<Metadata> {
       follow: true,
       googleBot: { index: true, follow: true, 'max-image-preview': 'large' },
     },
-    icons: { apple: '/apple-icon.png' },
     appleWebApp: { capable: true, title: siteName, statusBarStyle: 'default' },
   };
 }
