@@ -5,10 +5,12 @@ import { loginSchema } from '@/lib/validation/auth';
 import { verifyPassword } from '@/lib/auth/password';
 import { establishSession } from '@/lib/auth/tokens';
 import { requestMeta } from '@/lib/request';
+import { enforceRateLimit } from '@/lib/rate-limit';
 import type { Role } from '@/lib/auth/jwt';
 
 export async function POST(req: NextRequest) {
   try {
+    await enforceRateLimit(req, 'login', 10, 60);
     const { email, password } = loginSchema.parse(await req.json());
 
     const user = await prisma.user.findUnique({

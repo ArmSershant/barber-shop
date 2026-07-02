@@ -10,12 +10,14 @@ import { sendEmail } from '@/lib/email';
 import { verifyEmailEmail } from '@/lib/email-templates';
 import { syncNewsletterContact } from '@/lib/newsletter';
 import { requestMeta } from '@/lib/request';
+import { enforceRateLimit } from '@/lib/rate-limit';
 import type { Role } from '@/lib/auth/jwt';
 
 const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://barber-shop.am';
 
 export async function POST(req: NextRequest) {
   try {
+    await enforceRateLimit(req, 'register', 5, 60);
     const { email, password, fullName, role, newsletterOptIn } = registerSchema.parse(await req.json());
     const locale = req.cookies.get('NEXT_LOCALE')?.value ?? 'hy';
 

@@ -142,7 +142,8 @@
     "ALREADY_REVIEWED": "You already reviewed this booking.",
     "VALIDATION_ERROR": "Please check the entered data.",
     "INTERNAL": "Something went wrong.",
-    "SLUG_TAKEN": "That URL is already taken."
+    "SLUG_TAKEN": "That URL is already taken.",
+    "RATE_LIMITED": "Too many requests. Please wait a moment and try again."
   },
   "home": {
     "subtitle": "Book barbers in Yerevan.",

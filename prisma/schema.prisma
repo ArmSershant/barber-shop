@@ -66,6 +66,16 @@ enum PointsReason {
   adjustment
 }
 
+// Fixed-window rate limiting counter (one row per bucket:identifier key).
+// Written via a single atomic upsert in lib/rate-limit.ts.
+model RateLimit {
+  key         String   @id
+  count       Int      @default(0)
+  windowStart DateTime @default(now()) @map("window_start") @db.Timestamptz(6)
+
+  @@map("rate_limits")
+}
+
 enum NotificationChannel {
   email
   inapp

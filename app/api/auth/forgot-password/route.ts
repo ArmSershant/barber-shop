@@ -5,11 +5,13 @@ import { forgotPasswordSchema } from '@/lib/validation/auth';
 import { createAuthToken } from '@/lib/auth/verification';
 import { sendEmail } from '@/lib/email';
 import { passwordResetEmail } from '@/lib/email-templates';
+import { enforceRateLimit } from '@/lib/rate-limit';
 
 const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://barber-shop.am';
 
 export async function POST(req: NextRequest) {
   try {
+    await enforceRateLimit(req, 'forgot-password', 5, 300);
     const { email } = forgotPasswordSchema.parse(await req.json());
     const locale = req.cookies.get('NEXT_LOCALE')?.value;
 

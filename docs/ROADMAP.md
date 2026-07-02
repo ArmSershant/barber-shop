@@ -77,19 +77,20 @@ theme; animated favicon-style pole logo; `unstable_cache` on the home query.
 
 ---
 
-## 3. Known gaps & tech debt 🟡
+## 3. Known gaps & tech debt
 
-- **Automated tests / CI** ⬜ — no test suite around booking, availability, or
-  loyalty math (the parts most costly to break). Highest reliability priority
-  before real traffic.
-- **Rate limiting / abuse protection** ⬜ — booking and auth endpoints are open.
+- **Automated tests / CI** ✅ — Vitest suite over the pure logic (slots, loyalty
+  math, slugs); CI runs lint → typecheck → test → build. See `launch-setup.md` §1.
+  (Broader e2e/DB-integration tests are still a future add.)
+- **Rate limiting / abuse protection** ✅ — Postgres-backed per-IP limiter on
+  login/register/forgot-password/booking (fails open, gated). See `launch-setup.md` §2.
+- **Email deliverability** 🟡 — code ready; **verify the Resend domain + DNS**
+  (SPF/DKIM/DMARC) and set `EMAIL_FROM`/`EMAIL_API_KEY` before launch. `launch-setup.md` §3.
 - **SMS** 🟡 — fully wired but gated; flip `SMS_ENABLED` + configure a provider.
 - **Points expiry** ⬜ — earn/redeem done; a 12-month inactivity lapse cron is
   deferred (design in `loyalty-design.md` §6).
-- **Email deliverability** 🟡 — depends on `EMAIL_API_KEY`; verify domain/SPF/DKIM
-  before launch so confirmations don't spam-fold.
-- **Migration hygiene** — apply `0017_loyalty` + `0018_loyalty_redeem` in prod,
-  then `prisma migrate resolve --applied …` + `prisma generate`.
+- **Migration hygiene** — apply `0017_loyalty`, `0018_loyalty_redeem`,
+  `0019_rate_limits` in prod, then `prisma migrate resolve --applied …` + `prisma generate`.
 
 ---
 
@@ -98,11 +99,12 @@ theme; animated favicon-style pole logo; `unstable_cache` on the home query.
 Ordered by impact ÷ effort and dependency. Each item notes what it unblocks.
 
 ### Phase A — Launch-readiness (do before/at public launch)
-1. **Test suite + CI** — unit tests for availability + loyalty math; a couple of
-   e2e booking flows; run on PRs. *Unblocks: shipping confidently.*
-2. **Rate limiting** on `auth/*` and `barbers/[slug]/bookings`. *Abuse/spam guard.*
-3. **Email domain verification** + a real `EMAIL_API_KEY`. *Deliverable confirmations.*
-4. **Enable SMS** (optional at launch) — reminders/confirmations cut no-shows.
+1. **Test suite + CI** ✅ — unit tests for slots + loyalty math + slugs, wired into
+   CI. (Follow-up: e2e/DB-integration booking tests.)
+2. **Rate limiting** ✅ — Postgres limiter on `auth/*` + `barbers/[slug]/bookings`.
+3. **Email domain verification** 🟡 — verify Resend domain + set `EMAIL_FROM`/
+   `EMAIL_API_KEY` (ops step; see `launch-setup.md` §3).
+4. **Enable SMS** ⬜ (optional at launch) — reminders/confirmations cut no-shows.
 
 ### Phase B — Retention & growth (no payments needed) ⭐ start here
 5. **Referral program** — invite → both earn points on first completed booking.
@@ -161,6 +163,7 @@ everything else in Phases A–C can proceed now.
 | Doc | Purpose |
 | --- | --- |
 | `ROADMAP.md` | This file — status + backlog + sequencing. |
+| `launch-setup.md` | Phase A ops: tests/CI, rate limiting, email/SMS env. |
 | `00-naming.md` | Naming conventions. |
 | `01-product-spec.md` | Product spec. |
 | `02-data-model.md` | Data model rationale. |

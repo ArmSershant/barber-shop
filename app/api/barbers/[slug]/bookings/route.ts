@@ -15,6 +15,7 @@ import { sendSms } from '@/lib/sms';
 import { bookingConfirmationSms } from '@/lib/sms-templates';
 import { buildIcs } from '@/lib/ics';
 import { cappedRedeemPoints, type LoyaltyScope } from '@/lib/loyalty';
+import { enforceRateLimit } from '@/lib/rate-limit';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -30,6 +31,7 @@ function isOverlapError(e: unknown): boolean {
 // Create a booking (logged-in customer or guest). Public.
 export async function POST(req: NextRequest, { params }: Params) {
   try {
+    await enforceRateLimit(req, 'create-booking', 15, 60);
     const { slug } = await params;
     const body = createBookingSchema.parse(await req.json());
 
