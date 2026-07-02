@@ -75,7 +75,8 @@
     "newBooking": "Նոր ամրագրում՝ {name} — {when}",
     "cancelled": "Ամրագրումը չեղարկվել է՝ {name} — {when}",
     "reviewReceived": "Նոր կարծիք՝ {rating}★ — {name}",
-    "reviewRequest": "Ինչպե՞ս անցավ Ձեր այցը {name}-ի մոտ։ Թողե՛ք կարծիք"
+    "reviewRequest": "Ինչպե՞ս անցավ Ձեր այցը {name}-ի մոտ։ Թողե՛ք կարծիք",
+    "confirmed": "Ամրագրումը հաստատվեց՝ {name} — {when}"
   },
   "providerBookings": {
     "title": "Ամրագրումներ",

@@ -75,7 +75,8 @@
     "newBooking": "Новая запись: {name} — {when}",
     "cancelled": "Запись отменена: {name} — {when}",
     "reviewReceived": "Новый отзыв: {rating}★ — {name}",
-    "reviewRequest": "Как прошёл визит к {name}? Оставьте отзыв"
+    "reviewRequest": "Как прошёл визит к {name}? Оставьте отзыв",
+    "confirmed": "Бронирование подтверждено: {name} — {when}"
   },
   "providerBookings": {
     "title": "Записи",

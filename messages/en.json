@@ -75,7 +75,8 @@
     "newBooking": "New booking: {name} — {when}",
     "cancelled": "Booking cancelled: {name} — {when}",
     "reviewReceived": "New review: {rating}★ — {name}",
-    "reviewRequest": "How was your visit with {name}? Leave a review"
+    "reviewRequest": "How was your visit with {name}? Leave a review",
+    "confirmed": "Booking confirmed: {name} — {when}"
   },
   "providerBookings": {
     "title": "Bookings",

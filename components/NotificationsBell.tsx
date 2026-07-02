@@ -38,7 +38,7 @@ export function NotificationsBell() {
 
   const openTarget = (n: NotificationItem) => {
     setOpened(false);
-    if (n.type === 'review_request') {
+    if (n.type === 'review_request' || n.type === 'booking_confirmed') {
       router.push('/bookings');
     } else if (n.type === 'review_received' && n.payload?.barberSlug) {
       router.push(`/barbers/${String(n.payload.barberSlug)}` as Route);
@@ -53,6 +53,8 @@ export function NotificationsBell() {
       ? new Date(String(n.payload.startsAt)).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })
       : '';
     if (n.type === 'booking_created') return t('newBooking', { name, when });
+    if (n.type === 'booking_confirmed')
+      return t('confirmed', { name: String(n.payload?.barberName ?? ''), when });
     if (n.type === 'booking_cancelled') return t('cancelled', { name, when });
     if (n.type === 'review_received')
       return t('reviewReceived', { name, rating: String(n.payload?.rating ?? '') });
