@@ -90,7 +90,8 @@ theme; animated favicon-style pole logo; `unstable_cache` on the home query.
 - **Points expiry** ⬜ — earn/redeem done; a 12-month inactivity lapse cron is
   deferred (design in `loyalty-design.md` §6).
 - **Migration hygiene** — apply `0017_loyalty`, `0018_loyalty_redeem`,
-  `0019_rate_limits` in prod, then `prisma migrate resolve --applied …` + `prisma generate`.
+  `0019_rate_limits`, `0020_review_reply` in prod, then
+  `prisma migrate resolve --applied …` + `prisma generate`.
 
 ---
 
@@ -106,19 +107,26 @@ Ordered by impact ÷ effort and dependency. Each item notes what it unblocks.
    `EMAIL_API_KEY` (ops step; see `launch-setup.md` §3).
 4. **Enable SMS** ⬜ (optional at launch) — reminders/confirmations cut no-shows.
 
-### Phase B — Retention & growth (no payments needed) ⭐ start here
-5. **Referral program** — invite → both earn points on first completed booking.
-   Builds directly on the loyalty ledger. *Cheapest growth loop.*
-6. **Waitlist / "notify when a slot opens"** — subscribe to a full day, auto-notify
-   on cancellation. *Captures dropped demand.*
-7. **Rebook nudges** — cron using the existing `rebookNudgeSentAt` field.
-8. **Web push notifications** — the `push` channel already exists in the schema.
-9. **Provider self-promotions** — time-boxed discount surfaced on discovery.
+### Phase B — Retention & growth (no payments needed)
+5. **Referral program** ⬜ 🚧 *blocked — needs a decision.* Since loyalty is now
+   **per-provider**, a referral reward has no obvious scope to land in (which
+   provider funds/holds the points?). Options: a platform-wide credit concept, or
+   fund it as a first-booking discount (Phase E #18). Decide the model first.
+6. **Waitlist / "notify when a slot opens"** ⬜ — subscribe to a full day,
+   auto-notify on cancellation. *Captures dropped demand.* Self-contained; buildable.
+7. **Rebook nudges** ✅ — already live in `cron/reminders` (`rebookNudgeSentAt`).
+8. **Web push notifications** ⬜ 🚧 *needs VAPID keys (your setup, like SMS).* The
+   `push` channel exists; code can be gated/no-op until keys are set.
+9. **Provider self-promotions** ⬜ — time-boxed discount surfaced on discovery.
+   Buildable (pay-in-person), but overlaps loyalty-redemption pricing — do carefully.
 
 ### Phase C — Discovery & UX polish
-10. **Map view + filters** (open-now / price / rating) — `shops.lat/lng` exist.
-11. **PWA / installable app** — pairs with web push; phone-first market.
-12. **Review replies + photo reviews** — trust + SEO.
+10. **Map view + filters** ⬜ 🚧 *needs a maps-provider choice.* Filters (rating/
+    price/open-now) are buildable now; the map needs Leaflet+OSM (free) or a keyed
+    provider — pick one. `shops.lat/lng` exist.
+11. **PWA / installable app** ✅ — manifest + icons + theme-color shipped.
+12. **Review replies** ✅ / **photo reviews** ⬜ — providers can now reply to reviews
+    (shown on the profile). Photo reviews still open.
 
 ### Phase D — Monetization
 13. **Provider subscriptions** — `SubscriptionStatus` enum already exists; paid
@@ -131,8 +139,8 @@ Ordered by impact ÷ effort and dependency. Each item notes what it unblocks.
 16. **No-show deposits / prepay** — requires #15.
 
 ### Phase E — Loyalty completion
-17. **Points expiry cron** (12-month inactivity).
-18. **First-booking discount** for new accounts (platform-funded, capped).
+17. **Points expiry cron** ✅ — 12-month inactivity lapse runs in the daily cron.
+18. **First-booking discount** ⬜ for new accounts (platform-funded, capped).
 
 ---
 

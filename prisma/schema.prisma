@@ -503,6 +503,8 @@ model Review {
   rating         Int      @db.SmallInt
   comment        String?
   isHidden       Boolean  @default(false) @map("is_hidden")
+  reply          String?
+  repliedAt      DateTime? @map("replied_at") @db.Timestamptz(6)
   createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   booking  Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)

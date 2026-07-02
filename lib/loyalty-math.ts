@@ -28,3 +28,14 @@ export function cappedRedeemPoints(args: {
   const maxPointsByDiscount = Math.floor(maxDiscount / amdPerPoint);
   return Math.max(0, Math.min(requested, balance, maxPointsByDiscount));
 }
+
+/** Points lapse after this many months without any earn/redeem activity. */
+export const POINTS_EXPIRY_MONTHS = 12;
+
+/** True if a balance should expire: positive and inactive past the cutoff. */
+export function shouldExpire(balance: number, lastActivityMs: number, nowMs: number): boolean {
+  if (balance <= 0) return false;
+  const cutoff = new Date(nowMs);
+  cutoff.setMonth(cutoff.getMonth() - POINTS_EXPIRY_MONTHS);
+  return lastActivityMs < cutoff.getTime();
+}

@@ -1,0 +1,23 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="112" fill="#352a1f"/>
+  <defs>
+    <clipPath id="pole"><rect x="176" y="56" width="160" height="400" rx="80"/></clipPath>
+  </defs>
+  <g clip-path="url(#pole)">
+    <g transform="rotate(135 256 256)">
+      <rect x="-200" y="-300" width="912" height="60" fill="#7c3328"/>
+      <rect x="-200" y="-240" width="912" height="60" fill="#fff7ea"/>
+      <rect x="-200" y="-180" width="912" height="60" fill="#a8812f"/>
+      <rect x="-200" y="-120" width="912" height="60" fill="#7c3328"/>
+      <rect x="-200" y="-60"  width="912" height="60" fill="#fff7ea"/>
+      <rect x="-200" y="0"    width="912" height="60" fill="#a8812f"/>
+      <rect x="-200" y="60"   width="912" height="60" fill="#7c3328"/>
+      <rect x="-200" y="120"  width="912" height="60" fill="#fff7ea"/>
+      <rect x="-200" y="180"  width="912" height="60" fill="#a8812f"/>
+      <rect x="-200" y="240"  width="912" height="60" fill="#7c3328"/>
+      <rect x="-200" y="300"  width="912" height="60" fill="#fff7ea"/>
+      <rect x="-200" y="360"  width="912" height="60" fill="#a8812f"/>
+    </g>
+  </g>
+  <rect x="176" y="56" width="160" height="400" rx="80" fill="none" stroke="#a8812f" stroke-width="10"/>
+</svg>

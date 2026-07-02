@@ -390,7 +390,15 @@
     "title": "Rate your visit",
     "comment": "Comment (optional)",
     "submit": "Submit review",
-    "submitted": "Thanks for your review!"
+    "submitted": "Thanks for your review!",
+    "replyLabel": "Reply",
+    "replyPlaceholder": "Reply to this review…",
+    "replySave": "Save reply",
+    "replyCancel": "Cancel",
+    "replyEdit": "Edit reply",
+    "replyFrom": "Reply from the barber",
+    "replySaved": "Reply saved.",
+    "replyError": "Could not save reply."
   },
   "serviceTypes": {
     "haircut": "Men's haircut",

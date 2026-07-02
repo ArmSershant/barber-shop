@@ -4,6 +4,7 @@ import { sendEmail } from '@/lib/email';
 import { bookingReminderEmail, rebookingEmail } from '@/lib/email-templates';
 import { sendSms } from '@/lib/sms';
 import { bookingReminderSms } from '@/lib/sms-templates';
+import { expireStalePoints } from '@/lib/loyalty';
 
 const REBOOK_AFTER_DAYS = 28;
 const REBOOK_WINDOW_DAYS = 45; // don't nudge bookings older than this (avoids backfill spam)
@@ -129,9 +130,18 @@ export async function GET(req: NextRequest) {
     await prisma.booking.update({ where: { id: b.id }, data: { rebookNudgeSentAt: now } });
   }
 
+  // --- Loyalty: lapse points inactive past the expiry window ---
+  let pointsExpired = 0;
+  try {
+    pointsExpired = await expireStalePoints();
+  } catch (expireErr) {
+    console.error('Failed to expire stale points:', expireErr);
+  }
+
   return Response.json({
     ok: true,
     reminders: { processed: due.length, emailed: sent },
     rebooking: { processed: rebookDue.length, emailed: rebooked },
+    loyalty: { expired: pointsExpired },
   });
 }

@@ -390,7 +390,15 @@
     "title": "Оцените визит",
     "comment": "Комментарий (необязательно)",
     "submit": "Отправить отзыв",
-    "submitted": "Спасибо за отзыв!"
+    "submitted": "Спасибо за отзыв!",
+    "replyLabel": "Ответить",
+    "replyPlaceholder": "Ответить на этот отзыв…",
+    "replySave": "Сохранить ответ",
+    "replyCancel": "Отмена",
+    "replyEdit": "Изменить ответ",
+    "replyFrom": "Ответ барбера",
+    "replySaved": "Ответ сохранён.",
+    "replyError": "Не удалось сохранить ответ."
   },
   "serviceTypes": {
     "haircut": "Мужская стрижка",

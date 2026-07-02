@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/db';
-import { pointsForAmount, cappedRedeemPoints } from '@/lib/loyalty-math';
+import { pointsForAmount, cappedRedeemPoints, shouldExpire } from '@/lib/loyalty-math';
 
 // Pure arithmetic lives in loyalty-math.ts (unit-tested, DB-free); re-exported
 // here so existing callers can keep importing from '@/lib/loyalty'.
@@ -92,4 +92,36 @@ export async function earnPointsForBooking(bookingId: string): Promise<number> {
     if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2002') return 0;
     throw err;
   }
+}
+
+/**
+ * Lapse points that have been inactive past the expiry window. For each
+ * (customer, provider) balance with no earn/redeem activity in the window and a
+ * positive balance, writes one 'expired' row that zeroes it out. Run from the
+ * daily cron. Returns the number of balances expired.
+ */
+export async function expireStalePoints(): Promise<number> {
+  const groups = await prisma.pointsLedger.groupBy({
+    by: ['userId', 'scopeShopId', 'scopeBarberId'],
+    _sum: { delta: true },
+    _max: { createdAt: true },
+  });
+
+  const nowMs = Date.now();
+  let expired = 0;
+
+  for (const g of groups) {
+    const balance = g._sum.delta ?? 0;
+    const last = g._max.createdAt?.getTime() ?? 0;
+    if (!shouldExpire(balance, last, nowMs)) continue;
+
+    const scope: LoyaltyScope = g.scopeShopId
+      ? { scopeShopId: g.scopeShopId }
+      : { scopeBarberId: g.scopeBarberId! };
+    await prisma.pointsLedger.create({
+      data: { userId: g.userId, delta: -balance, reason: 'expired', ...scope },
+    });
+    expired += 1;
+  }
+  return expired;
 }

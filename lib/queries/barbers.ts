@@ -171,6 +171,8 @@ export const getBarberProfile = cache(async (slug: string) => {
           id: true,
           rating: true,
           comment: true,
+          reply: true,
+          repliedAt: true,
           createdAt: true,
           customer: { select: { fullName: true } },
         },

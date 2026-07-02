@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { pointsForAmount, cappedRedeemPoints } from '@/lib/loyalty-math';
+import { pointsForAmount, cappedRedeemPoints, shouldExpire } from '@/lib/loyalty-math';
 
 describe('pointsForAmount', () => {
   it('floors points at the provider rate', () => {
@@ -30,5 +30,23 @@ describe('cappedRedeemPoints', () => {
     expect(cappedRedeemPoints({ requested: 100, balance: 0, priceAmd: 2000, amdPerPoint: 1, maxRedeemPct: 50 })).toBe(0);
     expect(cappedRedeemPoints({ requested: 100, balance: 50, priceAmd: 2000, amdPerPoint: 0, maxRedeemPct: 50 })).toBe(0);
     expect(cappedRedeemPoints({ requested: 100, balance: 50, priceAmd: 2000, amdPerPoint: 1, maxRedeemPct: 0 })).toBe(0);
+  });
+});
+
+describe('shouldExpire', () => {
+  const now = Date.UTC(2026, 0, 1);
+  const monthsAgo = (m: number) => {
+    const d = new Date(now);
+    d.setMonth(d.getMonth() - m);
+    return d.getTime();
+  };
+  it('expires a positive balance inactive past 12 months', () => {
+    expect(shouldExpire(30, monthsAgo(13), now)).toBe(true);
+  });
+  it('keeps a balance with recent activity', () => {
+    expect(shouldExpire(30, monthsAgo(3), now)).toBe(false);
+  });
+  it('never expires a zero/negative balance', () => {
+    expect(shouldExpire(0, monthsAgo(24), now)).toBe(false);
   });
 });

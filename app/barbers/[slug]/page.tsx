@@ -12,6 +12,7 @@ import { getOpenStatus } from '@/lib/open-now';
 import { BookingWidget } from '@/components/booking/BookingWidget';
 import { PortfolioGrid } from '@/components/profile/PortfolioGrid';
 import { StickyBookBar } from '@/components/profile/StickyBookBar';
+import { ReviewReply } from '@/components/profile/ReviewReply';
 import { AtAGlance } from '@/components/profile/AtAGlance';
 import { SectionHeader } from '@/components/profile/SectionHeader';
 import { FavoriteButton } from '@/components/FavoriteButton';
@@ -313,6 +314,7 @@ export default async function BarberProfilePage({ params }: { params: Promise<{ 
                   {r.comment}
                 </Text>
               )}
+              <ReviewReply reviewId={r.id} reply={r.reply} canReply={isOwnProfile} />
             </Card>
           ))}
         </Stack>
