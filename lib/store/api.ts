@@ -583,7 +583,8 @@ export const api = createApi({
     }),
     createBooking: builder.mutation<CreateBookingResult, { slug: string } & CreateBookingRequest>({
       query: ({ slug, ...body }) => ({ url: `/barbers/${slug}/bookings`, method: 'POST', body }),
-      invalidatesTags: ['Availability'],
+      // Refresh the customer's own list too, so a new booking shows immediately.
+      invalidatesTags: ['Availability', 'MyBookings'],
     }),
 
     getNotifications: builder.query<{ notifications: NotificationItem[]; unread: number }, void>({
